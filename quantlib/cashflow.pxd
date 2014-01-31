@@ -1,8 +1,8 @@
 include 'types.pxi'
 
-cimport _cashflow as _cf
+from quantlib.ql cimport _cashflow as _cf
+from quantlib.ql cimport shared_ptr
 
-from quantlib.handle cimport shared_ptr
 from libcpp.vector cimport vector
 
 cdef class CashFlow:
