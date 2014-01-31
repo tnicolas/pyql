@@ -8,15 +8,16 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-cimport _cashflow as _cf
-cimport quantlib.time._date as _date
 cimport quantlib.time.date as date
 
 from libcpp.vector cimport vector
 from cython.operator cimport dereference as deref
 
-from quantlib.handle cimport shared_ptr
 from quantlib.time.date import pydate_from_qldate
+
+from quantlib.ql cimport _cashflow as _cf
+from quantlib.ql cimport _date
+from quantlib.ql cimport shared_ptr
 
 cdef class CashFlow:
     """Abstract Base Class.

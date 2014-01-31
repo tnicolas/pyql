@@ -18,8 +18,10 @@ SUPPORT_CODE_INCLUDE = './cpp_layer'
 # FIXME: would be good to be able to customize the path with envrironment
 # variables in place of hardcoded paths ...
 if sys.platform == 'darwin':
-    INCLUDE_DIRS = ['/opt/local/include', '.', SUPPORT_CODE_INCLUDE]
-    LIBRARY_DIRS = ["/opt/local/lib"]
+    INCLUDE_DIRS = ['/usr/local/include',
+                    '/Users/dpinte/projects/sources/boost_1_55_0',
+                    '.', SUPPORT_CODE_INCLUDE]
+    LIBRARY_DIRS = ["/usr/local/lib"]
 elif sys.platform == 'win32':
     INCLUDE_DIRS = [
         r'E:\tmp\QuantLib-1.1',  # QuantLib headers
@@ -80,7 +82,22 @@ def collect_extensions():
     """
 
     settings_extension = Extension('quantlib.settings',
-        ['quantlib/settings/settings.pyx', 'cpp_layer/ql_settings.cpp'],
+        ['quantlib/settings/settings.pyx'],
+        language='c++',
+        include_dirs=INCLUDE_DIRS,
+        library_dirs=LIBRARY_DIRS,
+        define_macros = get_define_macros(),
+        extra_compile_args = get_extra_compile_args(),
+        extra_link_args = get_extra_link_args(),
+        libraries=['QuantLib'],
+        pyrex_directives = CYTHON_DIRECTIVES
+    )
+
+    ql_extension = Extension('quantlib.ql',
+        ['quantlib/ql.pyx',
+         'cpp_layer/ql_settings.cpp',
+         'cpp_layer/simulate_support_code.cpp'
+        ],
         language='c++',
         include_dirs=INCLUDE_DIRS,
         library_dirs=LIBRARY_DIRS,
@@ -141,7 +158,6 @@ def collect_extensions():
         name='quantlib.sim.simulate',
         sources=[
             'quantlib/sim/simulate.pyx',
-            'cpp_layer/simulate_support_code.cpp'
         ],
         language='c++',
         include_dirs=INCLUDE_DIRS + [numpy.get_include()],
@@ -171,6 +187,7 @@ def collect_extensions():
     )
 
     manual_extensions = [
+        ql_extension,
         multipath_extension,
         mc_vanilla_engine_extension,
         piecewise_yield_curve_extension,

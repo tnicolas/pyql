@@ -1,14 +1,9 @@
 # distutils: language = c++
 # distutils: libraries = QuantLib
 
-include '../types.pxi'
-
 from cython.operator cimport dereference as deref
-from quantlib.handle cimport shared_ptr
-from libcpp cimport bool
 
-cimport quantlib.processes._heston_process as _hp
-cimport quantlib.processes._stochastic_process as _sp
+from quantlib.ql cimport _hp, _sp, shared_ptr, simulateMP
 
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.processes.bates_process cimport BatesProcess
@@ -18,11 +13,6 @@ from quantlib.models.equity.bates_model cimport BatesModel, BatesDetJumpModel, B
 import numpy as np
 cimport numpy as cnp
 
-cdef extern from "simulate_support_code.hpp":
-
-    void simulateMP(shared_ptr[_sp.StochasticProcess]& process,
-                    int nbPaths, int nbSteps, Time horizon, BigNatural seed,
-                    bool antithetic_variates, double *res) except +
 
 cdef simulate_sub(void *tmp, int nbPaths, int nbSteps,
 	     Time horizon, BigNatural seed, bool antithetic=True):
@@ -35,6 +25,24 @@ cdef simulate_sub(void *tmp, int nbPaths, int nbSteps,
                nbPaths, nbSteps, horizon, seed, antithetic, <double*> res.data)
 
     return res
+
+
+cdef simulate_process(process_type* process,
+        int nb_paths, int nb_steps, Time horizon, BigNatural seed,
+        bool antithetic=True):
+    """ Runs a multipath simulation on the process and returns a 2d array
+    (paths * steps).
+
+    """
+
+    cdef cnp.ndarray[cnp.double_t, ndim=2] result = \
+            np.zeros((nb_paths + 1, nb_steps + 1), dtype=np.double)
+
+    simulateMP(deref(process), nb_paths, nb_steps, horizon, seed, antithetic,
+            <double*> result.data)
+
+    return result
+
 
 def simulateHeston(HestonModel model, int nbPaths, int nbSteps,
 	     Time horizon, BigNatural seed, bool antithetic=True):
