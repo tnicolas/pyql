@@ -1,20 +1,14 @@
 # distutils: language = c++
 # distutils: libraries = QuantLib
 from cython.operator cimport dereference as deref
-from libcpp cimport bool as cbool
 
-cimport quantlib.time._date as qldate
 cimport quantlib.time.date as date
 
-cdef extern from "ql_settings.hpp" namespace "QL":
-    qldate.Date get_evaluation_date()
-    void set_evaluation_date(qldate.Date& date)
-
-cdef extern from 'ql/version.hpp':
-
-    char* QL_VERSION
-    int QL_HEX_VERSION
-    char* QL_LIB_VERSION
+from quantlib.ql cimport (
+    QL_VERSION, QL_HEX_VERSION, QL_LIB_VERSION, get_evaluation_date,
+    set_evaluation_date
+)
+from quantlib.ql cimport _date as qldate
 
 __quantlib_version__ = QL_VERSION
 __quantlib_lib_version__ = QL_LIB_VERSION
