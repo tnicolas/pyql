@@ -3,6 +3,7 @@
 
 from cython.operator cimport dereference as deref
 
+cimport quantlib.ql
 from quantlib.ql cimport _hp, _sp, shared_ptr, simulateMP
 
 from quantlib.processes.heston_process cimport HestonProcess
