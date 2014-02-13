@@ -71,7 +71,7 @@ def get_extra_link_args():
 
     return args
  
-CYTHON_DIRECTIVES = {"embedsignatur": True}
+CYTHON_DIRECTIVES = {"embedsignature": True}
 
 def collect_extensions():
     """ Collect all the directories with Cython extensions and return the list
@@ -80,18 +80,6 @@ def collect_extensions():
     Th function combines static Extension declaration and calls to cythonize
     to build the list of extenions.
     """
-
-    settings_extension = Extension('quantlib.settings',
-        ['quantlib/settings/settings.pyx'],
-        language='c++',
-        include_dirs=INCLUDE_DIRS,
-        library_dirs=LIBRARY_DIRS,
-        define_macros = get_define_macros(),
-        extra_compile_args = get_extra_compile_args(),
-        extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
-        pyrex_directives = CYTHON_DIRECTIVES
-    )
 
     ql_extension = Extension('quantlib.ql',
         ['quantlib/ql.pyx',
@@ -108,15 +96,25 @@ def collect_extensions():
         pyrex_directives = CYTHON_DIRECTIVES
     )
 
-    test_extension = Extension('quantlib.test.test_cython_bug',
-        ['quantlib/test/test_cython_bug.pyx', 'cpp_layer/ql_settings.cpp'],
+    settings_extension = Extension('quantlib.settings',
+        ['quantlib/settings/settings.pyx'],
         language='c++',
         include_dirs=INCLUDE_DIRS,
         library_dirs=LIBRARY_DIRS,
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
+        pyrex_directives = CYTHON_DIRECTIVES,
+    )
+
+    test_extension = Extension('quantlib.test.test_cython_bug',
+        ['quantlib/test/test_cython_bug.pyx'],
+        language='c++',
+        include_dirs=INCLUDE_DIRS,
+        library_dirs=LIBRARY_DIRS,
+        define_macros = get_define_macros(),
+        extra_compile_args = get_extra_compile_args(),
+        extra_link_args = get_extra_link_args(),
         pyrex_directives = CYTHON_DIRECTIVES
     )
 
@@ -165,7 +163,6 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
         pyrex_directives = CYTHON_DIRECTIVES
 
     )
@@ -228,7 +225,7 @@ def collect_extensions():
             collected_extensions.remove(ext)
             continue
 
-    extensions = collected_extensions + manual_extensions
+    extensions = manual_extensions + collected_extensions
 
     return extensions
 
