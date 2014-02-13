@@ -33,15 +33,19 @@ cdef extern from 'ql/handle.hpp' namespace 'QuantLib':
         void linkTo(shared_ptr[T]&, bool registerAsObserver)
 
 
-cimport quantlib.instruments._bonds as _bonds
 cimport quantlib._cashflow as _cashflow
+cimport quantlib.instruments._bonds as _bonds
+cimport quantlib.instruments._instrument as _instrument
+cimport quantlib.processes._heston_process as _hp
+cimport quantlib.processes._stochastic_process as _sp
+cimport quantlib.pricingengines._pricing_engine as _pricing_engine
 cimport quantlib.time._calendar as _calendar
 cimport quantlib.time._date as _date
-cimport quantlib.processes._heston_process as _hp
+cimport quantlib.time._daycounter as _daycounter
+cimport quantlib.time.daycounters._actual_actual as _actual_actual
 cimport quantlib.time._period as _period
 cimport quantlib.time._schedule as _schedule
-cimport quantlib.processes._stochastic_process as _sp
-cimport quantlib.time.daycounters._actual_actual as _actual_actual
+
 
 # Local imports
 cdef extern from "ql_settings.hpp" namespace "QL":

@@ -9,28 +9,23 @@
 
 include '../types.pxi'
 
-cimport _bonds
-cimport _instrument
-cimport quantlib.pricingengines._pricing_engine as _pe
-cimport quantlib.time._date as _date
+from quantlib.ql cimport Handle, shared_ptr, RelinkableHandle
+from quantlib.ql cimport _bonds, _cashflow, _date, _instrument
+from quantlib.ql cimport _pricing_engine as _pe
+from quantlib.ql cimport _calendar, _daycounter, _schedule
 
 from cython.operator cimport dereference as deref
 from libcpp.vector cimport vector
 
-from quantlib.handle cimport Handle, shared_ptr, RelinkableHandle
+from quantlib cimport cashflow
 from quantlib.instruments.instrument cimport Instrument
 from quantlib.pricingengines.engine cimport PricingEngine
-from quantlib.time._calendar cimport BusinessDayConvention
-from quantlib.time._daycounter cimport DayCounter as QlDayCounter
-from quantlib.time._schedule cimport Schedule as QlSchedule
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.date cimport Date, date_from_qldate
 from quantlib.time.schedule cimport Schedule
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.calendar import Following
 
-cimport quantlib._cashflow as _cashflow
-cimport quantlib.cashflow as cashflow
 
 import datetime
 
@@ -141,8 +136,10 @@ cdef class FixedRateBond(Bond):
             for rate in coupons:
                 _coupons.push_back(rate)
 
-            cdef QlSchedule* _fixed_bonds_schedule = <QlSchedule*>fixed_bonds_schedule._thisptr
-            cdef QlDayCounter* _accrual_day_counter = <QlDayCounter*>accrual_day_counter._thisptr
+            cdef _schedule.Schedule* _fixed_bonds_schedule = \
+                    <_schedule.Schedule*>fixed_bonds_schedule._thisptr
+            cdef _daycounter.DayCounter* _accrual_day_counter = \
+                    <_daycounter.DayCounter*>accrual_day_counter._thisptr
 
             cdef _date.Date* _issue_date
 
@@ -154,7 +151,7 @@ cdef class FixedRateBond(Bond):
                     new _bonds.FixedRateBond(settlement_days,
                         face_amount, deref(_fixed_bonds_schedule), deref(_coupons),
                         deref(_accrual_day_counter),
-                        <BusinessDayConvention>payment_convention,
+                        <_calendar.BusinessDayConvention>payment_convention,
                         redemption)
                 )
             else:
@@ -165,7 +162,7 @@ cdef class FixedRateBond(Bond):
                         face_amount, deref(_fixed_bonds_schedule),
                         deref(_coupons),
                         deref(_accrual_day_counter),
-                        <BusinessDayConvention>payment_convention,
+                        <_calendar.BusinessDayConvention>payment_convention,
                         redemption, deref(_issue_date)
                     )
                 )
@@ -183,7 +180,7 @@ cdef class ZeroCouponBond(Bond):
                 new _bonds.ZeroCouponBond(
                     <Natural> settlement_days, deref(calendar._thisptr),
                     <Real>face_amount, deref(maturity_date._thisptr.get()),
-                    <BusinessDayConvention>payment_convention,
+                    <_calendar.BusinessDayConvention>payment_convention,
                     <Real>redemption, deref(issue_date._thisptr.get())
                 )
             )
