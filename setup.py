@@ -13,7 +13,19 @@ from Cython.Build import cythonize
 
 import numpy
 
+# Symbols added in quantlib.ql from the support code are not exposed to 
+# the rest of the library. We need to expose them by hand ... 
+# Gorry but works ... Need to find a real solution asap
+SYMBOLS = [
+    "?simulateMP@QuantLib@@YAXABV?$shared_ptr@VStochasticProcess@QuantLib@@@boost@@HHNK_NPAN@Z",
+    "?set_evaluation_date@QL@@YAXAAVDate@QuantLib@@@Z",
+    "?get_evaluation_date@QL@@YA?AVDate@QuantLib@@XZ",
+]
+
+
+
 SUPPORT_CODE_INCLUDE = './cpp_layer'
+QL_LIBRARY = 'QuantLib-vc90-mt'
 
 # FIXME: would be good to be able to customize the path with envrironment
 # variables in place of hardcoded paths ...
@@ -24,16 +36,20 @@ if sys.platform == 'darwin':
     LIBRARY_DIRS = ["/usr/local/lib"]
 elif sys.platform == 'win32':
     INCLUDE_DIRS = [
-        r'E:\tmp\QuantLib-1.1',  # QuantLib headers
-        r'E:\tmp\boost_1_46_1',  # Boost headers
+        r'C:\dev\QuantLib-1.3',  # QuantLib headers
+        r'C:\dev\boost_1_55_0_lib',  # Boost headers
         '.',
         SUPPORT_CODE_INCLUDE
     ]
     LIBRARY_DIRS = [
-        r"E:\tmp\QuantLib-1.1\build\vc80\Release",
-        r'E:\tmp\boost_1_46_1\lib'
+        r'C:\dev\boost_1_55_0_lib\lib32-msvc-9.0',
+        r'C:\dev\QuantLib-1.3\lib',
+        r'.',
+        # On Win32, we need to explicitely link with the quantlib.ql.pyd
+        # We point to the directory where the generated .lib file is and 
+        # allows us to link against the content of ql.pyd/.lib
+        r'C:\dev\pyql\build\temp.win32-2.7\Release\quantlib'
     ]
-    QL_LIBRARY = 'QuantLib'
 elif sys.platform == 'linux2':
     # good for Debian / ubuntu 10.04 (with QL .99 installed by default)
     INCLUDE_DIRS = ['/usr/local/include', '/usr/include', '.', SUPPORT_CODE_INCLUDE]
@@ -65,7 +81,7 @@ def get_extra_compile_args():
 
 def get_extra_link_args():
     if sys.platform == 'win32':
-        args = ['/subsystem:windows', '/machine:I386']
+        args = ['/subsystem:windows', '/machine:I386',] # '/NODEFAULTLIB:library']
     else:
         args = []
 
@@ -92,8 +108,9 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
-        pyrex_directives = CYTHON_DIRECTIVES
+        libraries=[QL_LIBRARY],
+        pyrex_directives = CYTHON_DIRECTIVES,
+        export_symbols=SYMBOLS,
     )
 
     settings_extension = Extension('quantlib.settings',
@@ -105,6 +122,7 @@ def collect_extensions():
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
         pyrex_directives = CYTHON_DIRECTIVES,
+        libraries=['ql'],
     )
 
     test_extension = Extension('quantlib.test.test_cython_bug',
@@ -115,7 +133,8 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        pyrex_directives = CYTHON_DIRECTIVES
+        pyrex_directives = CYTHON_DIRECTIVES,
+        libraries=['ql'],
     )
 
     piecewise_yield_curve_extension = Extension(
@@ -130,7 +149,7 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
+        libraries=[QL_LIBRARY],
         pyrex_directives = CYTHON_DIRECTIVES
 
     )
@@ -147,7 +166,7 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
+        libraries=[QL_LIBRARY],
         pyrex_directives = CYTHON_DIRECTIVES
 
     )
@@ -163,7 +182,8 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        pyrex_directives = CYTHON_DIRECTIVES
+        pyrex_directives = CYTHON_DIRECTIVES,
+        libraries=['ql'],
 
     )
 
@@ -179,7 +199,7 @@ def collect_extensions():
         define_macros = get_define_macros(),
         extra_compile_args = get_extra_compile_args(),
         extra_link_args = get_extra_link_args(),
-        libraries=['QuantLib'],
+        libraries=[QL_LIBRARY],
         pyrex_directives = CYTHON_DIRECTIVES
     )
 
@@ -207,13 +227,14 @@ def collect_extensions():
     collected_extensions = cythonize(
         [
             Extension('*', ['{0}/*.pyx'.format(dirpath)],
+                language='c++',
                 include_dirs=INCLUDE_DIRS,
                 library_dirs=LIBRARY_DIRS,
                 define_macros = get_define_macros(),
                 extra_compile_args = get_extra_compile_args(),
                 extra_link_args = get_extra_link_args(),
                 pyrex_directives = CYTHON_DIRECTIVES,
-                libraries = ['QuantLib']
+                libraries = [QL_LIBRARY]
             ) for dirpath in cython_extension_directories
         ]
     )
