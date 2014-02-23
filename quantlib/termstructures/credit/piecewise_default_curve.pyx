@@ -1,4 +1,3 @@
-
 from cython.operator cimport dereference as deref
 
 from libcpp cimport bool
@@ -6,15 +5,12 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
-cimport _piecewise_default_curve as _pdc
+from quantlib.ql cimport shared_ptr, _credit_helpers, _default_term_structure
+from quantlib.ql cimport _piecewise_default_curve as _pdc
 
-from quantlib.handle cimport shared_ptr
-from quantlib.math._interpolations cimport Linear
 from quantlib.time.date cimport Date
 from quantlib.time.daycounter cimport DayCounter
-from quantlib.termstructures.credit._credit_helpers cimport DefaultProbabilityHelper
 from default_probability_helpers cimport CdsHelper
-from quantlib.termstructures._default_term_structure cimport DefaultProbabilityTermStructure
 
 
 VALID_TRAITS = ['HazardRate', 'DefaultDensity', 'SurvivalProbability']
@@ -46,15 +42,15 @@ cdef class PiecewiseDefaultCurve:
         cdef string interpolator_string = string(PyString_AsString(interpolator)),
 
         # convert Python list to std::vector
-        cdef vector[shared_ptr[DefaultProbabilityHelper]]* instruments = \
-                new vector[shared_ptr[DefaultProbabilityHelper]]()
+        cdef vector[shared_ptr[_credit_helpers.DefaultProbabilityHelper]]* instruments = \
+                new vector[shared_ptr[_credit_helpers.DefaultProbabilityHelper]]()
 
         for helper in helpers:
             instruments.push_back(
-                <shared_ptr[DefaultProbabilityHelper]>deref((<CdsHelper> helper)._thisptr)
+                <shared_ptr[_credit_helpers.DefaultProbabilityHelper]>deref((<CdsHelper> helper)._thisptr)
             )
 
-        self._thisptr = new shared_ptr[DefaultProbabilityTermStructure](
+        self._thisptr = new shared_ptr[_default_term_structure.DefaultProbabilityTermStructure](
             _pdc.credit_term_structure_factory(
                 trait_string, interpolator_string,
                 deref(reference_date._thisptr.get()),

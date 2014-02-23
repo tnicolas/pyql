@@ -1,7 +1,7 @@
-from quantlib.handle cimport shared_ptr
-from quantlib.termstructures._default_term_structure cimport DefaultProbabilityTermStructure
+from quantlib.ql cimport shared_ptr, _default_term_structure
+
 
 cdef class PiecewiseDefaultCurve:
 
-    cdef shared_ptr[DefaultProbabilityTermStructure]* _thisptr
+    cdef shared_ptr[_default_term_structure.DefaultProbabilityTermStructure]* _thisptr
 
