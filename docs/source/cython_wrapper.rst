@@ -50,9 +50,6 @@ This file contains the declaration of the
 QL class being exposed. For example, the header file ''_quotes.pxd''
 is as follows:: 
 
-    # distutils: language = c++
-    # distutils: libraries = QuantLib
-
     include 'types.pxi'
 
     from libcpp cimport bool
@@ -76,6 +73,11 @@ types used in declaring arguments are defined in ''types.pxi''.
 The clause 'except +' signals that the method may throw an exception. It
 is indispensible to append this clause to every declaration. Without it, an
 exception thrown in QL will terminate the python process.
+
+.. warning:: Do not use Cython/distutils directive in the .pyx files.
+
+    In particular the `libraries: QuantLib` will cause compilation to fail on
+    Windows because of the library name which is different.
 
 Declaration of the python class
 -------------------------------
