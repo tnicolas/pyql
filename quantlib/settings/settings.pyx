@@ -1,5 +1,3 @@
-# distutils: language = c++
-# distutils: libraries = QuantLib
 from cython.operator cimport dereference as deref
 
 cimport quantlib.time.date as date

@@ -1,6 +1,3 @@
-# distutils: language = c++
-# distutils: libraries = QuantLib
-
 from quantlib.handle cimport Handle
 cimport quantlib.termstructures.yields._flat_forward as _ff
 # cimport quantlib.indexes._ibor_index as _ib
