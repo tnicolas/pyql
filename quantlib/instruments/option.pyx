@@ -5,16 +5,11 @@ from cython.operator cimport dereference as deref
 from libcpp cimport bool
 from libcpp.vector cimport vector
 
-cimport _bonds #fixme :should move the PricingEngine declaration somewhere else
-cimport _exercise
-cimport _option
-cimport _payoffs
-cimport _instrument
-cimport quantlib.time._date as _date
-from quantlib.pricingengines cimport _pricing_engine as _pe
-cimport quantlib.processes._black_scholes_process as _bsp
+from quantlib.ql cimport (
+    _exercise, _option, _payoffs, _instrument, _date, _pricing_engine as _pe,
+    _black_scholes_process as _bsp, shared_ptr
+)
 
-from quantlib.handle cimport shared_ptr
 from quantlib.instruments.instrument cimport Instrument
 from quantlib.instruments.payoffs cimport Payoff, PlainVanillaPayoff
 from quantlib.time.date cimport Date

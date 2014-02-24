@@ -3,17 +3,16 @@ from cython.operator cimport dereference as deref
 
 from libcpp cimport bool as cbool
 
-from quantlib.time._period cimport Frequency
+from quantlib.ql cimport (
+    _period, _quote as _qt, _interest_rate as _ir, _flat_forward as ffwd
+)
+
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.date cimport Date, date_from_qldate
 
 from quantlib.compounding import Continuous
 from quantlib.time.date import Annual
-
-cimport _flat_forward as ffwd
-cimport quantlib._quote as _qt
-cimport quantlib._interest_rate as _ir
 
 from quantlib.quotes cimport Quote
 from quantlib.interest_rate cimport InterestRate

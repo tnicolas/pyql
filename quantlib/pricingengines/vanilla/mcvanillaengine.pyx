@@ -5,14 +5,15 @@ from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
 from cython.operator cimport dereference as deref
-from quantlib.handle cimport shared_ptr
 
-cimport quantlib.processes._heston_process as _hp
+from quantlib.ql cimport (
+    shared_ptr, _heston_process as _hp, _pricing_engine as _pe,
+    mc_vanilla_engine_factory
+)
+
 from quantlib.processes.heston_process cimport HestonProcess
-
 from quantlib.pricingengines.engine cimport PricingEngine
-cimport quantlib.pricingengines._pricing_engine as _pe
-cimport quantlib.pricingengines.vanilla._mcvanillaengine as _mc_ve
+
 
 VALID_TRAITS = ['MCEuropeanHestonEngine',]
 VALID_RNG = ['PseudoRandom',]
@@ -44,7 +45,7 @@ cdef class MCVanillaEngine(PricingEngine):
         
         cdef shared_ptr[_hp.HestonProcess]* hp_pt = <shared_ptr[_hp.HestonProcess] *> process._thisptr
 
-        cdef shared_ptr[_pe.PricingEngine] engine = _mc_ve.mc_vanilla_engine_factory(
+        cdef shared_ptr[_pe.PricingEngine] engine = mc_vanilla_engine_factory(
           traits_string, 
           RNG_string,
           deref(<shared_ptr[_hp.HestonProcess]*> hp_pt),

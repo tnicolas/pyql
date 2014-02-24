@@ -11,10 +11,9 @@ from cython.operator cimport dereference as deref, preincrement as inc
 from libcpp cimport bool
 from libcpp.vector cimport vector
 
-cimport quantlib.time._calendar as _calendar
-cimport quantlib.time._date as _date
+from quantlib.ql cimport _calendar, _date, _period
+
 cimport quantlib.time.date as date
-cimport quantlib.time._period as _period
 
 # BusinessDayConvention:
 cdef public enum BusinessDayConvention:

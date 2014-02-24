@@ -1,12 +1,12 @@
 from cython.operator cimport dereference as deref
-
-from quantlib.handle cimport shared_ptr, Handle
+ 
 from quantlib.pricingengines.vanilla.vanilla cimport PricingEngine
 from quantlib.termstructures.yields.yield_term_structure cimport YieldTermStructure
 
-cimport quantlib.pricingengines._swap as _swap
-cimport quantlib.pricingengines._pricing_engine as _pe
-cimport quantlib.termstructures.yields._flat_forward as _ff
+from quantlib.ql cimport (
+    shared_ptr, Handle, _swap as _swap, _pricing_engine as _pe,
+    _flat_forward as _ff
+)
 
 cdef class DiscountingSwapEngine(PricingEngine):
 

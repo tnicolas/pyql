@@ -1,5 +1,6 @@
 from cython.operator cimport dereference as deref
-cimport _black_vol_term_structure as _bv
+
+from quantlib.ql cimport _black_vol_term_structure as _bv
 
 
 from quantlib.time.calendar cimport Calendar

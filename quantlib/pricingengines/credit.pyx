@@ -9,14 +9,12 @@
 
 from cython.operator cimport dereference as deref
 
-from quantlib.handle cimport Handle, shared_ptr
-cimport _pricing_engine as _pe
-cimport _credit
+from quantlib.ql cimport (
+    Handle, shared_ptr, _pricing_engine as _pe, _credit, 
+    _default_term_structure as _dts, _yield_term_structure as _yts
+)
 
 from engine cimport PricingEngine
-
-cimport quantlib.termstructures._default_term_structure as _dts
-cimport quantlib.termstructures._yield_term_structure as _yts
 from quantlib.termstructures.credit.piecewise_default_curve cimport PiecewiseDefaultCurve
 from quantlib.termstructures.yields.yield_term_structure cimport YieldTermStructure
 

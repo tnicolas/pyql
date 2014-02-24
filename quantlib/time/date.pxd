@@ -8,11 +8,10 @@
 """
 
 from libcpp cimport bool
-cimport date
-cimport _date
-cimport _period
-from quantlib.handle cimport shared_ptr
 
+from quantlib.ql cimport _date, _period, shared_ptr
+
+cimport date
 
 cdef class Period:
     cdef shared_ptr[_period.Period]* _thisptr

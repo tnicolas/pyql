@@ -3,8 +3,7 @@ import datetime
 from cython.operator cimport dereference as deref
 
 # cannot use date.pxd because of name clashing
-cimport _date
-cimport _period
+from quantlib.ql cimport _date, _period
 
 from _date cimport (
     Date as QlDate, Date_todaysDate, Date_nextWeekday,

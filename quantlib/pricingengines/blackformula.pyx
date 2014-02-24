@@ -1,12 +1,10 @@
 include '../types.pxi'
 
-cimport _blackformula as _bf
-cimport quantlib.instruments._option as _opt
 from quantlib.instruments.payoffs import Call, Put
+
+from quantlib.ql cimport _blackformula as _bf, _option as _opt
+
 from math import sqrt, log
-
-from quantlib.instruments._payoffs cimport OptionType
-
 import types
 
 STR_TO_OPTION_TYPE = {'C': Call, 'P':Put}
@@ -14,7 +12,7 @@ STR_TO_OPTION_TYPE = {'C': Call, 'P':Put}
 def blackFormula(option_type, Real strike,
                       Real forward, Real stdDev, Real discount=1.0, Real displacement=0.0):
     """ Black 1976 formula
-
+    
     Parameters
     ==========
 

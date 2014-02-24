@@ -10,11 +10,12 @@
 include '../types.pxi'
 
 from cython.operator cimport dereference as deref
-cimport _heston_process as _hp
 
-from quantlib.handle cimport Handle, shared_ptr
-cimport quantlib.termstructures.yields._flat_forward as _ff
-cimport quantlib._quote as _qt
+from quantlib.ql cimport (
+    _heston_process as _hp, Handle, shared_ptr, _flat_forward as _ff,
+    _quote as _qt
+
+)
 from quantlib.quotes cimport Quote, SimpleQuote
 from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
 from heston_process cimport HestonProcess

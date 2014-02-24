@@ -1,6 +1,6 @@
 from cython.operator cimport dereference as deref
-cimport quantlib.time.calendars._jointcalendar as _jc
-cimport quantlib.time._calendar as _cal
+from quantlib.ql cimport _calendar as _cal, _jointcalendar as _jc
+
 from quantlib.time.calendar cimport Calendar
 
 cdef public enum JointCalendarRule:

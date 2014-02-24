@@ -1,11 +1,9 @@
 
 from cython.operator cimport dereference as deref
 
-from quantlib.handle cimport shared_ptr
-from quantlib.pricingengines.engine cimport PricingEngine
+from quantlib.ql cimport shared_ptr, _pricing_engine as _pe, _instrument
 
-cimport quantlib.pricingengines._pricing_engine as _pe
-cimport _instrument
+from quantlib.pricingengines.engine cimport PricingEngine
 
 cdef class Instrument:
 

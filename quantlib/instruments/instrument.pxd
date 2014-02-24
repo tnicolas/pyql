@@ -1,9 +1,6 @@
-from quantlib.handle cimport shared_ptr
-from quantlib.pricingengines.engine cimport PricingEngine
 from libcpp cimport bool as cbool
-cimport _instrument
 
-cimport quantlib.pricingengines._pricing_engine as _pe
+from quantlib.ql cimport shared_ptr, _instrument
 
 cdef class Instrument:
 

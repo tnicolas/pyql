@@ -7,8 +7,7 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-cimport quantlib._index as _in
-from quantlib.handle cimport shared_ptr
+from quantlib.ql cimport _index as _in, shared_ptr
 
 cdef class Index:
     cdef shared_ptr[_in.Index]* _thisptr

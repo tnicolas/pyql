@@ -1,9 +1,7 @@
 from cython.operator cimport dereference as deref
 from libcpp.vector cimport vector
 
-cimport _schedule
-cimport _date
-cimport _calendar
+from quantlib.ql cimport _schedule, _date, _calendar
 
 from calendar cimport DateList, Calendar
 from date cimport date_from_qldate, Date, Period

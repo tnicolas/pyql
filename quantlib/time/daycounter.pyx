@@ -1,7 +1,6 @@
 from cython.operator cimport dereference as deref
-cimport _daycounter
-cimport _date
-cimport _calendar
+from quantlib.ql cimport _daycounter, _date, _calendar
+
 from date cimport Date
 from calendar cimport Calendar
 from quantlib.time.daycounters.actual_actual cimport from_name as aa_from_name

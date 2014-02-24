@@ -1,5 +1,4 @@
-cimport quantlib.time._calendar as _calendar
-cimport quantlib.time.calendars._germany as _gm
+from quantlib.ql cimport _calendar, _germany as _gm
 from quantlib.time.calendar cimport Calendar
 
 SETTLEMENT = 0

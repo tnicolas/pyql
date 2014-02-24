@@ -11,13 +11,10 @@ include '../../types.pxi'
 
 from cython.operator cimport dereference as deref
 
-cimport _rate_helpers as _rh
-from quantlib.handle cimport shared_ptr, Handle
-cimport quantlib._quote as _qt
-cimport quantlib.indexes._ibor_index as _ib
-cimport quantlib.indexes._swap_index as _si
-from quantlib.time._period cimport Frequency, Days
-from quantlib.time._calendar cimport BusinessDayConvention
+from quantlib.ql cimport (
+    _rate_helpers as _rh, shared_ptr, Handle, _quote as _qt, 
+    _ibor_index as _ib, _swap_index as _si, _period, _calendar
+)
 
 from quantlib.quotes cimport Quote
 from quantlib.time.calendar cimport Calendar
@@ -121,8 +118,8 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
 
     @classmethod
     def from_tenor(cls, float rate, Period tenor,
-        Calendar calendar, Frequency fixedFrequency,
-        BusinessDayConvention fixedConvention, DayCounter fixedDayCount,
+        Calendar calendar, _period.Frequency fixedFrequency,
+        _calendar.BusinessDayConvention fixedConvention, DayCounter fixedDayCount,
         IborIndex iborIndex, Quote spread=None, Period fwdStart=None):
 
         cdef Handle[_qt.Quote] spread_handle
@@ -135,7 +132,7 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
                     rate,
                     deref(tenor._thisptr.get()),
                     deref(calendar._thisptr),
-                    <Frequency> fixedFrequency,
+                    <_period.Frequency> fixedFrequency,
                     <_rh.BusinessDayConvention> fixedConvention,
                     deref(fixedDayCount._thisptr),
                     deref(<shared_ptr[_ib.IborIndex]*> iborIndex._thisptr))
@@ -149,7 +146,7 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
                     rate,
                     deref(tenor._thisptr.get()),
                     deref(calendar._thisptr),
-                    <Frequency> fixedFrequency,
+                    <_period.Frequency> fixedFrequency,
                     <_rh.BusinessDayConvention> fixedConvention,
                     deref(fixedDayCount._thisptr),
                     deref(<shared_ptr[_ib.IborIndex]*> iborIndex._thisptr),
@@ -164,7 +161,7 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
     def from_index(cls, float rate, SwapIndex index):
 
         cdef Handle[_qt.Quote] spread_handle = Handle[_qt.Quote](new _qt.SimpleQuote(0))
-        cdef Period p = Period(2, Days)
+        cdef Period p = Period(2, _period.Days)
 
 
         cdef SwapRateHelper instance = cls(from_classmethod=True)
@@ -186,7 +183,7 @@ cdef class FraRateHelper(RelativeDateRateHelper):
 
     def __init__(self, Quote rate, Natural months_to_start,
             Natural months_to_end, Natural fixing_days, Calendar calendar,
-            BusinessDayConvention convention, end_of_month,
+            _calendar.BusinessDayConvention convention, end_of_month,
             DayCounter day_counter):
 
         cdef Handle[_qt.Quote] rate_handle = Handle[_qt.Quote](deref(rate._thisptr))
@@ -209,7 +206,7 @@ cdef class FuturesRateHelper(RateHelper):
 
     def __init__(self, Quote rate, Date imm_date,
             Natural length_in_months, Calendar calendar,
-            BusinessDayConvention convention, end_of_month,
+            _calendar.BusinessDayConvention convention, end_of_month,
             DayCounter day_counter):
 
         cdef Handle[_qt.Quote] rate_handle = Handle[_qt.Quote](deref(rate._thisptr))

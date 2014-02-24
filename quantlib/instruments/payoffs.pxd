@@ -1,5 +1,4 @@
-from quantlib.handle cimport shared_ptr
-cimport _payoffs
+from quantlib.ql cimport shared_ptr, _payoffs
 
 cdef class Payoff:
     cdef shared_ptr[_payoffs.Payoff]* _thisptr

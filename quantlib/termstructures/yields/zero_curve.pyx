@@ -3,8 +3,8 @@ include '../../types.pxi'
 from cython.operator cimport dereference as deref
 from libcpp.vector cimport vector
 
-cimport _zero_curve as _zc
-from quantlib.handle cimport shared_ptr
+from quantlib.ql cimport shared_ptr, _zero_curve as _zc
+
 from flat_forward cimport YieldTermStructure
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.date cimport Date

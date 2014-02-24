@@ -1,4 +1,4 @@
-cimport quantlib.time.calendars._null_calendar as _nc
+from quantlib.ql cimport _null_calendar as _nc
 from quantlib.time.calendar cimport Calendar
 
 

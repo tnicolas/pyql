@@ -1,8 +1,7 @@
 include '../types.pxi'
 
 # cython imports
-cimport _option
-cimport _payoffs
+from quantlib.ql cimport _option, _payoffs
 
 cdef public enum OptionType:
     Put = _option.Put

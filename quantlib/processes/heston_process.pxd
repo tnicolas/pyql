@@ -1,5 +1,4 @@
-cimport _heston_process as _hp
-from quantlib.handle cimport Handle, shared_ptr
+from quantlib.ql cimport Handle, shared_ptr, _heston_process as _hp
 
 cdef class HestonProcess:
 

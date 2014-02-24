@@ -19,8 +19,7 @@ occur on February and are grater than 27 become equal to 30
 for computational sake.
 
 '''
-cimport quantlib.time._daycounter as _daycounter
-cimport quantlib.time.daycounters._thirty360 as _th
+from quantlib.ql cimport _daycounter, _thirty360 as _th
 from quantlib.time.daycounter cimport DayCounter
 
 USA           = _th.USA

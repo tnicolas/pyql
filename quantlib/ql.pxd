@@ -1,4 +1,6 @@
 from libcpp cimport bool
+from libcpp.vector cimport vector
+from libcpp.string cimport string
 
 include 'types.pxi'
 
@@ -8,52 +10,81 @@ cdef extern from 'ql/version.hpp':
     int QL_HEX_VERSION
     char* QL_LIB_VERSION
 
-cdef extern from 'boost/shared_ptr.hpp' namespace 'boost':
+from quantlib.handle cimport shared_ptr, Handle, RelinkableHandle
+from quantlib cimport _cashflow
+from quantlib cimport _currency
+from quantlib cimport _index 
+from quantlib cimport _interest_rate
+from quantlib cimport _quote
+from quantlib.indexes cimport _ibor_index
+from quantlib.indexes cimport _libor
+from quantlib.indexes cimport _swap_index
+from quantlib.indexes cimport _interest_rate_index
+from quantlib.instruments cimport _bonds
+from quantlib.instruments cimport _credit_default_swap
+from quantlib.instruments cimport _exercise
+from quantlib.instruments cimport _instrument
+from quantlib.instruments cimport _option
+from quantlib.instruments cimport _payoffs
+from quantlib.math cimport _interpolations
+from quantlib.math cimport _optimization
+from quantlib.models.equity cimport _bates_model
+from quantlib.models.equity cimport _heston_model
+from quantlib.processes cimport _black_scholes_process
+from quantlib.processes cimport _heston_process
+from quantlib.processes cimport _stochastic_process
+from quantlib.pricingengines cimport _blackformula
+from quantlib.pricingengines cimport _bond as _bond_pricing_engine
+from quantlib.pricingengines cimport _pricing_engine
+from quantlib.pricingengines cimport _swap
+from quantlib.pricingengines cimport _credit
+from quantlib.pricingengines.vanilla cimport _vanilla
+from quantlib.termstructures cimport _default_term_structure 
+from quantlib.termstructures cimport _yield_term_structure
+from quantlib.termstructures.credit cimport _credit_helpers
+from quantlib.termstructures.credit cimport _piecewise_default_curve
+from quantlib.termstructures.volatility.equityfx cimport _black_vol_term_structure
+from quantlib.termstructures.yields cimport _flat_forward
+from quantlib.termstructures.yields cimport _rate_helpers
+from quantlib.termstructures.yields cimport _zero_curve
+from quantlib.time cimport _calendar
+from quantlib.time.calendars cimport (
+    _united_states, _united_kingdom, _null_calendar, _germany, _jointcalendar
+)
+from quantlib.time cimport _date
+from quantlib.time cimport _daycounter
+from quantlib.time.daycounters cimport _actual_actual, _thirty360
+from quantlib.time cimport _period
+from quantlib.time cimport _schedule
 
-    cdef cppclass shared_ptr[T]:
-        shared_ptr()
-        shared_ptr(T*)
-        shared_ptr(shared_ptr[T]&)
-        T* get()
-        long use_count()
-        #void reset(shared_ptr[T]&)
 
-cdef extern from 'ql/handle.hpp' namespace 'QuantLib':
-    cdef cppclass Handle[T]:
-        Handle()
-        Handle(T*)
-        Handle(shared_ptr[T]&)
-        shared_ptr[T]& currentLink()
+# Local imports from the C++ support code
 
-    cdef cppclass RelinkableHandle[T](Handle):
-        RelinkableHandle()
-        RelinkableHandle(T*)
-        RelinkableHandle(shared_ptr[T]*)
-        void linkTo(shared_ptr[T]&)
-        void linkTo(shared_ptr[T]&, bool registerAsObserver)
-
-
-cimport quantlib._cashflow as _cashflow
-cimport quantlib.instruments._bonds as _bonds
-cimport quantlib.instruments._instrument as _instrument
-cimport quantlib.processes._heston_process as _hp
-cimport quantlib.processes._stochastic_process as _sp
-cimport quantlib.pricingengines._pricing_engine as _pricing_engine
-cimport quantlib.time._calendar as _calendar
-cimport quantlib.time._date as _date
-cimport quantlib.time._daycounter as _daycounter
-cimport quantlib.time.daycounters._actual_actual as _actual_actual
-cimport quantlib.time._period as _period
-cimport quantlib.time._schedule as _schedule
-
-
-# Local imports
 cdef extern from "ql_settings.hpp" namespace "QL":
     _date.Date get_evaluation_date()
     void set_evaluation_date(_date.Date& date)
 
 cdef extern from "simulate_support_code.hpp":
 
-    void simulateMP(shared_ptr[_sp.StochasticProcess]& process,
+    void simulateMP(shared_ptr[_stochastic_process.StochasticProcess]& process,
                     int nbPaths, int nbSteps, Time horizon, BigNatural seed,
                     bool antithetic_variates, double *res) except +
+
+cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QuantLib':
+
+    cdef shared_ptr[_pricing_engine.PricingEngine] mc_vanilla_engine_factory(
+      string& trait, 
+      string& RNG,
+      shared_ptr[_heston_process.HestonProcess]& process,
+      bool doAntitheticVariate,
+      Size stepsPerYear,
+      Size requiredSamples,
+      BigNatural seed) except +
+
+## Cython does not seem to handle nested templates
+## cdef extern from 'ql/pricingengines/vanilla/mcvanillaengine.hpp' namespace 'QuantLib':
+
+##     cdef cppclass MCVanillaEngine[[MC], RNG, S, Inst]:
+##         pass
+##         # Not using the constructor because of the missing support for typemaps
+##         # in Cython --> use only the vanilla_engine_factory!

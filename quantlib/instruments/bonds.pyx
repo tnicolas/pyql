@@ -9,10 +9,10 @@
 
 include '../types.pxi'
 
-from quantlib.ql cimport Handle, shared_ptr, RelinkableHandle
-from quantlib.ql cimport _bonds, _cashflow, _date, _instrument
-from quantlib.ql cimport _pricing_engine as _pe
-from quantlib.ql cimport _calendar, _daycounter, _schedule
+from quantlib.ql cimport (
+    Handle, shared_ptr, RelinkableHandle, _bonds, _cashflow, _date, _instrument,
+    _pricing_engine as _pe, _calendar, _daycounter, _schedule
+)
 
 from cython.operator cimport dereference as deref
 from libcpp.vector cimport vector
@@ -25,7 +25,6 @@ from quantlib.time.date cimport Date, date_from_qldate
 from quantlib.time.schedule cimport Schedule
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.calendar import Following
-
 
 import datetime
 

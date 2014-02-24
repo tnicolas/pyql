@@ -25,7 +25,7 @@ After wrapping the C++ class, this class is now available in python:
 
 A couple of observations are worth mentioning:
 
-* pyql preserves the module hierarchy of QuantLib: 
+* pyql tries to preserve the module hierarchy of QuantLib: 
 the SimpleQuote class is defined in the quote module in C++.
 
 * pyql exposes QuantLib in a pythonic fashion: instead of exposing the accessor value(),
@@ -71,7 +71,8 @@ The syntax is almost identical to the corresponding c++ header file. The
 types used in declaring arguments are defined in ''types.pxi''.
 
 The clause 'except +' signals that the method may throw an exception. It
-is indispensible to append this clause to every declaration. Without it, an
+is important to append this clause to methods raising C++ exception to make sure
+they will be converted to Python exception and no segfaults.. Without it, an
 exception thrown in QL will terminate the python process.
 
 .. warning:: Do not use Cython/distutils directive in the .pyx files.
@@ -79,24 +80,48 @@ exception thrown in QL will terminate the python process.
     In particular the `libraries: QuantLib` will cause compilation to fail on
     Windows because of the library name which is different.
 
+In order to make sure all of the Cython extensions will go through one unique
+shared library to load QuantLib, all of the C++ pxd declarations are exposed
+through the `quantlib/ql.pxd` file.
+
+.. note:: Usage of quantlib.ql
+
+    The `quantlib.ql` Cython module has been introduced to solve the issue of
+    builind PyQL on Windows. The QuantLib project does only provide a static library
+    and no DLL. This caused some weird (but logic) issues with the singletons
+    used in QuantLib from the Python side. 
+    Other projects went down for a solution where they created their own DLL on top
+    of QuantLib and then used that DLL from the Cython project (e.g. PyBG). For PyQL,
+    we tried to avoid that midleware layer and have all of it within the Cython
+    wrappers. In order to make this work, all of the pxd file exposing
+    `cdef extern from` blocks with QuantLib classes must be used and exposed to
+    Cython through `quantlib.ql`. Then all of the pyx and pxd implementing the 
+    Cython extensions need to cimport from `quantlib.ql`.
+    
+    ! They are no restriction for imports between pxd's on the same side (e.g.
+    _calendar that cimports _date and _period).
+    
+    
+    
 Declaration of the python class
 -------------------------------
 
 The second header file declares the python classes that will be wrapping 
 the QL classes. The file ''quotes.pxd'' is reproduced below::
 
-    cimport _quote as _qt
+    from quantlib.ql _quote as _qt
     from quantlib.handle cimport shared_ptr
 
     cdef class Quote:
         cdef shared_ptr[_qt.Quote]* _thisptr
 
-Notice that in our header files we use 'Quote' to refer the the C++ class (in file _quote.pxd)
+Note that in our header files we use 'Quote' to refer the the C++ class (in file _quote.pxd)
  and to the python class (in file quote.pxd). To avoid 
 confusion we use the following convention:
 
  * the C++ class is always refered to as ''_qt.Quote''. 
  * the python class is always referd to as ''Quote''
+ * cimport for the _quote module is always done through `quantlib.ql`!
 
 The cython wrapper class holds a reference to the QL c++ class. As we do not
 want to do any memory handling on the Python side, we always wrap the C++
@@ -106,8 +131,9 @@ deallocation the Cython extension.
 Implementation of the python class
 ----------------------------------
 
-The third file contains the implementation of the cython wrapper class. As an illustration, the implementation of the ''SingleQuote'' python class 
-is reproduced below::
+The third file contains the implementation of the cython wrapper class. As an 
+illustration, the implementation of the ''SingleQuote'' python class is 
+reproduced below::
 
     cdef class SimpleQuote(Quote):
 
@@ -119,20 +145,21 @@ is reproduced below::
             del self._thisptr # properly deallocates the shared_ptr and
                               # probably the target object if not referenced 
 
-	def __str__(self):
-	    return 'Simple Quote: %f' % self._thisptr.get().value()
+    def __str__(self):
+        return 'Simple Quote: %f' % self._thisptr.get().value()
 
-	property value:
-	    def __get__(self):
+    property value:
+        def __get__(self):
             if self._thisptr.get().isValid():
                 return self._thisptr.get().value()
             else:
                 return None
 
-	    def __set__(self, float value):
+        def __set__(self, float value):
             (<_qt.SimpleQuote*>self._thisptr.get()).setValue(value)
 
-The ''__init__'' method invokes the c++ constructor, which returns a boost shared pointer.
+The ''__init__'' method invokes the c++ constructor, which returns a boost
+shared pointer.
 
 Properties are used to give a more pythonic flavor to the wrapping. 
 In python, we get the value of the ''SimpleQuote'' with the syntax

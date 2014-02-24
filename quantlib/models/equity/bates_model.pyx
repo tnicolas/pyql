@@ -11,10 +11,11 @@ include '../../types.pxi'
 
 from cython.operator cimport dereference as deref
 
-cimport _bates_model as _bm
-cimport _heston_model as _hm
-cimport quantlib.processes._heston_process as _hp
-from quantlib.handle cimport Handle, shared_ptr
+from quantlib.ql cimport (
+    _bates_model as _bm, _heston_model as _hm, _heston_process as _hp,
+    Handle, shared_ptr
+)
+
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.processes.bates_process cimport BatesProcess
 from quantlib.models.equity.heston_model cimport HestonModel

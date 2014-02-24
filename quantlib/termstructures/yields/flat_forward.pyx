@@ -10,7 +10,8 @@
 include '../../types.pxi'
 from cython.operator cimport dereference as deref
 
-from quantlib.time._period cimport Frequency
+from quantlib.ql cimport _period, _flat_forward as ffwd, _quote as _qt
+
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.date cimport Date, date_from_qldate
@@ -18,8 +19,6 @@ from quantlib.time.date cimport Date, date_from_qldate
 from quantlib.compounding import Continuous
 from quantlib.time.date import Annual
 
-cimport _flat_forward as ffwd
-cimport quantlib._quote as _qt
 from quantlib.quotes cimport Quote
 from quantlib.termstructures.yields.yield_term_structure cimport YieldTermStructure
 
@@ -71,7 +70,7 @@ cdef class FlatForward(YieldTermStructure):
                         quote_handle,
                         deref(daycounter._thisptr),
                         <ffwd.Compounding>compounding,
-                        <Frequency>frequency
+                        <_period.Frequency>frequency
                     )
                 )
             else:
@@ -81,7 +80,7 @@ cdef class FlatForward(YieldTermStructure):
                         <ffwd.Rate>forward,
                         deref(daycounter._thisptr),
                         <ffwd.Compounding>compounding,
-                        <Frequency>frequency
+                        <_period.Frequency>frequency
                     )
                 )
         elif settlement_days is not None and \
@@ -97,7 +96,7 @@ cdef class FlatForward(YieldTermStructure):
                         quote_handle,
                         deref(daycounter._thisptr),
                         <ffwd.Compounding>compounding,
-                        <Frequency>frequency
+                        <_period.Frequency>frequency
                     )
                 )
             else:
@@ -108,7 +107,7 @@ cdef class FlatForward(YieldTermStructure):
                         <Real>forward,
                         deref(daycounter._thisptr),
                         <ffwd.Compounding>compounding,
-                        <Frequency>frequency
+                        <_period.Frequency>frequency
                     )
                 )
         else:

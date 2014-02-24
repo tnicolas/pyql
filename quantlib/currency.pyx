@@ -7,8 +7,7 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-cimport _currency as _cu
-cimport currency
+from quantlib.ql cimport _currency as _cu
 
 cdef class Currency:
     def __cinit__(self):

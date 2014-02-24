@@ -1,5 +1,4 @@
-from quantlib.handle cimport shared_ptr
-cimport quantlib._quote as _qt
+from quantlib.ql cimport _quote as _qt, shared_ptr
 
 cdef class Quote:
 

@@ -1,5 +1,5 @@
-cimport quantlib.time._calendar as _calendar
-cimport quantlib.time.calendars._united_kingdom as _uk
+from quantlib.ql  cimport _calendar, _united_kingdom as _uk
+
 from quantlib.time.calendar cimport Calendar
 
 cdef public enum Market:

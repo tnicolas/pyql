@@ -13,12 +13,10 @@ from cython.operator cimport dereference as deref
 
 from libcpp cimport bool
 
-from quantlib.handle cimport shared_ptr
-
-cimport _credit_default_swap as _cds
-cimport _instrument
-from quantlib.pricingengines cimport _pricing_engine as _pe
-from quantlib.time cimport _calendar
+from quantlib.ql cimport (
+    shared_ptr, _credit_default_swap as _cds, _instrument, _calendar,
+    _pricing_engine as _pe
+)
 
 from quantlib.instruments.instrument cimport Instrument
 from quantlib.pricingengines.engine cimport PricingEngine

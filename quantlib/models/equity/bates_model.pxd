@@ -6,9 +6,12 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
-cimport quantlib.models.equity._bates_model as _bm
 
-from quantlib.handle cimport shared_ptr
+from quantlib.ql cimport (
+    _bates_model as _bm, _heston_model as _hm, _heston_process as _hp,
+    Handle, shared_ptr
+)
+
 from quantlib.models.equity.heston_model cimport HestonModel
 
 cdef class BatesModel(HestonModel):

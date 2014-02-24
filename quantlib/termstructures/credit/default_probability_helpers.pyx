@@ -9,14 +9,10 @@
 
 from cython.operator cimport dereference as deref
 
-from quantlib.handle cimport shared_ptr, Handle
-
-cimport quantlib.termstructures.credit._credit_helpers as _ci
-cimport quantlib.termstructures._yield_term_structure as _yts
-from quantlib.time._period cimport Frequency
-from quantlib.time._schedule cimport Rule
-from quantlib.time._calendar cimport BusinessDayConvention
-
+from quantlib.ql cimport (
+    shared_ptr, Handle, _yield_term_structure as _yts, _credit_helpers as _ci,
+    _period, _schedule, _calendar
+)
 
 from quantlib.time.date cimport Period
 from quantlib.time.calendar cimport Calendar
@@ -56,8 +52,9 @@ cdef class SpreadCdsHelper(CdsHelper):
 
         self._thisptr = new shared_ptr[_ci.CdsHelper](\
             new _ci.SpreadCdsHelper(running_spread, deref(tenor._thisptr.get()),
-                settlement_days, deref(calendar._thisptr), <Frequency>frequency,
-                <BusinessDayConvention>paymentConvention, <Rule>date_generation_rule,
+                settlement_days, deref(calendar._thisptr), <_period.Frequency>frequency,
+                <_calendar.BusinessDayConvention>paymentConvention, 
+                <_schedule.Rule>date_generation_rule,
                 deref(daycounter._thisptr),
                 recovery_rate, yts, settles_accrual,
                 pays_at_default_time)

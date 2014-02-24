@@ -8,9 +8,9 @@
 # distutils: language = c++
 from cython.operator cimport dereference as deref
 
-from quantlib.handle cimport Handle, shared_ptr
-cimport _pricing_engine as _pe
-cimport _bond
+from quantlib.ql cimport (
+    Handle, shared_ptr, _pricing_engine as _pe, _bond_pricing_engine as _bond
+)
 
 from engine cimport PricingEngine
 

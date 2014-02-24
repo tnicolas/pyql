@@ -12,8 +12,7 @@ The day count can be calculated according to:
 For more details, refer to
 http://www.isda.org/publications/pdf/Day-Count-Fracation1999.pdf
 '''
-cimport quantlib.time._daycounter as _daycounter
-cimport quantlib.time.daycounters._actual_actual as _aa
+from quantlib.ql cimport _daycounter, _actual_actual as _aa
 from quantlib.time.daycounter cimport DayCounter
 
 cdef public enum Convention:

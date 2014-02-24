@@ -1,6 +1,4 @@
-cimport _optimization as _opt
-
-from quantlib.handle cimport shared_ptr
+from quantlib.ql cimport shared_ptr, _optimization as opt
 
 cdef class OptimizationMethod:
     def __cinit__(self):
