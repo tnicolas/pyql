@@ -9,7 +9,7 @@ cdef extern from 'ql/instrument.hpp' namespace 'QuantLib':
         Instrument()
 
         Real NPV()
-        Date& valuationDate()
+        const Date& valuationDate() except +
         void setPricingEngine(shared_ptr[PricingEngine]&)
 
 

@@ -1,5 +1,4 @@
-from quantlib.handle cimport shared_ptr
-cimport quantlib.pricingengines._pricing_engine as _pe
+from quantlib.ql cimport _pricing_engine as _pe, shared_ptr
 from quantlib.pricingengines.engine cimport PricingEngine
 
 cdef class MCVanillaEngine(PricingEngine):

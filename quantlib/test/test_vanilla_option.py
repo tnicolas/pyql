@@ -1,9 +1,8 @@
 from .unittest_tools import unittest
 from quantlib.instruments.option import (
-    EuropeanExercise, AmericanExercise, DividendVanillaOption
+    EuropeanExercise, AmericanExercise, DividendVanillaOption, VanillaOption
     )
 from quantlib.instruments.payoffs import PlainVanillaPayoff, Put
-from quantlib.instruments.option import VanillaOption
 from quantlib.pricingengines.vanilla.vanilla import (
     AnalyticEuropeanEngine, BaroneAdesiWhaleyApproximationEngine,
     FDDividendAmericanEngine
@@ -25,7 +24,7 @@ class VanillaOptionTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.settings = Settings()
+        self.settings = Settings.instance()
 
         self.calendar = TARGET()
 
@@ -116,6 +115,8 @@ class VanillaOptionTestCase(unittest.TestCase):
 
         european_option.set_pricing_engine(analytic_european_engine)
 
+        print 'Eval', self.settings.evaluation_date
+        print 'Option', european_option.valuation_date
         self.assertAlmostEquals(3.844308, european_option.net_present_value, 6)
 
     def test_american_vanilla_option(self):

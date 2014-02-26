@@ -9,7 +9,7 @@
 
 include '../types.pxi'
 
-from quantlib.handle cimport Handle, shared_ptr
+
 from cython.operator cimport dereference as deref
 from cpython cimport bool
 from libcpp cimport bool as cbool
@@ -17,8 +17,7 @@ from libcpp cimport bool as cbool
 from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
-cimport _libor
-cimport quantlib._index as _in
+from quantlib.ql cimport _index as _in, _libor, Handle, shared_ptr
 
 from quantlib.time.date cimport Period
 from quantlib.time.daycounter cimport DayCounter

@@ -13,13 +13,10 @@ from cython.operator cimport dereference as deref
 
 from libcpp.vector cimport vector
 
-cimport _heston_model as _hm
-cimport quantlib.processes._heston_process as _hp
-cimport quantlib.termstructures.yields._flat_forward as _ffwd
-cimport quantlib._quote as _qt
-cimport quantlib.pricingengines._pricing_engine as _pe
-cimport _heston_model as _hm
-from quantlib.handle cimport Handle, shared_ptr
+from quantlib.ql cimport (
+    _heston_model as _hm, _heston_process as _hp, _flat_forward as _ffwd,
+    _quote as _qt, _pricing_engine as _pe, Handle, shared_ptr
+)
 from quantlib.math.optimization cimport OptimizationMethod, EndCriteria
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.pricingengines.engine cimport PricingEngine

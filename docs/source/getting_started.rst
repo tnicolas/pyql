@@ -38,11 +38,10 @@ Features:
 Building and installing PyQL
 ----------------------------
 
-PyQL must be installed on a system that has access to a build of QuantLib (the shared library and the C++ header files). It
-requires patched version of Cython 0.16 (minor patch).
-You can find the patch file in the PyQL root directory. 
+PyQL must be installed on a system that has access to a build of QuantLib
+(the shared library and the C++ header files). 
 
-Once Cython is patched, enter the pyql root directory. Open the setup.py file
+Enter the pyql root directory. Open the setup.py file
 and configure the Boost and QuantLib include and library directories, then run ::
 
     python setup.py build
@@ -58,10 +57,12 @@ Prerequites:
 
 * python 2.7
 * pandas 0.9
+* Cython > 0.19
 
 1. Install Quantlib
 
-   a. Install boost 1.46 from the repository. By default, boost will be installed in /usr/lib and /usr/include.
+   a. Install boost 1.46 from the repository. By default, boost will be
+      installed in /usr/lib and /usr/include.
 
    b. Download Quantlib 1.2 from Quantlib.org and copy to /opt
 
@@ -92,22 +93,15 @@ Prerequites:
 
 2. Install Cython
 
-   a. Download Cython-0.16.tat.gz from cython.org
+   a. Download Cython-0.20.tar.gz from cython.org
 
    b. Extract the Cython folder
 
       .. code-block:: bash
 
-		      $ tar xzvf Cython-0.16.tar.gz
+		      $ tar xzvf Cython-0.20.tar.gz
 
-   c. Apply patch
-
-      .. code-block:: bash
-
-		      $ cd Cython-0.16
-		      $ patch -p1 < ~/dev/pyql/cython_0.16.patch
-
-   d. Build and install Cython
+   c. Build and install Cython
 
       .. code-block:: bash
 

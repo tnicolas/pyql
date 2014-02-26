@@ -4,10 +4,10 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
-cimport _piecewise_yield_curve as _pyc
-cimport _rate_helpers as _rh
-cimport _flat_forward as _ff
-from quantlib.handle cimport shared_ptr
+from quantlib.ql cimport (
+    _piecewise_yield_curve as _pyc, _rate_helpers as _rh, _flat_forward as _ff,
+    shared_ptr
+)
 
 from rate_helpers cimport RateHelper
 from quantlib.time.date cimport Date

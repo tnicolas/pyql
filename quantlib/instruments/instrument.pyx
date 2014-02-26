@@ -1,9 +1,12 @@
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport shared_ptr, _pricing_engine as _pe, _instrument
+from quantlib.ql cimport (
+    shared_ptr, _pricing_engine as _pe, _instrument, _date
+)
 
 from quantlib.pricingengines.engine cimport PricingEngine
+from quantlib.time.date cimport date_from_qldate
 
 cdef class Instrument:
 
@@ -39,3 +42,9 @@ cdef class Instrument:
             return self.net_present_value
 
 
+    property valuation_date:
+        """ The instrument valuation date. """
+        def __get__(self):
+            cdef _date.Date valuation_date
+            valuation_date = self._thisptr.get().valuationDate()
+            return date_from_qldate(valuation_date)

@@ -7,9 +7,8 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-from quantlib.ql cimport shared_ptr, _flat_forward as ffwd
+from quantlib.ql cimport shared_ptr, _flat_forward as ffwd, shared_ptr
 from libcpp cimport bool as cbool
-from quantlib.handle cimport shared_ptr
 
 from quantlib.termstructures.yields.yield_term_structure cimport YieldTermStructure
 

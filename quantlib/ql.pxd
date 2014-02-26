@@ -47,6 +47,7 @@ from quantlib.termstructures.volatility.equityfx cimport _black_vol_term_structu
 from quantlib.termstructures.yields cimport _flat_forward
 from quantlib.termstructures.yields cimport _rate_helpers
 from quantlib.termstructures.yields cimport _zero_curve
+from quantlib.termstructures.yields cimport _piecewise_yield_curve
 from quantlib.time cimport _calendar
 from quantlib.time.calendars cimport (
     _united_states, _united_kingdom, _null_calendar, _germany, _jointcalendar
