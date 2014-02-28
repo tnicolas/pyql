@@ -11,14 +11,14 @@ include '../types.pxi'
 from cython.operator cimport dereference as deref
 
 from quantlib.index cimport Index
-from quantlib.handle cimport shared_ptr
 from quantlib.time.date cimport Period
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.currency cimport Currency
 from quantlib.time.calendar cimport Calendar
 
-cimport quantlib._index as _in
-cimport quantlib.indexes._interest_rate_index as _iri
+from quantlib.ql cimport (
+    _index as _in, _interest_rate_index as _iri, shared_ptr
+)
 
 cdef extern from "string" namespace "std":
     cdef cppclass string:

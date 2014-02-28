@@ -7,13 +7,13 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-from quantlib.handle cimport Handle, shared_ptr
-
 from cython.operator cimport dereference as deref
+
+from quantlib.ql cimport (
+    _euribor as _eu, _flat_forward as _ff, _index as _in, Handle, shared_ptr
+)
+
 from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
-cimport quantlib.termstructures.yields._flat_forward as _ff
-cimport _euribor as _eu
-cimport quantlib._index as _in
 
 
 cdef class Euribor(IborIndex):

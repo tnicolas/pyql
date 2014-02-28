@@ -16,6 +16,7 @@ from quantlib cimport _currency
 from quantlib cimport _index 
 from quantlib cimport _interest_rate
 from quantlib cimport _quote
+from quantlib.indexes cimport _euribor
 from quantlib.indexes cimport _ibor_index
 from quantlib.indexes cimport _libor
 from quantlib.indexes cimport _swap_index
