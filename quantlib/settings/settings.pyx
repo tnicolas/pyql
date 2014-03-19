@@ -3,11 +3,8 @@ from cython.operator cimport dereference as deref
 cimport quantlib.time.date as date
 
 from quantlib.ql cimport (
-    QL_VERSION, get_evaluation_date,
-    set_evaluation_date
+    QL_VERSION, get_evaluation_date, set_evaluation_date, _date
 )
-from quantlib.ql cimport _date
-
 
 cdef class Settings:
 
