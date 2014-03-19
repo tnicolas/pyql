@@ -15,9 +15,8 @@ from cython.operator cimport dereference as deref
 
 from quantlib.time.date import pydate_from_qldate
 
-from quantlib.ql cimport _cashflow as _cf
-from quantlib.ql cimport _date
 from quantlib.ql cimport shared_ptr
+from quantlib cimport ql
 
 cdef class CashFlow:
     """Abstract Base Class.
@@ -39,7 +38,7 @@ cdef class CashFlow:
   
     property date:
         def __get__(self):
-            cdef _date.Date cf_date
+            cdef ql.Date cf_date
             if self._thisptr:
                 cf_date = self._thisptr.get().date()
                 return date.date_from_qldate(cf_date)
@@ -57,11 +56,11 @@ cdef class CashFlow:
 cdef class SimpleCashFlow(CashFlow):
 
     def __init__(self, Real amount, date.Date cfdate):
-        cdef _date.Date* _cfdate
-        _cfdate = <_date.Date*>((<date.Date>cfdate)._thisptr.get())
+        cdef ql.Date* _cfdate
+        _cfdate = <ql.Date*>((<date.Date>cfdate)._thisptr.get())
         
-        self._thisptr = new shared_ptr[_cf.CashFlow]( \
-                            new _cf.SimpleCashFlow(amount,
+        self._thisptr = new shared_ptr[ql.CashFlow]( \
+                            new ql.SimpleCashFlow(amount,
                                                    deref(_cfdate))
                             )
 
@@ -69,9 +68,9 @@ cdef class SimpleCashFlow(CashFlow):
         return 'Simple Cash Flow: %f, %s' % (self.amount,
                                              self.date)
                                      
-cdef object leg_items(vector[shared_ptr[_cf.CashFlow]] leg):
+cdef object leg_items(vector[shared_ptr[ql.CashFlow]] leg):
     cdef int i
-    cdef shared_ptr[_cf.CashFlow] _thiscf
+    cdef shared_ptr[ql.CashFlow] _thiscf
     cdef date.Date _thisdate
     cdef int size = leg.size()
     
@@ -95,22 +94,22 @@ cdef class SimpleLeg:
         
         '''
         #TODO: make so that it handles pydate as well as QL Dates.
-        cdef shared_ptr[_cf.CashFlow] *_thiscf
+        cdef shared_ptr[ql.CashFlow] *_thiscf
         cdef date.Date testDate
-        cdef _date.Date _testDate
-        cdef _date.Date *_thisdate
+        cdef ql.Date _testDate
+        cdef ql.Date *_thisdate
         cdef int i
         
-        self._thisptr = new shared_ptr[vector[shared_ptr[_cf.CashFlow]]](\
-                    new vector[shared_ptr[_cf.CashFlow]]() 
+        self._thisptr = new shared_ptr[vector[shared_ptr[ql.CashFlow]]](\
+                    new vector[shared_ptr[ql.CashFlow]]() 
                     )
                     
         for i in range(len(leg)):
             _thisamount = leg[i][0]
-            _thisdate = <_date.Date*>((<date.Date>leg[i][1])._thisptr.get())
+            _thisdate = <ql.Date*>((<date.Date>leg[i][1])._thisptr.get())
             
-            _thiscf = new shared_ptr[_cf.CashFlow]( \
-                                new _cf.SimpleCashFlow(_thisamount,
+            _thiscf = new shared_ptr[ql.CashFlow]( \
+                                new ql.SimpleCashFlow(_thisamount,
                                                        deref(_thisdate))
                                                   )   
 
@@ -130,7 +129,7 @@ cdef class SimpleLeg:
             '''Return Leg as (amount, date) list
             
             '''
-            cdef vector[shared_ptr[_cf.CashFlow]] leg = \
+            cdef vector[shared_ptr[ql.CashFlow]] leg = \
                                         deref(self._thisptr.get())
             return leg_items(leg)
             

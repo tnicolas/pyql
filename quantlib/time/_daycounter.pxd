@@ -1,13 +1,8 @@
-include '../types.pxi'
-
 from libcpp cimport bool
-from _date cimport Date
-from _calendar cimport Calendar
 
 cdef extern from "string" namespace "std":
     cdef cppclass string:
         char* c_str()
-
 
 cdef extern from 'ql/time/daycounter.hpp' namespace 'QuantLib':
 

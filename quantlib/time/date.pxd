@@ -9,14 +9,15 @@
 
 from libcpp cimport bool
 
-from quantlib.ql cimport _date, _period, shared_ptr
+from quantlib.ql cimport shared_ptr
+from quantlib cimport ql
 
 cimport date
 
 cdef class Period:
-    cdef shared_ptr[_period.Period]* _thisptr
+    cdef shared_ptr[ql.Period]* _thisptr
 
 cdef class Date:
-    cdef shared_ptr[_date.Date]* _thisptr
+    cdef shared_ptr[ql.Date]* _thisptr
 
-cdef date.Date date_from_qldate(_date.Date& date)
+cdef date.Date date_from_qldate(ql.Date& date)

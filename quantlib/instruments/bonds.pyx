@@ -9,13 +9,11 @@
 
 include '../types.pxi'
 
-from quantlib.ql cimport (
-    Handle, shared_ptr, RelinkableHandle, _bonds, _cashflow, _date, _instrument,
-    _pricing_engine as _pe, _calendar, _daycounter, _schedule
-)
+from quantlib.ql cimport shared_ptr
+from quantlib cimport ql
 
 from cython.operator cimport dereference as deref
-from libcpp.vector cimport vector
+from libcpp.vector cimport         vector
 
 from quantlib cimport cashflow
 from quantlib.instruments.instrument cimport Instrument
@@ -28,12 +26,11 @@ from quantlib.time.calendar import Following
 
 import datetime
 
-
-cdef _bonds.Bond* get_bond(Bond bond):
+cdef ql.Bond* get_bond(Bond bond):
     """ Utility function to extract a properly casted Bond pointer out of the
     internal _thisptr attribute of the Instrument base class. """
 
-    cdef _bonds.Bond* ref = <_bonds.Bond*>bond._thisptr.get()
+    cdef ql.Bond* ref = <ql.Bond*>bond._thisptr.get()
 
     return ref
 
@@ -57,25 +54,27 @@ cdef class Bond(Instrument):
     property issue_date:
         """ Bond issue date. """
         def __get__(self):
-            cdef _date.Date issue_date = get_bond(self).issueDate()
+            cdef ql.Date issue_date = get_bond(self).issueDate()
             return date_from_qldate(issue_date)
 
     property maturity_date:
         """ Bond maturity date. """
         def __get__(self):
-            cdef _date.Date maturity_date = get_bond(self).maturityDate()
+            cdef ql.Date maturity_date = get_bond(self).maturityDate()
             return date_from_qldate(maturity_date)
 
     property valuation_date:
         """ Bond valuation date. """
         def __get__(self):
-            cdef _date.Date valuation_date = get_bond(self).valuationDate()
+            cdef ql.Date valuation_date = get_bond(self).valuationDate()
             return date_from_qldate(valuation_date)
 
     def settlement_date(self, Date from_date=None):
         """ Returns the bond settlement date after the given date."""
-        cdef _date.Date* date
-        cdef _date.Date settlement_date
+        from quantlib.settings import Settings
+        print 'XXX ', Settings.instance().evaluation_date
+        cdef ql.Date* date
+        cdef ql.Date settlement_date
         if from_date is not None:
             date = from_date._thisptr.get()
             settlement_date = get_bond(self).settlementDate(deref(date))
@@ -107,7 +106,7 @@ cdef class Bond(Instrument):
     property cashflows:
         """ cash flow stream as a Leg """
         def __get__(self):
-            cdef _cashflow.Leg leg
+            cdef ql.Leg leg
             cdef object result
             leg = get_bond(self).cashflows()
             result = cashflow.leg_items(leg)
@@ -135,33 +134,33 @@ cdef class FixedRateBond(Bond):
             for rate in coupons:
                 _coupons.push_back(rate)
 
-            cdef _schedule.Schedule* _fixed_bonds_schedule = \
-                    <_schedule.Schedule*>fixed_bonds_schedule._thisptr
-            cdef _daycounter.DayCounter* _accrual_day_counter = \
-                    <_daycounter.DayCounter*>accrual_day_counter._thisptr
+            cdef ql.Schedule* _fixed_bonds_schedule = \
+                    <ql.Schedule*>fixed_bonds_schedule._thisptr
+            cdef ql.DayCounter* _accrual_day_counter = \
+                    <ql.DayCounter*>accrual_day_counter._thisptr
 
-            cdef _date.Date* _issue_date
+            cdef ql.Date* _issue_date
 
             if issue_date is None:
                 # empty issue rate seem to break some of the computation with
                 # segfaults. Do we really want to let the user do that ? Or
                 # shall we default on the first date of the schedule ?
-                self._thisptr = new shared_ptr[_instrument.Instrument](
-                    new _bonds.FixedRateBond(settlement_days,
+                self._thisptr = new shared_ptr[ql.Instrument](
+                    new ql.FixedRateBond(settlement_days,
                         face_amount, deref(_fixed_bonds_schedule), deref(_coupons),
                         deref(_accrual_day_counter),
-                        <_calendar.BusinessDayConvention>payment_convention,
+                        <ql.BusinessDayConvention>payment_convention,
                         redemption)
                 )
             else:
-                _issue_date = <_date.Date*>((<Date>issue_date)._thisptr.get())
+                _issue_date = <ql.Date*>((<Date>issue_date)._thisptr.get())
 
-                self._thisptr = new shared_ptr[_instrument.Instrument](\
-                    new _bonds.FixedRateBond(settlement_days,
+                self._thisptr = new shared_ptr[ql.Instrument](\
+                    new ql.FixedRateBond(settlement_days,
                         face_amount, deref(_fixed_bonds_schedule),
                         deref(_coupons),
                         deref(_accrual_day_counter),
-                        <_calendar.BusinessDayConvention>payment_convention,
+                        <ql.BusinessDayConvention>payment_convention,
                         redemption, deref(_issue_date)
                     )
                 )
@@ -175,11 +174,11 @@ cdef class ZeroCouponBond(Bond):
     ):
         """ Instantiate a zero coupon bond. """
         if issue_date is not None:
-            self._thisptr = new shared_ptr[_instrument.Instrument](
-                new _bonds.ZeroCouponBond(
+            self._thisptr = new shared_ptr[ql.Instrument](
+                new ql.ZeroCouponBond(
                     <Natural> settlement_days, deref(calendar._thisptr),
                     <Real>face_amount, deref(maturity_date._thisptr.get()),
-                    <_calendar.BusinessDayConvention>payment_convention,
+                    <ql.BusinessDayConvention>payment_convention,
                     <Real>redemption, deref(issue_date._thisptr.get())
                 )
             )

@@ -1,5 +1,5 @@
-from quantlib.ql cimport _daycounter
+from quantlib cimport ql
 
 cdef class DayCounter:
 
-    cdef _daycounter.DayCounter* _thisptr
+    cdef ql.DayCounter* _thisptr

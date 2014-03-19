@@ -1,5 +1,5 @@
-from quantlib.ql cimport _schedule
+from quantlib cimport ql
 
 cdef class Schedule:
-    cdef _schedule.Schedule* _thisptr
+    cdef ql.Schedule* _thisptr
 

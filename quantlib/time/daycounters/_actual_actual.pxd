@@ -1,9 +1,7 @@
-from quantlib.time._daycounter cimport DayCounter
-
 cdef extern from 'ql/time/daycounters/actualactual.hpp' namespace 'QuantLib::ActualActual':
     cdef enum Convention:
         ISMA
-        Bond
+        # Bond -- Bond is duplicate of ISMA and conflicts with the Bond instrument
         ISDA
         Historical
         Actual365

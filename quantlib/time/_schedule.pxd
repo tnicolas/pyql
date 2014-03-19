@@ -1,10 +1,5 @@
-include '../types.pxi'
-
 from libcpp cimport bool
 from libcpp.vector cimport vector
-from _period cimport Period
-from _date cimport Date
-from _calendar cimport Calendar, BusinessDayConvention
 
 cdef extern from 'ql/time/dategenerationrule.hpp' namespace \
         'QuantLib::DateGeneration':

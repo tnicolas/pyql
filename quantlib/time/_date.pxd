@@ -1,7 +1,4 @@
-include '../types.pxi'
-
 from libcpp cimport bool
-from _period cimport Period
 
 cdef extern from "ostream" namespace "std":
     cdef cppclass ostream:

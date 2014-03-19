@@ -1,15 +1,5 @@
-include '../types.pxi'
-
 from libcpp.vector cimport vector
 from libcpp cimport bool
-
-from quantlib.handle cimport shared_ptr, Handle
-from _instrument cimport Instrument
-from quantlib.time._calendar cimport BusinessDayConvention, Calendar
-from quantlib.time._date cimport Date
-from quantlib.time._daycounter cimport DayCounter
-from quantlib.time._schedule cimport Schedule
-from quantlib._cashflow cimport Leg
 
 cdef extern from 'ql/instruments/bond.hpp' namespace 'QuantLib':
     cdef cppclass Bond(Instrument):

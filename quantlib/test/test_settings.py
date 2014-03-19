@@ -1,10 +1,13 @@
 from .unittest_tools import unittest
 from quantlib.instruments.bonds import FixedRateBond
-from quantlib.time.api import (
-    Date, Days, August, Period, Jul, Annual, today, Years, TARGET,
-    Unadjusted, Schedule, ModifiedFollowing, Backward, ActualActual, ISMA,
-    Following
+from quantlib.time.date import (
+    Date, Days, August, Period, Jul, Annual, today, Years
 )
+from quantlib.time.calendar import (
+    TARGET, Unadjusted, Following, ModifiedFollowing
+)
+from quantlib.time.daycounters.actual_actual import ISMA, ActualActual
+from quantlib.time.schedule import Schedule, Backward
 
 from quantlib.settings import Settings
 
@@ -12,7 +15,7 @@ class SettingsTestCase(unittest.TestCase):
 
     def test_using_settings(self):
 
-        settings = Settings()
+        settings = Settings.instance()
 
         evaluation_date = today()
 
@@ -29,11 +32,12 @@ class SettingsTestCase(unittest.TestCase):
 
     def test_settings_instance_method(self):
 
-        Settings.instance().evaluation_date = today()
+        settings =  Settings.instance()
+        settings.evaluation_date = today()
 
         self.assertEquals(
                 today(),
-                Settings.instance().evaluation_date
+                settings.evaluation_date
         )
 
 
@@ -46,7 +50,7 @@ class SettingsTestCase(unittest.TestCase):
         
         todays_date = today()
 
-        settings = Settings()
+        settings = Settings.instance()
         settings.evaluation_date =  todays_date
 
         calendar = TARGET()
@@ -95,7 +99,7 @@ class SettingsTestCase(unittest.TestCase):
         
         todays_date = Date(30, August, 2011) 
 
-        settings = Settings()
+        settings = Settings.instance()
         settings.evaluation_date =  todays_date
 
         calendar = TARGET()
@@ -122,11 +126,11 @@ class SettingsTestCase(unittest.TestCase):
 
         bond = FixedRateBond(
             settlement_days,
-		    face_amount,
-		    fixed_bond_schedule,
-		    [coupon_rate],
+	   face_amount,
+	   fixed_bond_schedule,
+	   [coupon_rate],
             ActualActual(ISMA), 
-		    Following,
+	   Following,
             redemption,
             issue_date
         )
@@ -136,6 +140,9 @@ class SettingsTestCase(unittest.TestCase):
        
     def test_bond_schedule_anotherday_bug_cython_implementation(self):
 
+        # This cython module replicates issues related to the problems with the
+        # Settings singleton when used with multiple Cython modules and one 
+        # "shared" static library!
         import quantlib.test.test_cython_bug as tcb
 
         date1, date2  = tcb.test_bond_schedule_today_cython()
@@ -143,5 +150,6 @@ class SettingsTestCase(unittest.TestCase):
         
         date1, date2  = tcb.test_bond_schedule_anotherday_cython()
         self.assertEquals(date1, date2)
-    
-
+        
+if __name__ == '__main__':
+    unittest.main()

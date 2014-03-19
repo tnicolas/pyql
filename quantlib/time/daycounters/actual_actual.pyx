@@ -12,26 +12,26 @@ The day count can be calculated according to:
 For more details, refer to
 http://www.isda.org/publications/pdf/Day-Count-Fracation1999.pdf
 '''
-from quantlib.ql cimport _daycounter, _actual_actual as _aa
+from quantlib cimport ql
 from quantlib.time.daycounter cimport DayCounter
 
 cdef public enum Convention:
-    ISMA       = _aa.ISMA
-    Bond       = _aa.Bond
-    ISDA       = _aa.ISDA
-    Historical = _aa.Historical
-    Actual365  = _aa.Actual365
-    AFB        = _aa.AFB
-    Euro       = _aa.Euro
+    ISMA       = ql.ISMA
+    Bond       = ql.ISMA
+    ISDA       = ql.ISDA
+    Historical = ql.Historical
+    Actual365  = ql.Actual365
+    AFB        = ql.AFB
+    Euro       = ql.Euro
 
 CONVENTIONS = {
-    'ISMA' : _aa.ISMA,
-    'Bond' : _aa.Bond,
-    'ISDA' : _aa.ISDA,
-    'Historical' : _aa.Historical,
-    'Actual365' : _aa.Actual365,
-    'AFB' : _aa.AFB,
-    'Euro' : _aa.Euro
+    'ISMA' : ql.ISMA,
+    'Bond' : ql.ISMA,
+    'ISDA' : ql.ISDA,
+    'Historical' : ql.Historical,
+    'Actual365' : ql.Actual365,
+    'AFB' : ql.AFB,
+    'Euro' : ql.Euro
 }
 
 
@@ -53,15 +53,15 @@ cdef class ActualActual(DayCounter):
     """
 
     def __cinit__(self, convention=ISMA):
-        self._thisptr = <_daycounter.DayCounter*> new \
-            _aa.ActualActual(<_aa.Convention>convention)
+        self._thisptr = <ql.DayCounter*> new \
+            ql.ActualActual(<ql.Convention>convention)
 
 
-cdef _daycounter.DayCounter* from_name(str name, str convention):
+cdef ql.DayCounter* from_name(str name, str convention):
 
-    cdef _aa.Convention ql_convention = <_aa.Convention>CONVENTIONS[convention]
+    cdef ql.Convention ql_convention = <ql.Convention>CONVENTIONS[convention]
 
-    cdef _daycounter.DayCounter* return_val =  new _aa.ActualActual(ql_convention)
+    cdef ql.DayCounter* return_val =  new ql.ActualActual(ql_convention)
 
     return return_val
 

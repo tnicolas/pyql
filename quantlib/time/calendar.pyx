@@ -11,17 +11,17 @@ from cython.operator cimport dereference as deref, preincrement as inc
 from libcpp cimport bool
 from libcpp.vector cimport vector
 
-from quantlib.ql cimport _calendar, _date, _period
+from quantlib cimport ql
 
 cimport quantlib.time.date as date
 
 # BusinessDayConvention:
 cdef public enum BusinessDayConvention:
-    Following         = _calendar.Following
-    ModifiedFollowing = _calendar.ModifiedFollowing
-    Preceding         = _calendar.Preceding
-    ModifiedPreceding = _calendar.ModifiedPreceding
-    Unadjusted        = _calendar.Unadjusted
+    Following         = ql.Following
+    ModifiedFollowing = ql.ModifiedFollowing
+    Preceding         = ql.Preceding
+    ModifiedPreceding = ql.ModifiedPreceding
+    Unadjusted        = ql.Unadjusted
 
 cdef class Calendar:
     '''This class provides methods for determining whether a date is a
@@ -48,14 +48,14 @@ cdef class Calendar:
         '''Returns true iff the weekday is part of the
         weekend for the given market.
         '''
-        cdef _date.Date* c_date = (<date.Date>test_date)._thisptr.get()
+        cdef ql.Date* c_date = (<date.Date>test_date)._thisptr.get()
         return self._thisptr.isHoliday(deref(c_date))
 
     def is_weekend(self,  int week_day):
         '''Returns true iff the date is last business day for the
         month in given market.
         '''
-        return self._thisptr.isWeekend(<_date.Weekday>week_day)
+        return self._thisptr.isWeekend(<ql.Weekday>week_day)
 
     def is_business_day(self, date.Date test_date):
         '''Returns true iff the date is a business day for the
@@ -86,28 +86,28 @@ cdef class Calendar:
         
         """
 
-        cdef _date.Date* c_date = (<date.Date>current_date)._thisptr.get()
-        cdef _date.Date eom_date = self._thisptr.endOfMonth(deref(c_date))
+        cdef ql.Date* c_date = (<date.Date>current_date)._thisptr.get()
+        cdef ql.Date eom_date = self._thisptr.endOfMonth(deref(c_date))
 
         return date.date_from_qldate(eom_date)
 
     def add_holiday(self, date.Date holiday):
         '''Adds a date to the set of holidays for the given calendar. '''
-        cdef _date.Date* c_date = (<date.Date>holiday)._thisptr.get()
+        cdef ql.Date* c_date = (<date.Date>holiday)._thisptr.get()
         self._thisptr.addHoliday(deref(c_date))
 
     def remove_holiday(self, date.Date holiday):
         '''Removes a date from the set of holidays for the given calendar.'''
-        cdef _date.Date* c_date = (<date.Date>holiday)._thisptr.get()
+        cdef ql.Date* c_date = (<date.Date>holiday)._thisptr.get()
         self._thisptr.removeHoliday(deref(c_date))
 
     def adjust(self, date.Date given_date, int convention=Following):
         '''Adjusts a non-business day to the appropriate near business day
             with respect to the given convention.
         '''
-        cdef _date.Date* c_date = (<date.Date>given_date)._thisptr.get()
-        cdef _date.Date adjusted_date = self._thisptr.adjust(deref(c_date),
-                <_calendar.BusinessDayConvention> convention)
+        cdef ql.Date* c_date = (<date.Date>given_date)._thisptr.get()
+        cdef ql.Date adjusted_date = self._thisptr.adjust(deref(c_date),
+                <ql.BusinessDayConvention> convention)
 
         return date.date_from_qldate(adjusted_date)
 
@@ -120,18 +120,18 @@ cdef class Calendar:
         You must provide either a step and unit or a Period.
 
         '''
-        cdef _date.Date* c_date = (<date.Date>given_date)._thisptr.get()
-        cdef _date.Date advanced_date
+        cdef ql.Date* c_date = (<date.Date>given_date)._thisptr.get()
+        cdef ql.Date advanced_date
 
         # fixme: add better checking on inputs
         if period is None and units > -1:
             advanced_date = self._thisptr.advance(deref(c_date),
-                    step, <_period.TimeUnit>units,
-                    <_calendar.BusinessDayConvention>convention, end_of_month)
+                    step, <ql.TimeUnit>units,
+                    <ql.BusinessDayConvention>convention, end_of_month)
         elif period is not None:
             advanced_date = self._thisptr.advance(deref(c_date),
                     deref((<date.Period>period)._thisptr.get()),
-                    <_calendar.BusinessDayConvention>convention, end_of_month)
+                    <ql.BusinessDayConvention>convention, end_of_month)
         else:
             raise ValueError(
                 'You must at least provide a step and unit or a Period!'
@@ -149,10 +149,10 @@ cdef class DateList:
     def __cinit__(self):
         self._pos = 0
 
-    cdef _set_dates(self, vector[_date.Date]& dates):
+    cdef _set_dates(self, vector[ql.Date]& dates):
         # fixme : would be great to be able to do that at construction time ...
         # but Cython does not allow to pass C object in the __cinit__ method
-        self._dates = new vector[_date.Date](dates)
+        self._dates = new vector[ql.Date](dates)
 
     def __dealloc__(self):
         if self._dates is not NULL:
@@ -168,7 +168,7 @@ cdef class DateList:
         if self._pos == self._dates.size():
             raise StopIteration()
 
-        cdef _date.Date d = deref(self._dates).at(self._pos)
+        cdef ql.Date d = deref(self._dates).at(self._pos)
         self._pos += 1
         return date.date_from_qldate(d)
 
@@ -177,7 +177,7 @@ def holiday_list(Calendar calendar, date.Date from_date, date.Date to_date,
         bool include_weekends=False):
     '''Returns the holidays between two dates. '''
 
-    cdef vector[_date.Date] dates = _calendar.Calendar_holidayList(
+    cdef vector[ql.Date] dates = ql.Calendar_holidayList(
         deref((<Calendar>calendar)._thisptr),
         deref((<date.Date>from_date)._thisptr.get()),
         deref((<date.Date>to_date)._thisptr.get()),
@@ -204,7 +204,7 @@ cdef class TARGET(Calendar):
     '''
 
     def __cinit__(self):
-        self._thisptr = <_calendar.Calendar*> new _calendar.TARGET()
+        self._thisptr = <ql.Calendar*> new ql.TARGET()
 
 
 

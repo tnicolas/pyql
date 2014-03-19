@@ -1,10 +1,7 @@
-include 'types.pxi'
-
 from libcpp cimport bool
 from libcpp.vector cimport vector
 
-from quantlib.handle cimport shared_ptr
-from quantlib.time._date cimport Date
+# Depends on shared_ptr and Date
 
 cdef extern from 'boost/optional.hpp' namespace 'boost':
     cdef cppclass optional[T]:
