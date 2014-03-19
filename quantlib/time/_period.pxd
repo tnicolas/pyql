@@ -1,4 +1,3 @@
-include '../types.pxi'
 from libcpp cimport bool
 
 cdef extern from 'ql/time/frequency.hpp' namespace "QuantLib":
@@ -45,10 +44,10 @@ cdef extern from 'ql/time/period.hpp' namespace "QuantLib":
 
     Period mult_op 'operator*'(Period& p, Integer i) except +
     Period sub_op 'operator-'(Period& p1, Period& p2)
-    bool eq_op 'operator=='(Period& p1, Period& p2)
-    bool neq_op 'operator!='(Period& p1, Period& p2)
-    bool g_op 'operator>'(Period& p1, Period& p2)
-    bool geq_op 'operator>='(Period& p1, Period& p2)
-    bool l_op 'operator<'(Period& p1, Period& p2)
-    bool leq_op 'operator<='(Period& p1, Period& p2)
+    bool period_eq_op 'operator=='(Period& p1, Period& p2)
+    bool period_neq_op 'operator!='(Period& p1, Period& p2)
+    bool period_g_op 'operator>'(Period& p1, Period& p2)
+    bool period_geq_op 'operator>='(Period& p1, Period& p2)
+    bool period_l_op 'operator<'(Period& p1, Period& p2)
+    bool period_leq_op 'operator<='(Period& p1, Period& p2)
 

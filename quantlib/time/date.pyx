@@ -1,75 +1,67 @@
+include '../types.pxi'
+
 import datetime
 
 from cython.operator cimport dereference as deref
 
 # cannot use date.pxd because of name clashing
-from quantlib.ql cimport _date, _period
-
-from _date cimport (
-    Date as QlDate, Date_todaysDate, Date_nextWeekday,
-    Date_endOfMonth, Date_isEndOfMonth, Date_minDate, Date_maxDate, Year,
-    Date_isLeap, Size, Date_nthWeekday, BigInteger, Integer
-)
-from _period cimport (
-    Period as QlPeriod, mult_op, sub_op, eq_op, neq_op,
-    g_op, geq_op, l_op, leq_op
-    )
+from quantlib cimport ql
 
 cdef public enum Month:
-    January   = _date.January
-    February  = _date.February
-    March     = _date.March
-    April     = _date.April
-    May       = _date.May
-    June      = _date.June
-    July      = _date.July
-    August    = _date.August
-    September = _date.September
-    October   = _date.October
-    November  = _date.November
-    December  = _date.December
-    Jan = _date.Jan
-    Feb = _date.Feb
-    Mar = _date.Mar
-    Apr = _date.Apr
-    Jun = _date.Jun
-    Jul = _date.Jul
-    Aug = _date.Aug
-    Sep = _date.Sep
-    Oct = _date.Oct
-    Nov = _date.Nov
-    Dec = _date.Dec
+    January   = ql.January
+    February  = ql.February
+    March     = ql.March
+    April     = ql.April
+    May       = ql.May
+    June      = ql.June
+    July      = ql.July
+    August    = ql.August
+    September = ql.September
+    October   = ql.October
+    November  = ql.November
+    December  = ql.December
+    Jan = ql.Jan
+    Feb = ql.Feb
+    Mar = ql.Mar
+    Apr = ql.Apr
+    Jun = ql.Jun
+    Jul = ql.Jul
+    Aug = ql.Aug
+    Sep = ql.Sep
+    Oct = ql.Oct
+    Nov = ql.Nov
+    Dec = ql.Dec
 
 cdef public enum Weekday:
-    Sunday   = _date.Sunday
-    Monday   = _date.Monday
-    Tuesday  = _date.Tuesday
-    Wednesday = _date.Wednesday
-    Thursday = _date.Thursday
-    Friday   = _date.Friday
-    Saturday = _date.Saturday
-    Sun = _date.Sun
-    Mon = _date.Mon
-    Tue = _date.Tue
-    Wed = _date.Wed
-    Thu = _date.Thu
-    Fri = _date.Fri
-    Sat = _date.Sat
+    Sunday   = ql.Sunday
+    Monday   = ql.Monday
+    Tuesday  = ql.Tuesday
+    Wednesday = ql.Wednesday
+    Thursday = ql.Thursday
+    Friday   = ql.Friday
+    Saturday = ql.Saturday
+    Sun = ql.Sun
+    Mon = ql.Mon
+    Tue = ql.Tue
+    Wed = ql.Wed
+    Thu = ql.Thu
+    Fri = ql.Fri
+    Sat = ql.Sat
 
 cdef public enum Frequency:
-    NoFrequency      = _period.NoFrequency # null frequency
-    Once             = _period.Once  # only once, e.g., a zero-coupon
-    Annual           = _period.Annual  # once a year
-    Semiannual       = _period.Semiannual  # twice a year
-    EveryFourthMonth = _period.EveryFourthMonth  # every fourth month
-    Quarterly        = _period.Quarterly  # every third month
-    Bimonthly        = _period.Bimonthly  # every second month
-    Monthly          = _period.Monthly # once a month
-    EveryFourthWeek  = _period.EveryFourthWeek # every fourth week
-    Biweekly         = _period.Biweekly # every second week
-    Weekly           = _period.Weekly # once a week
-    Daily            = _period.Daily # once a day
-    OtherFrequency   = _period.OtherFrequency # some other unknown frequency
+    NoFrequency      = ql.NoFrequency # null frequency
+    Once             = ql.Once  # only once, e.g., a zero-coupon
+    Annual           = ql.Annual  # once a year
+    Semiannual       = ql.Semiannual  # twice a year
+    EveryFourthMonth = ql.EveryFourthMonth  # every fourth month
+    Quarterly        = ql.Quarterly  # every third month
+    Bimonthly        = ql.Bimonthly  # every second month
+    Monthly          = ql.Monthly # once a month
+    EveryFourthWeek  = ql.EveryFourthWeek # every fourth week
+    Biweekly         = ql.Biweekly # every second week
+    Weekly           = ql.Weekly # once a week
+    Daily            = ql.Daily # once a day
+    OtherFrequency   = ql.OtherFrequency # some other unknown frequency
 
 FREQUENCIES = ['NoFrequency', 'Once', 'Annual', 'Semiannual', 'EveryFourthMonth',
                'Quarterly', 'Bimonthly', 'Monthly', 'EveryFourthWeek',
@@ -86,10 +78,10 @@ def str_to_frequency(char* name):
     return _STR_FREQ_DICT[name]
 
 cdef public enum TimeUnit:
-    Days   = _period.Days
-    Weeks  = _period.Weeks
-    Months = _period.Months
-    Years  = _period.Years
+    Days   = ql.Days
+    Weeks  = ql.Weeks
+    Months = ql.Months
+    Years  = ql.Years
 
 cdef extern from "string" namespace "std":
     cdef cppclass string:
@@ -103,9 +95,9 @@ cdef class Period:
 
     def __cinit__(self, *args):
         if len(args) == 1:
-            self._thisptr = new shared_ptr[QlPeriod](new QlPeriod(<_period.Frequency>args[0]))
+            self._thisptr = new shared_ptr[ql.Period](new ql.Period(<ql.Frequency>args[0]))
         elif len(args) == 2:
-            self._thisptr = new shared_ptr[QlPeriod](new QlPeriod(<Integer> args[0], <_period.TimeUnit> args[1]))
+            self._thisptr = new shared_ptr[ql.Period](new ql.Period(<Integer> args[0], <ql.TimeUnit> args[1]))
         else:
             raise RuntimeError('Invalid arguments for Period.__cinit__')
 
@@ -130,16 +122,16 @@ cdef class Period:
         self._thisptr.get().normalize()
 
     def __sub__(self, value):
-        cdef QlPeriod outp
+        cdef ql.Period outp
         if isinstance(self, Period) and isinstance(value, Period):
-            outp = sub_op(deref( (<Period>self)._thisptr.get()),
+            outp = ql.sub_op(deref( (<Period>self)._thisptr.get()),
                     deref( (<Period>value)._thisptr.get()))
 
         # fixme : this is inefficient and ugly ;-)
         return Period(outp.length(), outp.units())
 
     def __mul__(self, value):
-        cdef QlPeriod inp
+        cdef ql.Period inp
         if isinstance(self, Period):
             inp = deref((<Period>self)._thisptr.get())
             value = <int> value
@@ -149,14 +141,14 @@ cdef class Period:
         else:
             raise NotImplemented()
 
-        cdef QlPeriod outp = mult_op(inp, value)
+        cdef ql.Period outp = ql.mult_op(inp, value)
 
         # fixme : this is inefficient and ugly ;-)
         return Period(outp.length(), outp.units())
 
     def __iadd__(self, value):
-        cdef QlPeriod p1
-        cdef QlPeriod* tmp  = (<Period>value)._thisptr.get()
+        cdef ql.Period p1
+        cdef ql.Period* tmp  = (<Period>value)._thisptr.get()
 
         if isinstance(self, Period) and isinstance(value, Period):
 
@@ -170,8 +162,8 @@ cdef class Period:
             return NotImplemented
 
     def __isub__(self, value):
-        cdef QlPeriod p1
-        cdef QlPeriod* tmp  = (<Period>value)._thisptr.get()
+        cdef ql.Period p1
+        cdef ql.Period* tmp  = (<Period>value)._thisptr.get()
 
         if isinstance(self, Period) and isinstance(value, Period):
 
@@ -185,7 +177,7 @@ cdef class Period:
             return NotImplemented
 
     def __idiv__(self, value):
-        cdef QlPeriod p1
+        cdef ql.Period p1
 
         if isinstance(self, Period) and isinstance(value, int):
 
@@ -198,24 +190,24 @@ cdef class Period:
 
     def __richcmp__(self, value, t):
 
-        cdef QlPeriod* p1 = (<Period>self)._thisptr.get()
+        cdef ql.Period* p1 = (<Period>self)._thisptr.get()
         if not isinstance(value, Period):
             return False
 
-        cdef QlPeriod* p2 = (<Period>value)._thisptr.get()
+        cdef ql.Period* p2 = (<Period>value)._thisptr.get()
 
         if t==0:
-            return l_op( deref(p1), deref(p2))
+            return ql.period_l_op( deref(p1), deref(p2))
         elif t==1:
-            return leq_op( deref(p1), deref(p2))
+            return ql.period_leq_op( deref(p1), deref(p2))
         elif t==2:
-            return eq_op( deref(p1), deref(p2))
+            return ql.period_eq_op( deref(p1), deref(p2))
         elif t==3:
-            return neq_op( deref(p1), deref(p2))
+            return ql.period_neq_op( deref(p1), deref(p2))
         elif t==4:
-            return g_op( deref(p1), deref(p2))
+            return ql.period_g_op( deref(p1), deref(p2))
         elif t==5:
-            return geq_op( deref(p1), deref(p2))
+            return ql.period_geq_op( deref(p1), deref(p2))
 
     def __str__(self):
         return 'Period %d length  %d units' % (self.length, self.units)
@@ -230,13 +222,13 @@ cdef class Date:
     def __cinit__(self, *args):
 
         if len(args) == 0:
-            self._thisptr = new shared_ptr[QlDate](new QlDate())
+            self._thisptr = new shared_ptr[ql.Date](new ql.Date())
         elif len(args) == 3:
             day, month, year = args
-            self._thisptr = new shared_ptr[QlDate](new QlDate(<Integer>day, <_date.Month>month, <Year>year))
+            self._thisptr = new shared_ptr[ql.Date](new ql.Date(<Integer>day, <ql.Month>month, <ql.Year>year))
         elif len(args) == 1:
             serial = args[0]
-            self._thisptr = new shared_ptr[QlDate](new QlDate(<BigInteger> serial))
+            self._thisptr = new shared_ptr[ql.Date](new ql.Date(<BigInteger> serial))
         else:
             raise RuntimeError('Invalid constructor')
 
@@ -265,8 +257,8 @@ cdef class Date:
         def __get__(self):
             return self._thisptr.get().weekday()
 
-    #: Day of the year (one based - Jan 1st = 1)
     property day_of_year:
+        """ Day of the year (one based - Jan 1st = 1). """
         def __get__(self):
             return self._thisptr.get().dayOfYear()
 
@@ -326,21 +318,18 @@ cdef class Date:
         return self._thisptr.get().serialNumber()
 
     def __add__(self, value):
-        cdef QlDate add
+        cdef ql.Date add
         if isinstance(self, Date):
             if isinstance(value, Period):
                 add = deref((<Date>self)._thisptr.get()) + deref((<Period>value)._thisptr.get())
             else:
                 add = deref((<Date>self)._thisptr.get()) + <BigInteger>value
             return date_from_qldate(add)
-            #d = Date()
-            #d._set_qldate(add)
-            #return d
         else:
             return NotImplemented
 
     def __iadd__(self, value):
-        cdef QlDate add
+        cdef ql.Date add
         if isinstance(self, Date):
             if isinstance(value, Period):
                 add = self._thisptr.get().i_add(deref((<Period>value)._thisptr.get()))
@@ -351,7 +340,7 @@ cdef class Date:
             return NotImplemented
 
     def __sub__(self, value):
-        cdef QlDate sub
+        cdef ql.Date sub
         if isinstance(self, Date):
             if isinstance(value, Period):
                 sub = deref((<Date>self)._thisptr.get()) - deref((<Period>value)._thisptr.get())
@@ -364,7 +353,7 @@ cdef class Date:
             return NotImplemented
 
     def __isub__(self, value):
-        cdef QlDate sub
+        cdef ql.Date sub
         if isinstance(self, Date):
             if isinstance(value, Period):
                 self._thisptr.get().i_sub( deref((<Period>value)._thisptr.get()) )
@@ -382,50 +371,50 @@ cdef class Date:
 
 def today():
     '''Today's date. '''
-    cdef QlDate today = Date_todaysDate()
+    cdef ql.Date today = ql.Date_todaysDate()
     return date_from_qldate(today)
 
 def next_weekday(Date date, int weekday):
     ''' Returns the next given weekday following or equal to the given date
     '''
-    cdef QlDate nwd = Date_nextWeekday( deref(date._thisptr.get()), <_date.Weekday>weekday)
+    cdef ql.Date nwd = ql.Date_nextWeekday( deref(date._thisptr.get()), <ql.Weekday>weekday)
     return date_from_qldate(nwd)
 
 def nth_weekday(int size, int weekday, int month, int year):
-    '''Return the n-th given weekday in the given month and year
+    '''Return the n-th given weekday in the given month and ql.Year
 
     E.g., the 4th Thursday of March, 1998 was March 26th, 1998.
 
     see http://www.cpearson.com/excel/DateTimeWS.htm
     '''
-    cdef QlDate nwd = Date_nthWeekday(<Size>size, <_date.Weekday>weekday, <_date.Month>month, <Year>year)
+    cdef ql.Date nwd = ql.Date_nthWeekday(<ql.Size>size, <ql.Weekday>weekday, <ql.Month>month, <ql.Year>year)
     return date_from_qldate(nwd)
 
 def end_of_month(Date date):
     '''Last day of the month to which the given date belongs.'''
-    cdef QlDate eom = Date_endOfMonth(deref(date._thisptr.get()))
+    cdef ql.Date eom = ql.Date_endOfMonth(deref(date._thisptr.get()))
     return date_from_qldate(eom)
 
 def maxdate():
     '''Latest allowed date.'''
-    cdef QlDate mdate = Date_maxDate()
+    cdef ql.Date mdate = ql.Date_maxDate()
     return date_from_qldate(mdate)
 
 def mindate():
     '''Earliest date allowed.'''
-    cdef QlDate mdate = Date_minDate()
+    cdef ql.Date mdate = ql.Date_minDate()
     return date_from_qldate(mdate)
 
 def is_end_of_month(Date date):
     '''Whether a date is the last day of its month.'''
-    return Date_isEndOfMonth(deref(date._thisptr.get()))
+    return ql.Date_isEndOfMonth(deref(date._thisptr.get()))
 
 def is_leap(int year):
-    '''Whether the given year is a leap one.'''
-    return Date_isLeap(<Year> year)
+    '''Whether the given ql.Year is a leap one.'''
+    return ql.Date_isLeap(<ql.Year> year)
 
-cdef Date date_from_qldate(QlDate& date):
-    '''Converts a QuantLib::Date (QlDate) to a cython Date instance.
+cdef Date date_from_qldate(ql.Date& date):
+    '''Converts a QuantLib::Date (ql.Date) to a cython Date instance.
 
     Inefficient because taking a copy of the date ... but safe!
     '''
@@ -434,7 +423,7 @@ cdef Date date_from_qldate(QlDate& date):
 
 # Date Interfaces
 
-cdef object _pydate_from_qldate(QlDate qdate):
+cdef object _pydate_from_qldate(ql.Date qdate):
     """ Converts a QuantLib Date (C++) to a datetime.date object. """
 
     cdef int m = qdate.month()
@@ -452,16 +441,16 @@ cpdef object pydate_from_qldate(Date qdate):
 
     return datetime.date(y, m, d)
 
-cdef QlDate _qldate_from_pydate(object pydate):
+cdef ql.Date qldate_from_pydate(object pydate):
     """ Converts a datetime.date to a QuantLib (C++) object. """
 
     cdef Date qdate_ref = Date.from_datetime(pydate)
-    cdef QlDate* date_ref = <QlDate*>qdate_ref._thisptr.get()
+    cdef ql.Date* date_ref = <ql.Date*>qdate_ref._thisptr.get()
 
     return deref(date_ref)
 
 
-cpdef Date qldate_from_pydate(object pydate):
+cpdef Date _qldate_from_pydate(object pydate):
     """ Converts a datetime.date to a PyQL date. """
 
     cdef Date qdate_ref = Date.from_datetime(pydate)
