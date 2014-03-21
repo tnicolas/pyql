@@ -1,4 +1,4 @@
-from quantlib.ql cimport _null_calendar as _nc
+from quantlib cimport ql
 from quantlib.time.calendar cimport Calendar
 
 
@@ -11,5 +11,5 @@ cdef class NullCalendar(Calendar):
     '''
 
     def __cinit__(self):
-        self._thisptr = new _nc.NullCalendar()
+        self._thisptr = new ql.NullCalendar()
 

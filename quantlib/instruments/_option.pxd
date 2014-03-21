@@ -1,18 +1,5 @@
-include '../types.pxi'
-
-from libcpp cimport bool
-from libcpp.vector cimport vector
-
-from _instrument cimport Instrument
-from _payoffs cimport Payoff, StrikedTypePayoff
-from _exercise cimport Exercise
-from quantlib.handle cimport shared_ptr
-from quantlib.time._date cimport Date
-from quantlib.processes._black_scholes_process cimport GeneralizedBlackScholesProcess
-
 cdef extern from 'ql/option.hpp' namespace 'QuantLib::Option':
-
-    enum Type:
+    cdef enum Type:
         Put
         Call
 

@@ -4,15 +4,65 @@ from libcpp.string cimport string
 
 include 'types.pxi'
 
+include '_boost.pxd'
+
 cdef extern from 'ql/version.hpp':
 
     char* QL_VERSION
     int QL_HEX_VERSION
     char* QL_LIB_VERSION
 
-include "handle.pxd"
+include "time/_period.pxd"
+include "time/_date.pxd"
+include "time/_calendar.pxd"
+include "time/_daycounter.pxd"
+include "time/_schedule.pxd"
 
-#from quantlib cimport _cashflow
+include "time/daycounters/_actual_actual.pxd"
+include "time/daycounters/_thirty360.pxd"
+
+include "time/calendars/_germany.pxd"
+include "time/calendars/_jointcalendar.pxd"
+include "time/calendars/_null_calendar.pxd"
+include "time/calendars/_united_kingdom.pxd"
+include "time/calendars/_united_states.pxd"
+
+include "_cashflow.pxd"
+include "_currency.pxd"
+include "_index.pxd"
+include "_interest_rate.pxd"
+include "_quote.pxd"
+
+include "indexes/_interest_rate_index.pxd"
+include "indexes/_ibor_index.pxd"
+include "indexes/_libor.pxd"
+include "indexes/_swap_index.pxd"
+
+include "pricingengines/_pricing_engine.pxd"
+
+include "instruments/_instrument.pxd"
+include "instruments/_bonds.pxd"
+
+include "termstructures/volatility/equityfx/_black_vol_term_structure.pxd"
+include "processes/_black_scholes_process.pxd"
+include "instruments/_exercise.pxd"
+include "instruments/_payoffs.pxd"
+include "instruments/_option.pxd"
+
+include "termstructures/_helpers.pxd"
+include "termstructures/_yield_term_structure.pxd"
+include "termstructures/yields/_flat_forward.pxd"
+include "termstructures/yields/_rate_helpers.pxd"
+include "termstructures/yields/_zero_curve.pxd"
+
+include "pricingengines/_bond.pxd"
+
+include "math/_optimization.pxd"
+include "processes/_heston_process.pxd"
+include "models/equity/_heston_model.pxd"
+include "models/equity/_bates_model.pxd"
+
+
 #from quantlib cimport _currency
 #from quantlib cimport _index 
 #from quantlib cimport _interest_rate
@@ -22,21 +72,6 @@ include "handle.pxd"
 #from quantlib.indexes cimport _libor
 #from quantlib.indexes cimport _swap_index
 #from quantlib.indexes cimport _interest_rate_index
-
-include "time/_period.pxd"
-include "time/_date.pxd"
-include "time/_calendar.pxd"
-include "time/calendars/_jointcalendar.pxd"
-include "time/_daycounter.pxd"
-include "time/daycounters/_actual_actual.pxd"
-include "time/_schedule.pxd"
-
-include "_cashflow.pxd"
-
-include "pricingengines/_pricing_engine.pxd"
-
-include "instruments/_instrument.pxd"
-include "instruments/_bonds.pxd"
 
 #from quantlib.instruments cimport _bonds
 #from quantlib.instruments cimport _credit_default_swap
@@ -77,7 +112,7 @@ include "instruments/_bonds.pxd"
 #from quantlib.time cimport _schedule
 
 
-# Local imports from the C++ support code
+##### Local imports from the C++ support code
 
 cdef extern from "ql_settings.hpp" namespace "QL":
     Date get_evaluation_date()

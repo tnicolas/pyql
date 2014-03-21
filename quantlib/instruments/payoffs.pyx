@@ -1,11 +1,12 @@
 include '../types.pxi'
 
 # cython imports
-from quantlib.ql cimport _option, _payoffs
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 cdef public enum OptionType:
-    Put = _option.Put
-    Call = _option.Call
+    Put = ql.Put
+    Call = ql.Call
 
 
 PAYOFF_TO_STR = {Call:'Call', Put:'Put'}
@@ -30,17 +31,17 @@ cdef class Payoff:
         if self._thisptr is not NULL:
             return 'Payoff: %s' % self._thisptr.get().name().c_str()
 
-    cdef set_payoff(self, shared_ptr[_payoffs.Payoff] payoff):
+    cdef set_payoff(self, shared_ptr[ql.Payoff] payoff):
         if self._thisptr != NULL:
             del self._thisptr
             self._thisptr = NULL
         if payoff.get() == NULL:
             raise ValueError('Setting the payoff with a null pointer.')
-        self._thisptr = new shared_ptr[_payoffs.Payoff](payoff)
+        self._thisptr = new shared_ptr[ql.Payoff](payoff)
 
-cdef _payoffs.PlainVanillaPayoff* _get_payoff(PlainVanillaPayoff payoff):
+cdef ql.PlainVanillaPayoff* _get_payoff(PlainVanillaPayoff payoff):
 
-    return <_payoffs.PlainVanillaPayoff*>payoff._thisptr.get()
+    return <ql.PlainVanillaPayoff*>payoff._thisptr.get()
 
 cdef class PlainVanillaPayoff(Payoff):
     """ Plain vanilla payoff.
@@ -68,9 +69,9 @@ cdef class PlainVanillaPayoff(Payoff):
         if isinstance(option_type, basestring):
             option_type = str_to_option_type(option_type)
         if not from_qlpayoff:
-            self._thisptr = new shared_ptr[_payoffs.Payoff]( \
-                new _payoffs.PlainVanillaPayoff(
-                    <_option.Type>option_type, <Real>strike
+            self._thisptr = new shared_ptr[ql.Payoff]( \
+                new ql.PlainVanillaPayoff(
+                    <ql.Type>option_type, <Real>strike
                 )
             )
         else:

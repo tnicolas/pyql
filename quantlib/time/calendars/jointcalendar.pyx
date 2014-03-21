@@ -3,7 +3,7 @@ from quantlib cimport ql # _calendar as _cal, _jointcalendar as _jc
 
 from quantlib.time.calendar cimport Calendar
 
-cdef enum JointCalendarRule:
+cdef public enum JointCalendarRule:
     JOINHOLIDAYS = ql.JoinHolidays
     JOINBUSINESSDAYS = ql.JoinBusinessDays
 

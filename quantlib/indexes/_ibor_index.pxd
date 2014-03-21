@@ -6,20 +6,6 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
-
-include '../types.pxi'
-from libcpp cimport bool
-from quantlib.handle cimport Handle
-
-from quantlib.time._date cimport Date
-from quantlib.time._period cimport Period
-from quantlib.time._calendar cimport Calendar, BusinessDayConvention
-from quantlib.time._daycounter cimport DayCounter
-from quantlib._currency cimport Currency
-
-cimport quantlib.termstructures.yields._flat_forward as _ff
-from quantlib.indexes._interest_rate_index cimport InterestRateIndex
-
 cdef extern from "string" namespace "std":
     cdef cppclass string:
         char* c_str()    
@@ -44,7 +30,7 @@ cdef extern from 'ql/indexes/iborindex.hpp' namespace 'QuantLib':
         bool endOfMonth()
         
         # the curve used to forecast fixings
-        Handle[_ff.YieldTermStructure] forwardingTermStructure()
+        Handle[YieldTermStructure] forwardingTermStructure()
         
         # \name Date calculations
         Date maturityDate(Date& valueDate)
@@ -61,7 +47,7 @@ cdef extern from 'ql/indexes/iborindex.hpp' namespace 'QuantLib':
                        Currency& currency,
                        Calendar& fixingCalendar,
                        DayCounter& dayCounter,
-                       Handle[_ff.YieldTermStructure]& h)
+                       Handle[YieldTermStructure]& h)
 
         # returns a copy of itself linked to a different forwarding curve
         #boost::shared_ptr<IborIndex> clone(

@@ -3,9 +3,8 @@ from cython.operator cimport dereference as deref
 
 from libcpp cimport bool as cbool
 
-from quantlib.ql cimport (
-    _period, _quote as _qt, _interest_rate as _ir, _flat_forward as ffwd
-)
+from quantlib.ql cimport shared_ptr
+from quantlib cimport ql
 
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.daycounter cimport DayCounter
@@ -40,12 +39,12 @@ cdef class YieldTermStructure:
             # Create a new RelinkableHandle to a YieldTermStructure within a
             # new shared_ptr
             self._relinkable_ptr = new \
-                shared_ptr[ffwd.RelinkableHandle[ffwd.YieldTermStructure]](
-                    new ffwd.RelinkableHandle[ffwd.YieldTermStructure]()
+                shared_ptr[ql.RelinkableHandle[ql.YieldTermStructure]](
+                    new ql.RelinkableHandle[ql.YieldTermStructure]()
                 )
         else:
             # initialize an empty shared_ptr. ! Might be dangerous
-            self._thisptr = new shared_ptr[ffwd.YieldTermStructure]()
+            self._thisptr = new shared_ptr[ql.YieldTermStructure]()
 
     def link_to(self, YieldTermStructure structure):
         if not self.relinkable:
@@ -73,7 +72,7 @@ cdef class YieldTermStructure:
         extraplolate: bool, optional
             Default to False
         """
-        cdef ffwd.YieldTermStructure* term_structure
+        cdef ql.YieldTermStructure* term_structure
         if self.relinkable is True:
             # retrieves the shared_ptr (currentLink()) then gets the
             # term_structure (get())
@@ -83,13 +82,13 @@ cdef class YieldTermStructure:
         else:
             term_structure = self._thisptr.get()
 
-        cdef _ir.InterestRate ql_zero_rate = term_structure.zeroRate(
-            deref(date._thisptr.get()), deref(day_counter._thisptr), <_ir.Compounding>compounding,
-            <_ir.Frequency>frequency, extrapolate)
+        cdef ql.InterestRate ql_zero_rate = term_structure.zeroRate(
+            deref(date._thisptr.get()), deref(day_counter._thisptr), <ql.Compounding>compounding,
+            <ql.Frequency>frequency, extrapolate)
 
         zero_rate = InterestRate(0, None, 0, 0, noalloc=True)
-        zero_rate._thisptr = new shared_ptr[_ir.InterestRate](
-            new _ir.InterestRate(
+        zero_rate._thisptr = new shared_ptr[ql.InterestRate](
+            new ql.InterestRate(
                 ql_zero_rate.rate(),
                 ql_zero_rate.dayCounter(),
                 ql_zero_rate.compounding(),
@@ -100,12 +99,12 @@ cdef class YieldTermStructure:
         return zero_rate
 
     def discount(self, value):
-        cdef ffwd.YieldTermStructure* term_structure
-        cdef shared_ptr[ffwd.YieldTermStructure] ts_ptr
+        cdef ql.YieldTermStructure* term_structure
+        cdef shared_ptr[ql.YieldTermStructure] ts_ptr
         if self.relinkable is True:
             # retrieves the shared_ptr (currentLink()) then gets the
             # term_structure (get())
-            ts_ptr = shared_ptr[ffwd.YieldTermStructure](self._relinkable_ptr.get().currentLink())
+            ts_ptr = shared_ptr[ql.YieldTermStructure](self._relinkable_ptr.get().currentLink())
             term_structure = ts_ptr.get()
         else:
             term_structure = self._thisptr.get()
@@ -126,11 +125,11 @@ cdef class YieldTermStructure:
 
     property reference_date:
         def __get__(self):
-            cdef ffwd.Date ref_date = self._thisptr.get().referenceDate()
+            cdef ql.Date ref_date = self._thisptr.get().referenceDate()
             return date_from_qldate(ref_date)
 
     property max_date:
         def __get__(self):
-            cdef ffwd.Date max_date = self._thisptr.get().maxDate()
+            cdef ql.Date max_date = self._thisptr.get().maxDate()
             return date_from_qldate(max_date)
 

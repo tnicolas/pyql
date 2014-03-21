@@ -1,9 +1,9 @@
 include '../../types.pxi'
 
 from cython.operator cimport dereference as deref
-from quantlib.ql cimport (
-    shared_ptr, _black_scholes_process as _bsp, _bates_model as _bm
-)
+
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr 
 
 from quantlib.models.equity.heston_model cimport HestonModel
 from quantlib.models.equity.bates_model cimport (BatesModel, BatesDetJumpModel, BatesDoubleExpModel, BatesDoubleExpDetJumpModel)
@@ -19,8 +19,8 @@ cdef class AnalyticEuropeanEngine(VanillaOptionEngine):
 
     def __init__(self, GeneralizedBlackScholesProcess process):
 
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
                 deref(process._thisptr)
             )
 
@@ -32,8 +32,8 @@ cdef class BaroneAdesiWhaleyApproximationEngine(VanillaOptionEngine):
 
     def __init__(self, GeneralizedBlackScholesProcess process):
 
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
                 deref(process._thisptr)
             )
 
@@ -58,7 +58,7 @@ cdef class BatesEngine(AnalyticHestonEngine):
 
         self._thisptr = new shared_ptr[_vanilla.PricingEngine](
             new _vanilla.BatesEngine(
-                deref(<shared_ptr[_bm.BatesModel]*> model._thisptr),
+                deref(<shared_ptr[ql.BatesModel]*> model._thisptr),
                 <Size>integration_order
             )
         )
@@ -69,7 +69,7 @@ cdef class BatesDetJumpEngine(BatesEngine):
 
         self._thisptr = new shared_ptr[_vanilla.PricingEngine](
             new _vanilla.BatesDetJumpEngine(
-                deref(<shared_ptr[_bm.BatesDetJumpModel]*> model._thisptr),
+                deref(<shared_ptr[ql.BatesDetJumpModel]*> model._thisptr),
                 <Size>integration_order))
 
 cdef class BatesDoubleExpEngine(AnalyticHestonEngine):
@@ -78,7 +78,7 @@ cdef class BatesDoubleExpEngine(AnalyticHestonEngine):
 
         self._thisptr = new shared_ptr[_vanilla.PricingEngine](
             new _vanilla.BatesDoubleExpEngine(
-                deref(<shared_ptr[_bm.BatesDoubleExpModel]*> model._thisptr),
+                deref(<shared_ptr[ql.BatesDoubleExpModel]*> model._thisptr),
                 <Size>integration_order))
 
 cdef class BatesDoubleExpDetJumpEngine(BatesDoubleExpEngine):
@@ -87,7 +87,7 @@ cdef class BatesDoubleExpDetJumpEngine(BatesDoubleExpEngine):
 
         self._thisptr = new shared_ptr[_vanilla.PricingEngine](
             new _vanilla.BatesDoubleExpDetJumpEngine(
-                deref(<shared_ptr[_bm.BatesDoubleExpDetJumpModel]*> model._thisptr),
+                deref(<shared_ptr[ql.BatesDoubleExpDetJumpModel]*> model._thisptr),
                 <Size>integration_order))
 
 
@@ -95,8 +95,8 @@ cdef class AnalyticDividendEuropeanEngine(PricingEngine):
 
     def __init__(self, GeneralizedBlackScholesProcess process):
 
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
                 deref(process._thisptr)
             )
 
@@ -111,8 +111,8 @@ cdef class FDDividendAmericanEngine(PricingEngine):
 
         # FIXME: first implementation using a fixed scheme!
         print 'Warning : rough implementation using CrankNicolson schema'
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
                 deref(process._thisptr)
             )
 
@@ -127,8 +127,8 @@ cdef class FDAmericanEngine(PricingEngine):
     def __init__(self, scheme, GeneralizedBlackScholesProcess process, timesteps, gridpoints):
 
         # FIXME: first implementation using a fixed scheme!
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
                 deref(process._thisptr)
             )
 

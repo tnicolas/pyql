@@ -22,3 +22,6 @@ cdef extern from 'ql/handle.hpp' namespace 'QuantLib':
         void linkTo(shared_ptr[T]&)
         void linkTo(shared_ptr[T]&, bool registerAsObserver)
 
+cdef extern from 'boost/optional.hpp' namespace 'boost':
+    cdef cppclass optional[T]:
+        optional(T*)

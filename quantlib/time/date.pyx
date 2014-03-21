@@ -441,7 +441,7 @@ cpdef object pydate_from_qldate(Date qdate):
 
     return datetime.date(y, m, d)
 
-cdef ql.Date qldate_from_pydate(object pydate):
+cdef ql.Date _qldate_from_pydate(object pydate):
     """ Converts a datetime.date to a QuantLib (C++) object. """
 
     cdef Date qdate_ref = Date.from_datetime(pydate)
@@ -450,7 +450,7 @@ cdef ql.Date qldate_from_pydate(object pydate):
     return deref(date_ref)
 
 
-cpdef Date _qldate_from_pydate(object pydate):
+cpdef Date qldate_from_pydate(object pydate):
     """ Converts a datetime.date to a PyQL date. """
 
     cdef Date qdate_ref = Date.from_datetime(pydate)

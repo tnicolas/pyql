@@ -1,8 +1,8 @@
-from quantlib.ql cimport shared_ptr, _black_scholes_process as _bsp
+from quantlib cimport ql
 
 cdef class GeneralizedBlackScholesProcess:
 
-    cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess]* _thisptr
+    cdef ql.shared_ptr[ql.GeneralizedBlackScholesProcess]* _thisptr
 
 
 

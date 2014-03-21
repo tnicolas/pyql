@@ -1,17 +1,5 @@
-include '../../types.pxi'
 
-from libcpp.vector cimport vector
-
-from quantlib.handle cimport Handle, shared_ptr
-from quantlib.math._optimization cimport OptimizationMethod, EndCriteria
-from quantlib.processes._heston_process cimport HestonProcess
-from quantlib.pricingengines._pricing_engine cimport PricingEngine
-from quantlib.termstructures.yields._flat_forward cimport (
-    YieldTermStructure
-)
-cimport quantlib._quote as _qt
-from quantlib.time._calendar cimport Calendar
-from quantlib.time._period cimport Period
+#from quantlib.processes._heston_process cimport HestonProcess
 
 cdef extern from 'ql/models/calibrationhelper.hpp' namespace 'QuantLib':
 

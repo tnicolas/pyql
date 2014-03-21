@@ -5,10 +5,8 @@ from cython.operator cimport dereference as deref
 from libcpp cimport bool
 from libcpp.vector cimport vector
 
-from quantlib.ql cimport (
-    _exercise, _option, _payoffs, _instrument, _date, _pricing_engine as _pe,
-    _black_scholes_process as _bsp, shared_ptr
-)
+from quantlib cimport ql 
+from quantlib.ql cimport shared_ptr
 
 from quantlib.instruments.instrument cimport Instrument
 from quantlib.instruments.payoffs cimport Payoff, PlainVanillaPayoff
@@ -17,9 +15,9 @@ from quantlib.pricingengines.engine cimport PricingEngine
 from quantlib.processes.black_scholes_process cimport GeneralizedBlackScholesProcess
 
 cdef public enum ExerciseType:
-    American = _exercise.American
-    Bermudan  = _exercise.Bermudan
-    European = _exercise.European
+    American = ql.American
+    Bermudan  = ql.Bermudan
+    European = ql.European
 
 EXERCISE_TO_STR = {
     American : 'American',
@@ -40,16 +38,16 @@ cdef class Exercise:
     def __str__(self):
         return 'Exercise type: %s' % EXERCISE_TO_STR[self._thisptr.get().type()]
 
-    cdef set_exercise(self, shared_ptr[_exercise.Exercise] exc):
+    cdef set_exercise(self, shared_ptr[ql.Exercise] exc):
         if exc.get() == NULL:
             raise ValueError('Setting the exercise with a null pointer.')
-        self._thisptr = new shared_ptr[_exercise.Exercise](exc)
+        self._thisptr = new shared_ptr[ql.Exercise](exc)
 
 cdef class EuropeanExercise(Exercise):
 
     def __init__(self, Date exercise_date):
-        self._thisptr = new shared_ptr[_exercise.Exercise]( \
-            new _exercise.EuropeanExercise(
+        self._thisptr = new shared_ptr[ql.Exercise]( \
+            new ql.EuropeanExercise(
                 deref(exercise_date._thisptr.get())
             )
         )
@@ -64,24 +62,24 @@ cdef class AmericanExercise(Exercise):
 
         """
         if earliest_exercise_date is not None:
-            self._thisptr = new shared_ptr[_exercise.Exercise]( \
-                new _exercise.AmericanExercise(
+            self._thisptr = new shared_ptr[ql.Exercise]( \
+                new ql.AmericanExercise(
                     deref(earliest_exercise_date._thisptr.get()),
                     deref(latest_exercise_date._thisptr.get())
                 )
             )
         else:
-            self._thisptr = new shared_ptr[_exercise.Exercise]( \
-                new _exercise.AmericanExercise(
+            self._thisptr = new shared_ptr[ql.Exercise]( \
+                new ql.AmericanExercise(
                     deref(latest_exercise_date._thisptr.get())
                 )
             )
 
-cdef _option.Option* get_option(OneAssetOption option):
+cdef ql.Option* get_option(OneAssetOption option):
     """ Utility function to extract a properly casted VanillaOption out of the
     internal _thisptr attribute of the Instrument base class. """
 
-    cdef _option.Option* ref = <_option.Option*>option._thisptr.get()
+    cdef ql.Option* ref = <ql.Option*>option._thisptr.get()
     return ref
 
 cdef class OneAssetOption(Instrument):
@@ -112,80 +110,80 @@ cdef class OneAssetOption(Instrument):
     property is_expired:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).isExpired()
+                return (<ql.OneAssetOption *> self._thisptr.get()).isExpired()
 
     property delta:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).delta()
+                return (<ql.OneAssetOption *> self._thisptr.get()).delta()
 
     property delta_forward:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).deltaForward()
+                return (<ql.OneAssetOption *> self._thisptr.get()).deltaForward()
 
     property elasticity:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).elasticity()
+                return (<ql.OneAssetOption *> self._thisptr.get()).elasticity()
 
     property gamma:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).gamma()
+                return (<ql.OneAssetOption *> self._thisptr.get()).gamma()
 
     property theta:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).theta()
+                return (<ql.OneAssetOption *> self._thisptr.get()).theta()
 
     property theta_per_day:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).thetaPerDay()
+                return (<ql.OneAssetOption *> self._thisptr.get()).thetaPerDay()
 
     property vega:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).vega()
+                return (<ql.OneAssetOption *> self._thisptr.get()).vega()
 
     property rho:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).rho()
+                return (<ql.OneAssetOption *> self._thisptr.get()).rho()
 
     property dividend_rho:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).dividendRho()
+                return (<ql.OneAssetOption *> self._thisptr.get()).dividendRho()
 
     property strike_sensitivity:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).strikeSensitivity()
+                return (<ql.OneAssetOption *> self._thisptr.get()).strikeSensitivity()
 
     property itm_cash_probability:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).itmCashProbability()
+                return (<ql.OneAssetOption *> self._thisptr.get()).itmCashProbability()
 
 
 cdef class VanillaOption(OneAssetOption):
 
     def __init__(self, PlainVanillaPayoff payoff, Exercise exercise):
 
-        cdef shared_ptr[_payoffs.StrikedTypePayoff] payoff_ptr = \
-            shared_ptr[_payoffs.StrikedTypePayoff](
-                deref(<shared_ptr[_payoffs.StrikedTypePayoff]*>payoff._thisptr)
+        cdef shared_ptr[ql.StrikedTypePayoff] payoff_ptr = \
+            shared_ptr[ql.StrikedTypePayoff](
+                deref(<shared_ptr[ql.StrikedTypePayoff]*>payoff._thisptr)
         )
 
-        cdef shared_ptr[_exercise.Exercise] exercise_ptr = \
-            shared_ptr[_exercise.Exercise](
+        cdef shared_ptr[ql.Exercise] exercise_ptr = \
+            shared_ptr[ql.Exercise](
                 deref(exercise._thisptr)
             )
 
-        self._thisptr = new shared_ptr[_instrument.Instrument]( \
-            new _option.VanillaOption(payoff_ptr, exercise_ptr)
+        self._thisptr = new shared_ptr[ql.Instrument]( \
+            new ql.VanillaOption(payoff_ptr, exercise_ptr)
         )
 
 
@@ -193,12 +191,12 @@ cdef class VanillaOption(OneAssetOption):
         GeneralizedBlackScholesProcess process, Real accuracy, Size max_evaluations,
         Volatility min_vol, Volatility max_vol):
 
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
-                deref(<shared_ptr[_bsp.GeneralizedBlackScholesProcess]*>process._thisptr)
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
+                deref(<shared_ptr[ql.GeneralizedBlackScholesProcess]*>process._thisptr)
         )
 
-        vol = (<_option.VanillaOption *> self._thisptr.get()).impliedVolatility(
+        vol = (<ql.VanillaOption *> self._thisptr.get()).impliedVolatility(
             target_value, process_ptr, accuracy, max_evaluations, min_vol, max_vol)
 
         return vol
@@ -206,24 +204,24 @@ cdef class VanillaOption(OneAssetOption):
     property delta:
         def __get__(self):
             if self._has_pricing_engine:
-                return (<_option.OneAssetOption *> self._thisptr.get()).delta()
+                return (<ql.OneAssetOption *> self._thisptr.get()).delta()
 
 cdef class EuropeanOption(VanillaOption):
 
     def __init__(self, PlainVanillaPayoff payoff, Exercise exercise):
 
-        cdef shared_ptr[_payoffs.StrikedTypePayoff] payoff_ptr = \
-            shared_ptr[_payoffs.StrikedTypePayoff](
-                deref(<shared_ptr[_payoffs.StrikedTypePayoff]*>payoff._thisptr)
+        cdef shared_ptr[ql.StrikedTypePayoff] payoff_ptr = \
+            shared_ptr[ql.StrikedTypePayoff](
+                deref(<shared_ptr[ql.StrikedTypePayoff]*>payoff._thisptr)
         )
 
-        cdef shared_ptr[_exercise.Exercise] exercise_ptr = \
-            shared_ptr[_exercise.Exercise](
+        cdef shared_ptr[ql.Exercise] exercise_ptr = \
+            shared_ptr[ql.Exercise](
                 deref(exercise._thisptr)
             )
 
-        self._thisptr = new shared_ptr[_instrument.Instrument]( \
-            new _option.EuropeanOption(payoff_ptr, exercise_ptr)
+        self._thisptr = new shared_ptr[ql.Instrument]( \
+            new ql.EuropeanOption(payoff_ptr, exercise_ptr)
         )
 
 cdef class DividendVanillaOption(OneAssetOption):
@@ -231,18 +229,18 @@ cdef class DividendVanillaOption(OneAssetOption):
 
     def __init__(self, PlainVanillaPayoff payoff, Exercise exercise, dividend_dates, dividends):
 
-        cdef shared_ptr[_payoffs.StrikedTypePayoff] payoff_ptr = \
-            shared_ptr[_payoffs.StrikedTypePayoff](
-                deref(<shared_ptr[_payoffs.StrikedTypePayoff]*>payoff._thisptr)
+        cdef shared_ptr[ql.StrikedTypePayoff] payoff_ptr = \
+            shared_ptr[ql.StrikedTypePayoff](
+                deref(<shared_ptr[ql.StrikedTypePayoff]*>payoff._thisptr)
         )
 
-        cdef shared_ptr[_exercise.Exercise] exercise_ptr = \
-            shared_ptr[_exercise.Exercise](
+        cdef shared_ptr[ql.Exercise] exercise_ptr = \
+            shared_ptr[ql.Exercise](
                 deref(exercise._thisptr)
         )
 
         # convert the list of PyQL dates into a vector of QL dates
-        cdef vector[_date.Date]* _dividend_dates = new vector[_date.Date]()
+        cdef vector[ql.Date]* _dividend_dates = new vector[ql.Date]()
         for date in dividend_dates:
             _dividend_dates.push_back(deref((<Date>date)._thisptr.get()))
 
@@ -251,8 +249,8 @@ cdef class DividendVanillaOption(OneAssetOption):
         for value in dividends:
             _dividends.push_back(<Real>value)
 
-        self._thisptr = new shared_ptr[_instrument.Instrument]( \
-            new _option.DividendVanillaOption(
+        self._thisptr = new shared_ptr[ql.Instrument]( \
+            new ql.DividendVanillaOption(
                 payoff_ptr, exercise_ptr, deref(_dividend_dates),
                 deref(_dividends)
             )
@@ -266,12 +264,12 @@ cdef class DividendVanillaOption(OneAssetOption):
         GeneralizedBlackScholesProcess process, Real accuracy, Size max_evaluations,
         Volatility min_vol, Volatility max_vol):
 
-        cdef shared_ptr[_bsp.GeneralizedBlackScholesProcess] process_ptr = \
-            shared_ptr[_bsp.GeneralizedBlackScholesProcess](
-                deref(<shared_ptr[_bsp.GeneralizedBlackScholesProcess]*>process._thisptr)
+        cdef shared_ptr[ql.GeneralizedBlackScholesProcess] process_ptr = \
+            shared_ptr[ql.GeneralizedBlackScholesProcess](
+                deref(<shared_ptr[ql.GeneralizedBlackScholesProcess]*>process._thisptr)
         )
 
-        vol = (<_option.DividendVanillaOption *> self._thisptr.get()).impliedVolatility(
+        vol = (<ql.DividendVanillaOption *> self._thisptr.get()).impliedVolatility(
             target_value, process_ptr, accuracy, max_evaluations, min_vol, max_vol)
 
         return vol

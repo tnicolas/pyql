@@ -1,8 +1,8 @@
-from quantlib.ql cimport shared_ptr, _payoffs
+from quantlib cimport ql
 
 cdef class Payoff:
-    cdef shared_ptr[_payoffs.Payoff]* _thisptr
-    cdef set_payoff(self, shared_ptr[_payoffs.Payoff] payoff)
+    cdef ql.shared_ptr[ql.Payoff]* _thisptr
+    cdef set_payoff(self, ql.shared_ptr[ql.Payoff] payoff)
 
 cdef class PlainVanillaPayoff(Payoff):
     pass

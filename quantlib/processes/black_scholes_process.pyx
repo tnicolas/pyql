@@ -1,9 +1,7 @@
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    _black_scholes_process as _bsp,  Handle, _flat_forward as _ff, 
-    _quote as _qt, _black_vol_term_structure as _bvts
-)
+from quantlib cimport ql
+from quantlib.ql cimport Handle, shared_ptr
 
 from quantlib.quotes cimport Quote
 from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
@@ -24,20 +22,20 @@ cdef class BlackScholesProcess(GeneralizedBlackScholesProcess):
     def __init__(self, Quote x0, YieldTermStructure risk_free_ts,
                  BlackVolTermStructure black_vol_ts):
 
-        cdef Handle[_qt.Quote] x0_handle = Handle[_qt.Quote](
+        cdef Handle[ql.Quote] x0_handle = Handle[ql.Quote](
             deref(x0._thisptr)
         )
-        cdef Handle[_ff.YieldTermStructure] risk_free_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef Handle[ql.YieldTermStructure] risk_free_ts_handle = \
+                Handle[ql.YieldTermStructure](
                     deref(risk_free_ts._thisptr)
                 )
-        cdef Handle[_bvts.BlackVolTermStructure] black_vol_ts_handle = \
-            Handle[_bvts.BlackVolTermStructure](
+        cdef Handle[ql.BlackVolTermStructure] black_vol_ts_handle = \
+            Handle[ql.BlackVolTermStructure](
                 deref(black_vol_ts._thisptr)
             )
 
-        self._thisptr = new shared_ptr[_bsp.GeneralizedBlackScholesProcess]( new \
-            _bsp.BlackScholesProcess(
+        self._thisptr = new shared_ptr[ql.GeneralizedBlackScholesProcess]( new \
+            ql.BlackScholesProcess(
                 x0_handle,
                 risk_free_ts_handle,
                 black_vol_ts_handle
@@ -52,24 +50,24 @@ cdef class BlackScholesMertonProcess(GeneralizedBlackScholesProcess):
         YieldTermStructure risk_free_ts,
         BlackVolTermStructure black_vol_ts):
 
-        cdef Handle[_qt.Quote] x0_handle = Handle[_qt.Quote](
+        cdef Handle[ql.Quote] x0_handle = Handle[ql.Quote](
             deref(x0._thisptr)
         )
-        cdef Handle[_ff.YieldTermStructure] dividend_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef Handle[ql.YieldTermStructure] dividend_ts_handle = \
+                Handle[ql.YieldTermStructure](
                     deref(dividend_ts._thisptr)
                 )
-        cdef Handle[_ff.YieldTermStructure] risk_free_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef Handle[ql.YieldTermStructure] risk_free_ts_handle = \
+                Handle[ql.YieldTermStructure](
                     deref(risk_free_ts._thisptr)
                 )
-        cdef Handle[_bvts.BlackVolTermStructure] black_vol_ts_handle = \
-            Handle[_bvts.BlackVolTermStructure](
+        cdef Handle[ql.BlackVolTermStructure] black_vol_ts_handle = \
+            Handle[ql.BlackVolTermStructure](
                 deref(black_vol_ts._thisptr)
             )
 
-        self._thisptr = new shared_ptr[_bsp.GeneralizedBlackScholesProcess]( new \
-            _bsp.BlackScholesMertonProcess(
+        self._thisptr = new shared_ptr[ql.GeneralizedBlackScholesProcess]( new \
+            ql.BlackScholesMertonProcess(
                 x0_handle,
                 dividend_ts_handle,
                 risk_free_ts_handle,

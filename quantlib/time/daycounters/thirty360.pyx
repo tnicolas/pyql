@@ -19,20 +19,20 @@ occur on February and are grater than 27 become equal to 30
 for computational sake.
 
 '''
-from quantlib.ql cimport _daycounter, _thirty360 as _th
+from quantlib cimport ql
 from quantlib.time.daycounter cimport DayCounter
 
-USA           = _th.USA
-BONDBASIS     = _th.BondBasis
-EUROPEAN      = _th.European
-EUROBONDBASIS = _th.EurobondBasis
-ITALIAN       = _th.Italian
+USA           = ql.Thirty360USA
+BONDBASIS     = ql.Thirty360BondBasis
+EUROPEAN      = ql.Thirty360European
+EUROBONDBASIS = ql.Thirty360EurobondBasis
+ITALIAN       = ql.Thirty360Italian
 
 cdef class Thirty360(DayCounter):
 
     def __cinit__(self, convention=BONDBASIS):
-        self._thisptr = <_daycounter.DayCounter*> new \
-            _th.Thirty360(<_th.Convention> convention)
+        self._thisptr = <ql.DayCounter*> new \
+            ql.Thirty360(<ql.Thirty360Convention> convention)
 
 
 

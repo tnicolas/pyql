@@ -1,10 +1,7 @@
-include '../types.pxi'
-
 cdef extern from 'ql/math/optimization/method.hpp' namespace 'QuantLib':
 
     cdef cppclass OptimizationMethod:
         pass
-
 
 cdef extern from 'ql/math/optimization/levenbergmarquardt.hpp' namespace 'QuantLib':
 

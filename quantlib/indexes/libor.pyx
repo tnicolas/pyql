@@ -17,13 +17,13 @@ from libcpp cimport bool as cbool
 from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
-from quantlib.ql cimport _index as _in, _libor, Handle, shared_ptr
+from quantlib cimport ql 
+from quantlib.ql cimport shared_ptr, Handle
 
 from quantlib.time.date cimport Period
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.currency cimport Currency
 from quantlib.time.calendar cimport Calendar
-from quantlib.time._calendar cimport BusinessDayConvention
 
 
 cdef class Libor(IborIndex):
@@ -53,8 +53,8 @@ cdef class Libor(IborIndex):
         cdef string familyName_string = string(PyString_AsString(familyName))
 
         
-        self._thisptr = new shared_ptr[_in.Index](
-        new _libor.Libor(
+        self._thisptr = new shared_ptr[ql.Index](
+        new ql.Libor(
             familyName_string,
             deref(tenor._thisptr.get()),
             <Natural> settlementDays,

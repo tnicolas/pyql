@@ -7,25 +7,6 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-include '../../types.pxi'
-
-from libcpp cimport bool
-
-from quantlib.handle cimport shared_ptr, Handle, RelinkableHandle
-from quantlib._quote cimport Quote
-from quantlib.time._calendar cimport BusinessDayConvention, Calendar
-from quantlib.time._date cimport Date
-from quantlib.time._daycounter cimport DayCounter
-from quantlib.time._period cimport Period, Frequency
-from _flat_forward cimport YieldTermStructure
-from quantlib.indexes._ibor_index cimport IborIndex
-from quantlib.indexes._swap_index cimport SwapIndex
-
-cimport quantlib.indexes._ibor_index as _ib
-
-from quantlib.termstructures._helpers cimport BootstrapHelper, \
-                                              RelativeDateBootstrapHelper
-
 cdef extern from 'ql/termstructures/yield/ratehelpers.hpp' namespace 'QuantLib':
 
     ctypedef BootstrapHelper[YieldTermStructure] RateHelper
@@ -70,7 +51,7 @@ cdef extern from 'ql/termstructures/yield/ratehelpers.hpp' namespace 'QuantLib':
                        Frequency& fixedFrequency,
                        BusinessDayConvention fixedConvention,
                        DayCounter& fixedDayCount,
-                       shared_ptr[_ib.IborIndex]& iborIndex,
+                       shared_ptr[IborIndex]& iborIndex,
         )
         SwapRateHelper(Rate rate,
                        Period& tenor,
@@ -78,7 +59,7 @@ cdef extern from 'ql/termstructures/yield/ratehelpers.hpp' namespace 'QuantLib':
                        Frequency& fixedFrequency,
                        BusinessDayConvention fixedConvention,
                        DayCounter& fixedDayCount,
-                       shared_ptr[_ib.IborIndex]& iborIndex,
+                       shared_ptr[IborIndex]& iborIndex,
                        Handle[Quote]& spread,
                        Period& fwdStart
         )

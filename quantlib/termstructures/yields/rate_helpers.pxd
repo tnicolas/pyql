@@ -1,8 +1,8 @@
-from quantlib.ql cimport shared_ptr, _rate_helpers as _rh
+from quantlib cimport ql
 
 cdef class RateHelper:
-    cdef shared_ptr[_rh.RateHelper]* _thisptr
+    cdef ql.shared_ptr[ql.RateHelper]* _thisptr
 
 cdef class RelativeDateRateHelper:
-    cdef shared_ptr[_rh.RelativeDateRateHelper]* _thisptr
+    cdef ql.shared_ptr[ql.RelativeDateRateHelper]* _thisptr
     

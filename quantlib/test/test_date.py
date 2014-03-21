@@ -329,3 +329,6 @@ class TestQuantLibPeriod(unittest.TestCase):
         date2 = date1 - period
         expected_date = Date(21, Apr, 2011)
         self.assertTrue(expected_date == date2)
+
+if __name__ == '__main__':
+    unittest.main()

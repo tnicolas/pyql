@@ -7,10 +7,10 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-from quantlib.ql cimport _currency
+from quantlib cimport ql
 
 cdef class Currency:
-    cdef _currency.Currency *_thisptr
+    cdef ql.Currency *_thisptr
 
 cdef class USDCurrency(Currency):
     pass

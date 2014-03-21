@@ -7,11 +7,6 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-include 'types.pxi'
-
-from quantlib.time._daycounter cimport DayCounter
-from quantlib.time._period cimport Frequency
-
 cdef extern from 'ql/compounding.hpp' namespace 'QuantLib':
     cdef enum Compounding:
         pass

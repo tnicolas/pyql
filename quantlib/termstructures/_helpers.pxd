@@ -7,12 +7,6 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-include '../types.pxi'
-
-from quantlib.handle cimport Handle
-from quantlib._quote cimport Quote
-
-
 cdef extern from 'ql/termstructures/bootstraphelper.hpp' namespace 'QuantLib':
 
     cdef cppclass BootstrapHelper[T]:

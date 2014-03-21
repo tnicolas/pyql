@@ -1,9 +1,8 @@
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    shared_ptr, _pricing_engine as _pe, _instrument, _date
-)
+from quantlib cimport ql 
+from quantlib.ql cimport shared_ptr
 
 from quantlib.pricingengines.engine cimport PricingEngine
 from quantlib.time.date cimport date_from_qldate
@@ -23,8 +22,8 @@ cdef class Instrument:
         '''Sets the pricing engine.
 
         '''
-        cdef shared_ptr[_pe.PricingEngine] engine_ptr = \
-                shared_ptr[_pe.PricingEngine](deref(engine._thisptr))
+        cdef shared_ptr[ql.PricingEngine] engine_ptr = \
+                shared_ptr[ql.PricingEngine](deref(engine._thisptr))
 
         self._thisptr.get().setPricingEngine(engine_ptr)
 
@@ -45,6 +44,6 @@ cdef class Instrument:
     property valuation_date:
         """ The instrument valuation date. """
         def __get__(self):
-            cdef _date.Date valuation_date
+            cdef ql.Date valuation_date
             valuation_date = self._thisptr.get().valuationDate()
             return date_from_qldate(valuation_date)

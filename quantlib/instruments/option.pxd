@@ -1,7 +1,7 @@
-from quantlib.ql cimport shared_ptr, _exercise
+from quantlib cimport ql
 
 cdef class Exercise:
-    cdef shared_ptr[_exercise.Exercise]* _thisptr
-    cdef set_exercise(self, shared_ptr[_exercise.Exercise] exc)
+    cdef ql.shared_ptr[ql.Exercise]* _thisptr
+    cdef set_exercise(self, ql.shared_ptr[ql.Exercise] exc)
 
 

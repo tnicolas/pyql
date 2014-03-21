@@ -12,8 +12,8 @@ from cython.operator cimport dereference as deref
 from cpython.string cimport PyString_AsString
 from libcpp.string cimport string
 
-from quantlib.ql cimport shared_ptr, _calendar
-from quantlib.ql cimport _index as _in, _swap_index as _si, _ibor_index as _ii
+from quantlib.ql cimport shared_ptr
+from quantlib cimport ql 
 
 from quantlib.index cimport Index
 from quantlib.indexes.ibor_index cimport IborIndex
@@ -36,17 +36,17 @@ cdef class SwapIndex(Index):
         # convert the Python str to C++ string
         cdef string family_name_string = string(PyString_AsString(family_name))
 
-        self._thisptr = new shared_ptr[_in.Index](
-            new _si.SwapIndex(
+        self._thisptr = new shared_ptr[ql.Index](
+            new ql.SwapIndex(
                 family_name_string,
                 deref(tenor._thisptr.get()),
                 <Natural> settlement_days,
                 deref(currency._thisptr),
                 deref(calendar._thisptr),
                 deref(fixed_leg_tenor._thisptr.get()),
-                <_calendar.BusinessDayConvention> fixed_leg_convention,
+                <ql.BusinessDayConvention> fixed_leg_convention,
                 deref(fixed_leg_daycounter._thisptr),
-                deref(<shared_ptr[_ii.IborIndex]*> ibor_index._thisptr)
+                deref(<shared_ptr[ql.IborIndex]*> ibor_index._thisptr)
             )
         )
 

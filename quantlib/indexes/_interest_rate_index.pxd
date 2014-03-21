@@ -7,16 +7,6 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-include '../types.pxi'
-from libcpp cimport bool
-
-from quantlib._index cimport Index
-from quantlib.time._date cimport Date
-from quantlib.time._period cimport Period
-from quantlib.time._calendar cimport Calendar
-from quantlib.time._daycounter cimport DayCounter
-from quantlib._currency cimport Currency
-
 cdef extern from "string" namespace "std":
     cdef cppclass string:
         char* c_str()    
@@ -25,6 +15,7 @@ cdef extern from 'ql/indexes/interestrateindex.hpp' namespace 'QuantLib':
 
     cdef cppclass InterestRateIndex(Index):
         InterestRateIndex()
+        #FIXME: why is this commented?
 #        InterestRateIndex(string& familyName,
 #                          Period& tenor,
 #                          Natural settlementDays,

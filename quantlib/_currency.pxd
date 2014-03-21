@@ -7,9 +7,6 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-include 'types.pxi'
-from libcpp cimport bool
-
 cdef extern from "string" namespace "std":
     cdef cppclass string:
         char* c_str()    

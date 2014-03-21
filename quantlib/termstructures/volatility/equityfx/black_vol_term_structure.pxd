@@ -1,5 +1,5 @@
-from quantlib.ql cimport _black_vol_term_structure as _bv, shared_ptr
+from quantlib cimport ql
 
 cdef class BlackVolTermStructure:
-    cdef shared_ptr[_bv.BlackVolTermStructure]* _thisptr
+    cdef ql.shared_ptr[ql.BlackVolTermStructure]* _thisptr
 

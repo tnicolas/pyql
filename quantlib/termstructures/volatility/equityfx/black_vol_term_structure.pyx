@@ -1,7 +1,7 @@
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport _black_vol_term_structure as _bv
-
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.date cimport Date
@@ -31,8 +31,8 @@ cdef class BlackConstantVol(BlackVolTermStructure):
         DayCounter daycounter
     ):
 
-        self._thisptr = new shared_ptr[_bv.BlackVolTermStructure](
-            new _bv.BlackConstantVol(
+        self._thisptr = new shared_ptr[ql.BlackVolTermStructure](
+            new ql.BlackConstantVol(
                 deref(reference_date._thisptr.get()),
                 deref(calendar._thisptr),
                 volatility,

@@ -6,13 +6,6 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
-
-include '../types.pxi'
-
-from quantlib.handle cimport Handle, shared_ptr
-from quantlib.termstructures.yields._flat_forward cimport YieldTermStructure
-cimport quantlib._quote as _qt
-
 cdef extern from 'ql/processes/hestonprocess.hpp' namespace 'QuantLib::HestonProcess':
 
     cdef enum Discretization:

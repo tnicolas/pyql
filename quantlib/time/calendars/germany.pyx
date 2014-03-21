@@ -1,11 +1,11 @@
-from quantlib.ql cimport _calendar, _germany as _gm
+from quantlib cimport ql
 from quantlib.time.calendar cimport Calendar
 
-SETTLEMENT = 0
-FrankfurtStockExchange = 1 # Frankfurt stock-exchange
-XETRA = 2                  # Xetra
-EUREX = 3                  # Eurex
-EUWAX = 4                  # Euwax
+SETTLEMENT = ql.DESettlement
+FrankfurtStockExchange = ql.FrankfurtStockExchange
+XETRA = ql.Xetra
+EUREX = ql.Eurex
+EUWAX = ql.Euwax
 
 cdef class Germany(Calendar):
     ''' Germany calendars.
@@ -13,7 +13,7 @@ cdef class Germany(Calendar):
 
     def __cinit__(self, market=SETTLEMENT):
 
-        self._thisptr = <_calendar.Calendar*> new \
-            _gm.Germany(<_gm.Market>market)
+        self._thisptr = <ql.Calendar*> new \
+            ql.Germany(<ql.GermanMarket>market)
 
 

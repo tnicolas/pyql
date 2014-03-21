@@ -1,5 +1,5 @@
-from quantlib.ql cimport _interest_rate as _ir, shared_ptr
+from quantlib cimport ql
 
 cdef class InterestRate:
-    cdef shared_ptr[_ir.InterestRate]* _thisptr
+    cdef ql.shared_ptr[ql.InterestRate]* _thisptr
 

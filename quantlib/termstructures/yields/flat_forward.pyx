@@ -10,7 +10,8 @@
 include '../../types.pxi'
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport _period, _flat_forward as ffwd, _quote as _qt
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.daycounter cimport DayCounter
@@ -57,57 +58,57 @@ cdef class FlatForward(YieldTermStructure):
         self.relinkable = False
 
         #local cdef's
-        cdef ffwd.Handle[_qt.Quote] quote_handle
-        cdef ffwd.Date _reference_date
+        cdef ql.Handle[ql.Quote] quote_handle
+        cdef ql.Date _reference_date
 
         if reference_date is not None:
             if isinstance(forward, Quote):
-                quote_handle = ffwd.Handle[_qt.Quote](deref( (<Quote>forward)._thisptr))
+                quote_handle = ql.Handle[ql.Quote](deref( (<Quote>forward)._thisptr))
 
-                self._thisptr = new shared_ptr[ffwd.YieldTermStructure](
-                    new ffwd.FlatForward(
+                self._thisptr = new shared_ptr[ql.YieldTermStructure](
+                    new ql.FlatForward(
                         deref(reference_date._thisptr.get()),
                         quote_handle,
                         deref(daycounter._thisptr),
-                        <ffwd.Compounding>compounding,
-                        <_period.Frequency>frequency
+                        <ql.Compounding>compounding,
+                        <ql.Frequency>frequency
                     )
                 )
             else:
-                self._thisptr = new shared_ptr[ffwd.YieldTermStructure](
-                    new ffwd.FlatForward(
+                self._thisptr = new shared_ptr[ql.YieldTermStructure](
+                    new ql.FlatForward(
                         deref(reference_date._thisptr.get()),
-                        <ffwd.Rate>forward,
+                        <ql.Rate>forward,
                         deref(daycounter._thisptr),
-                        <ffwd.Compounding>compounding,
-                        <_period.Frequency>frequency
+                        <ql.Compounding>compounding,
+                        <ql.Frequency>frequency
                     )
                 )
         elif settlement_days is not None and \
             calendar is not None:
 
             if isinstance(forward, Quote):
-                quote_handle = ffwd.Handle[_qt.Quote](deref( (<Quote>forward)._thisptr))
+                quote_handle = ql.Handle[ql.Quote](deref( (<Quote>forward)._thisptr))
 
-                self._thisptr = new shared_ptr[ffwd.YieldTermStructure](
-                    new ffwd.FlatForward(
-                        <ffwd.Natural>settlement_days,
+                self._thisptr = new shared_ptr[ql.YieldTermStructure](
+                    new ql.FlatForward(
+                        <ql.Natural>settlement_days,
                         deref(calendar._thisptr),
                         quote_handle,
                         deref(daycounter._thisptr),
-                        <ffwd.Compounding>compounding,
-                        <_period.Frequency>frequency
+                        <ql.Compounding>compounding,
+                        <ql.Frequency>frequency
                     )
                 )
             else:
-                self._thisptr = new shared_ptr[ffwd.YieldTermStructure](
-                    new ffwd.FlatForward(
-                        <ffwd.Natural>settlement_days,
+                self._thisptr = new shared_ptr[ql.YieldTermStructure](
+                    new ql.FlatForward(
+                        <ql.Natural>settlement_days,
                         deref(calendar._thisptr),
                         <Real>forward,
                         deref(daycounter._thisptr),
-                        <ffwd.Compounding>compounding,
-                        <_period.Frequency>frequency
+                        <ql.Compounding>compounding,
+                        <ql.Frequency>frequency
                     )
                 )
         else:

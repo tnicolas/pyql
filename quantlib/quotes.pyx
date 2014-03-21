@@ -1,4 +1,5 @@
-from quantlib.ql cimport _quote as _qt, shared_ptr
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 cdef class Quote:
 
@@ -30,7 +31,7 @@ cdef class Quote:
 cdef class SimpleQuote(Quote):
 
     def __init__(self, float value=0.0):
-        self._thisptr = new shared_ptr[_qt.Quote](new _qt.SimpleQuote(value))
+        self._thisptr = new shared_ptr[ql.Quote](new ql.SimpleQuote(value))
 
     def __str__(self):
         return 'Simple Quote: %f' % self._thisptr.get().value()
@@ -43,4 +44,4 @@ cdef class SimpleQuote(Quote):
                 return None
 
         def __set__(self, float value):
-            (<_qt.SimpleQuote*>self._thisptr.get()).setValue(value)
+            (<ql.SimpleQuote*>self._thisptr.get()).setValue(value)

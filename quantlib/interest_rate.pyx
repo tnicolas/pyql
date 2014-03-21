@@ -11,7 +11,8 @@ include 'types.pxi'
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport _interest_rate as _ir, shared_ptr
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr 
 
 from quantlib import compounding
 from quantlib.time.api import NoFrequency, Once
@@ -38,10 +39,10 @@ cdef class InterestRate:
         if 'noalloc' in kwargs:
             return
             
-        self._thisptr = new shared_ptr[_ir.InterestRate](
-            new _ir.InterestRate(
-                <Rate>rate, deref(dc._thisptr), <_ir.Compounding>compounding,
-                <_ir.Frequency>frequency
+        self._thisptr = new shared_ptr[ql.InterestRate](
+            new ql.InterestRate(
+                <Rate>rate, deref(dc._thisptr), <ql.Compounding>compounding,
+                <ql.Frequency>frequency
             )
         )
 
@@ -68,7 +69,7 @@ cdef class InterestRate:
 
     property day_counter:
         def __get__(self):
-            cdef _ir.DayCounter dc = self._thisptr.get().dayCounter()
+            cdef ql.DayCounter dc = self._thisptr.get().dayCounter()
 
             return DayCounter.from_name(dc.name().c_str())
 

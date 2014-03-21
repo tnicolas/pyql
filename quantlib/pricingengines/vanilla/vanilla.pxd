@@ -1,6 +1,5 @@
-from quantlib.ql cimport _vanilla
-from quantlib.pricingengines.engine cimport PricingEngine
 
+from quantlib.pricingengines.engine cimport PricingEngine
 from quantlib.processes.black_scholes_process cimport GeneralizedBlackScholesProcess
 
 cdef class VanillaOptionEngine(PricingEngine):
