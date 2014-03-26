@@ -404,7 +404,7 @@ def collect_extensions():
     manual_extensions = [
         ql_extension,
         multipath_extension,
-        #mc_vanilla_engine_extension,
+        mc_vanilla_engine_extension,
         settings_extension,
         test_extension,
         instrument_extension,

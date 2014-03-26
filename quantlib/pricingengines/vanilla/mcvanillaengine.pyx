@@ -8,9 +8,6 @@ from cython.operator cimport dereference as deref
 
 from quantlib cimport ql
 from quantlib.ql cimport shared_ptr 
-# _heston_process as _hp, _pricing_engine as _pe,
-#    mc_vanilla_engine_factory
-
 
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.pricingengines.engine cimport PricingEngine

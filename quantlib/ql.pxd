@@ -82,17 +82,17 @@ cdef extern from "simulate_support_code.hpp" namespace 'QL':
                     int nbPaths, int nbSteps, Time horizon, BigNatural seed,
                     bool antithetic_variates, double *res) except +
 
-#cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QL':
-#
-#    cdef shared_ptr[PricingEngine] mc_vanilla_engine_factory(
-#      string& trait, 
-#      string& RNG,
-#      shared_ptr[HestonProcess]& process,
-#      bool doAntitheticVariate,
-#      Size stepsPerYear,
-#      Size requiredSamples,
-#      BigNatural seed) except +
-#
+cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QL':
+
+    cdef shared_ptr[PricingEngine] mc_vanilla_engine_factory(
+      string& trait, 
+      string& RNG,
+      shared_ptr[HestonProcess]& process,
+      bool doAntitheticVariate,
+      Size stepsPerYear,
+      Size requiredSamples,
+      BigNatural seed) except +
+
 
 include "termstructures/yields/_piecewise_yield_curve.pxd"
 include "termstructures/credit/_piecewise_default_curve.pxd"
