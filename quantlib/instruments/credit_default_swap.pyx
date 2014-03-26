@@ -13,10 +13,8 @@ from cython.operator cimport dereference as deref
 
 from libcpp cimport bool
 
-from quantlib.ql cimport (
-    shared_ptr, _credit_default_swap as _cds, _instrument, _calendar,
-    _pricing_engine as _pe
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from quantlib.instruments.instrument cimport Instrument
 from quantlib.pricingengines.engine cimport PricingEngine
@@ -24,14 +22,14 @@ from quantlib.time.date cimport Date
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.schedule cimport Schedule
 
-BUYER = _cds.Buyer
-SELLER = _cds.Seller
+BUYER = ql.Buyer
+SELLER = ql.Seller
 
-cdef _cds.CreditDefaultSwap* _get_cds(CreditDefaultSwap cds):
+cdef ql.CreditDefaultSwap* _get_cds(CreditDefaultSwap cds):
     """ Utility function to extract a properly casted Bond pointer out of the
     internal _thisptr attribute of the Instrument base class. """
 
-    cdef _cds.CreditDefaultSwap* ref = <_cds.CreditDefaultSwap*>cds._thisptr.get()
+    cdef ql.CreditDefaultSwap* ref = <ql.CreditDefaultSwap*>cds._thisptr.get()
 
     return ref
 
@@ -79,10 +77,10 @@ cdef class CreditDefaultSwap(Instrument):
                                     event will trigger the contract.
         """
 
-        self._thisptr = new shared_ptr[_instrument.Instrument](
-            new _cds.CreditDefaultSwap(
-                <_cds.Side>side, notional, spread, deref(schedule._thisptr),
-                <_calendar.BusinessDayConvention>payment_convention,
+        self._thisptr = new shared_ptr[ql.Instrument](
+            new ql.CreditDefaultSwap(
+                <ql.Side>side, notional, spread, deref(schedule._thisptr),
+                <ql.BusinessDayConvention>payment_convention,
                 deref(day_counter._thisptr), settles_accrual, pays_at_default_time,
                 deref(protection_start._thisptr.get())
             )

@@ -51,6 +51,7 @@ include "processes/_black_scholes_process.pxd"
 include "instruments/_exercise.pxd"
 include "instruments/_payoffs.pxd"
 include "instruments/_option.pxd"
+include "instruments/_credit_default_swap.pxd"
 
 include "termstructures/_helpers.pxd"
 include "termstructures/_yield_term_structure.pxd"

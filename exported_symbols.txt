@@ -185,3 +185,8 @@
 ?fixing@InterestRateIndex@QuantLib@@UBENABVDate@2@_N@Z
 ?addFixing@Index@QuantLib@@UAEXABVDate@2@N_N@Z
 ?maturityDate@IborIndex@QuantLib@@UBE?AVDate@2@ABV32@@Z
+?couponLegNPV@CreditDefaultSwap@QuantLib@@QBENXZ
+?defaultLegNPV@CreditDefaultSwap@QuantLib@@QBENXZ
+?fairSpread@CreditDefaultSwap@QuantLib@@QBENXZ
+?fairUpfront@CreditDefaultSwap@QuantLib@@QBENXZ
+??0CreditDefaultSwap@QuantLib@@QAE@W4Side@Protection@1@NNABVSchedule@1@W4BusinessDayConvention@1@ABVDayCounter@1@_N4ABVDate@1@ABV?$shared_ptr@VClaim@QuantLib@@@boost@@@Z
