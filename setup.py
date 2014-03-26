@@ -384,8 +384,8 @@ def collect_extensions():
     )
     
     default_probability_helpers_extension = Extension(
-        'quantlib.termstructres.credit.default_probability_helpers',
-        ['quantlib/termstructres/credit/default_probability_helpers.pyx'],
+        'quantlib.termstructures.credit.default_probability_helpers',
+        ['quantlib/termstructures/credit/default_probability_helpers.pyx'],
         **ql_ext_args
     ) 
 
@@ -430,9 +430,9 @@ def collect_extensions():
         bates_process_extension,
         currency_extension,
         black_pe_extension,
-        #default_probability_helpers_extension,
-        #piecewise_yield_curve_extension,
-        #piecewise_default_curve_extension,
+        default_probability_helpers_extension,
+        piecewise_yield_curve_extension,
+        piecewise_default_curve_extension,
     ]
     
     for mod in ['calendar', 'date', 'daycounter', 'schedule']:

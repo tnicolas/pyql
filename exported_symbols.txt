@@ -1,7 +1,9 @@
 ?set_evaluation_date@QL@@YAXAAVDate@QuantLib@@@Z
 ?get_evaluation_date@QL@@YA?AVDate@QuantLib@@XZ
 ?simulateMP@QL@@YAXABV?$shared_ptr@VStochasticProcess@QuantLib@@@boost@@HHNK_NPAN@Z
+?term_structure_factory@QL@@YA?AV?$shared_ptr@VYieldTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@QuantLib@@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@7@N@Z
 ?mc_vanilla_engine_factory@QL@@YA?AV?$shared_ptr@VPricingEngine@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABV?$shared_ptr@VHestonProcess@QuantLib@@@3@_NIIK@Z
+?credit_term_structure_factory@QL@@YA?AV?$shared_ptr@VDefaultProbabilityTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@QuantLib@@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@7@N@Z
 # Start of QL symbols
 # FIXME: this should be generated ... Can be found using `nm -ug target.obj`
 ??0Period@QuantLib@@QAE@W4Frequency@1@@Z
@@ -176,3 +178,4 @@
 ?lambda@BatesProcess@QuantLib@@QBENXZ
 ??0Data@Currency@QuantLib@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H00HABVRounding@2@0ABV12@@Z
 ?survivalProbability@DefaultProbabilityTermStructure@QuantLib@@QBENN_N@Z
+??0SpreadCdsHelper@QuantLib@@QAE@NABVPeriod@1@HABVCalendar@1@W4Frequency@1@W4BusinessDayConvention@1@W4Rule@DateGeneration@1@ABVDayCounter@1@NABV?$Handle@VYieldTermStructure@QuantLib@@@1@_N7@Z
