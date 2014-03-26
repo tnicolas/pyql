@@ -388,6 +388,12 @@ def collect_extensions():
         ['quantlib/termstructures/credit/default_probability_helpers.pyx'],
         **ql_ext_args
     ) 
+    
+    euribox_index_extension = Extension(
+        'quantlib.indexes.euribor',
+        ['quantlib/indexes/euribor.pyx'],
+        **ql_ext_args
+    )
 
     manual_extensions = [
         ql_extension,
@@ -433,6 +439,7 @@ def collect_extensions():
         default_probability_helpers_extension,
         piecewise_yield_curve_extension,
         piecewise_default_curve_extension,
+        euribox_index_extension
     ]
     
     for mod in ['calendar', 'date', 'daycounter', 'schedule']:

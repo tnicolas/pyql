@@ -39,6 +39,7 @@ include "indexes/_interest_rate_index.pxd"
 include "indexes/_ibor_index.pxd"
 include "indexes/_libor.pxd"
 include "indexes/_swap_index.pxd"
+include "indexes/_euribor.pxd"
 
 include "pricingengines/_pricing_engine.pxd"
 

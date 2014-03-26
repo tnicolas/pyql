@@ -179,3 +179,9 @@
 ??0Data@Currency@QuantLib@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H00HABVRounding@2@0ABV12@@Z
 ?survivalProbability@DefaultProbabilityTermStructure@QuantLib@@QBENN_N@Z
 ??0SpreadCdsHelper@QuantLib@@QAE@NABVPeriod@1@HABVCalendar@1@W4Frequency@1@W4BusinessDayConvention@1@W4Rule@DateGeneration@1@ABVDayCounter@1@NABV?$Handle@VYieldTermStructure@QuantLib@@@1@_N7@Z
+?clone@IborIndex@QuantLib@@UBE?AV?$shared_ptr@VIborIndex@QuantLib@@@boost@@ABV?$Handle@VYieldTermStructure@QuantLib@@@2@@Z
+?forecastFixing@IborIndex@QuantLib@@UBENABVDate@2@@Z
+??0Euribor@QuantLib@@QAE@ABVPeriod@1@ABV?$Handle@VYieldTermStructure@QuantLib@@@1@@Z
+?fixing@InterestRateIndex@QuantLib@@UBENABVDate@2@_N@Z
+?addFixing@Index@QuantLib@@UAEXABVDate@2@N_N@Z
+?maturityDate@IborIndex@QuantLib@@UBE?AVDate@2@ABV32@@Z

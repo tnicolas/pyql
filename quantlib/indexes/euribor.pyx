@@ -9,9 +9,9 @@
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    _euribor as _eu, _flat_forward as _ff, _index as _in, Handle, shared_ptr
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
+
 
 from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
 
@@ -23,9 +23,9 @@ cdef class Euribor(IborIndex):
 cdef class Euribor6M(Euribor):
     def __init__(self):
     
-        cdef Handle[_ff.YieldTermStructure] yc_handle = \
-                Handle[_ff.YieldTermStructure]()
+        cdef ql.Handle[ql.YieldTermStructure] yc_handle = \
+                ql.Handle[ql.YieldTermStructure]()
 
-        self._thisptr = new shared_ptr[_in.Index](
-            new _eu.Euribor6M(yc_handle))
+        self._thisptr = new shared_ptr[ql.Index](
+            new ql.Euribor6M(yc_handle))
 
