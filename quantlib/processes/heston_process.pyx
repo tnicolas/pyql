@@ -2,21 +2,19 @@ include '../types.pxi'
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    Handle, shared_ptr, _flat_forward as _ff, _quote as _qt,
-    _heston_process as _hp
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from quantlib.quotes cimport Quote, SimpleQuote
 from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
 
 cdef public enum Discretization:
-        PARTIALTRUNCATION = _hp.PartialTruncation
-        FULLTRUNCATION = _hp.FullTruncation
-        REFLECTION = _hp.Reflection
-        NONCENTRALCHISQUAREVARIANCE = _hp.NonCentralChiSquareVariance
-        QUADRATICEXPONENTIAL = _hp.QuadraticExponential
-        QUADRATICEXPONENTIALMARTINGALE = _hp.QuadraticExponentialMartingale
+        PARTIALTRUNCATION = ql.PartialTruncation
+        FULLTRUNCATION = ql.FullTruncation
+        REFLECTION = ql.Reflection
+        NONCENTRALCHISQUAREVARIANCE = ql.NonCentralChiSquareVariance
+        QUADRATICEXPONENTIAL = ql.QuadraticExponential
+        QUADRATICEXPONENTIALMARTINGALE = ql.QuadraticExponentialMartingale
 
 cdef class HestonProcess:
     """Heston process: a diffusion process with mean-reverting stochastic variance.
@@ -54,18 +52,18 @@ cdef class HestonProcess:
             return
         
         #create handles
-        cdef Handle[_qt.Quote] s0_handle = Handle[_qt.Quote](deref(s0._thisptr))
-        cdef Handle[_ff.YieldTermStructure] dividend_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef ql.Handle[ql.Quote] s0_handle = ql.Handle[ql.Quote](deref(s0._thisptr))
+        cdef ql.Handle[ql.YieldTermStructure] dividend_ts_handle = \
+                ql.Handle[ql.YieldTermStructure](
                     deref(dividend_ts._thisptr)
                 )
-        cdef Handle[_ff.YieldTermStructure] risk_free_rate_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef ql.Handle[ql.YieldTermStructure] risk_free_rate_ts_handle = \
+                ql.Handle[ql.YieldTermStructure](
                     deref(risk_free_rate_ts._thisptr)
                 )
 
-        self._thisptr = new shared_ptr[_hp.HestonProcess](
-            new _hp.HestonProcess(
+        self._thisptr = new shared_ptr[ql.HestonProcess](
+            new ql.HestonProcess(
                 risk_free_rate_ts_handle,
                 dividend_ts_handle,
                 s0_handle,
@@ -102,9 +100,9 @@ cdef class HestonProcess:
             return self._thisptr.get().sigma()
 
     def s0(self):
-        #cdef _hp.HestonProcess* hp_ptr = self._thisptr.get()
-        cdef Handle[_qt.Quote] handle = self._thisptr.get().s0()
-        cdef shared_ptr[_qt.Quote] quote_sptr = shared_ptr[_qt.Quote](handle.currentLink())
+        #cdef ql.HestonProcess* hp_ptr = self._thisptr.get()
+        cdef ql.Handle[ql.Quote] handle = self._thisptr.get().s0()
+        cdef shared_ptr[ql.Quote] quote_sptr = shared_ptr[ql.Quote](handle.currentLink())
 
         # maybe not optmal but easiest to do
         return  SimpleQuote(quote_sptr.get().value())

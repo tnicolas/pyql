@@ -13,14 +13,14 @@
 #include <vector>
 #include <string>
 
-namespace QuantLib {
+namespace QL {
 
     // Creates a YieldTermStructure based on a PiecewiseYieldCurve
-    boost::shared_ptr<YieldTermStructure> term_structure_factory(
+    boost::shared_ptr<QuantLib::YieldTermStructure> term_structure_factory(
         std::string& traits, std::string& interpolator, 
-        const Date& settlement_date,
-        const std::vector<boost::shared_ptr<RateHelper> >& curve_input,
-        DayCounter& 
-        day_counter, Real tolerance
+        const QuantLib::Date& settlement_date,
+        const std::vector<boost::shared_ptr<QuantLib::RateHelper> >& curve_input,
+        QuantLib::DayCounter& 
+        day_counter, QuantLib::Real tolerance
     );
 }

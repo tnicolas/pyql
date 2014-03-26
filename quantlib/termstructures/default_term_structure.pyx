@@ -1,7 +1,8 @@
 
-from quantlib.ql cimport shared_ptr, _default_term_structure as _dts
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 
 cdef class DefaultProbabilityTermStructure: #not inheriting from TermStructure at this point
 
-    cdef shared_ptr[_dts.DefaultProbabilityTermStructure]* _thisptr
+    cdef shared_ptr[ql.DefaultProbabilityTermStructure]* _thisptr

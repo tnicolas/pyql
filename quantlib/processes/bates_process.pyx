@@ -11,22 +11,20 @@ include '../types.pxi'
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    _heston_process as _hp, Handle, shared_ptr, _flat_forward as _ff,
-    _quote as _qt
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
-)
 from quantlib.quotes cimport Quote, SimpleQuote
 from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
 from heston_process cimport HestonProcess
 
 cdef public enum Discretization:
-        PARTIALTRUNCATION = _hp.PartialTruncation
-        FULLTRUNCATION = _hp.FullTruncation
-        REFLECTION = _hp.Reflection
-        NONCENTRALCHISQUAREVARIANCE = _hp.NonCentralChiSquareVariance
-        QUADRATICEXPONENTIAL = _hp.QuadraticExponential
-        QUADRATICEXPONENTIALMARTINGALE = _hp.QuadraticExponentialMartingale
+        PARTIALTRUNCATION = ql.PartialTruncation
+        FULLTRUNCATION = ql.FullTruncation
+        REFLECTION = ql.Reflection
+        NONCENTRALCHISQUAREVARIANCE = ql.NonCentralChiSquareVariance
+        QUADRATICEXPONENTIAL = ql.QuadraticExponential
+        QUADRATICEXPONENTIALMARTINGALE = ql.QuadraticExponentialMartingale
 
 cdef class BatesProcess(HestonProcess):
 
@@ -56,18 +54,18 @@ cdef class BatesProcess(HestonProcess):
             return
         
         #create handles
-        cdef Handle[_qt.Quote] s0_handle = Handle[_qt.Quote](deref(s0._thisptr))
-        cdef Handle[_ff.YieldTermStructure] dividend_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef ql.Handle[ql.Quote] s0_handle = ql.Handle[ql.Quote](deref(s0._thisptr))
+        cdef ql.Handle[ql.YieldTermStructure] dividend_ts_handle = \
+                ql.Handle[ql.YieldTermStructure](
                     deref(dividend_ts._thisptr)
                 )
-        cdef Handle[_ff.YieldTermStructure] risk_free_rate_ts_handle = \
-                Handle[_ff.YieldTermStructure](
+        cdef ql.Handle[ql.YieldTermStructure] risk_free_rate_ts_handle = \
+                ql.Handle[ql.YieldTermStructure](
                     deref(risk_free_rate_ts._thisptr)
                 )
 
-        self._thisptr = new shared_ptr[_hp.HestonProcess](
-            new _hp.BatesProcess(
+        self._thisptr = new shared_ptr[ql.HestonProcess](
+            new ql.BatesProcess(
                 risk_free_rate_ts_handle,
                 dividend_ts_handle,
                 s0_handle,
@@ -81,12 +79,12 @@ cdef class BatesProcess(HestonProcess):
     
     property Lambda:
         def __get__(self):
-            return (<_hp.BatesProcess*> self._thisptr.get()).Lambda()
+            return (<ql.BatesProcess*> self._thisptr.get()).Lambda()
             
     property nu:
         def __get__(self):
-            return (<_hp.BatesProcess*> self._thisptr.get()).nu()
+            return (<ql.BatesProcess*> self._thisptr.get()).nu()
 
     property delta:
         def __get__(self):
-            return (<_hp.BatesProcess*> self._thisptr.get()).delta()
+            return (<ql.BatesProcess*> self._thisptr.get()).delta()

@@ -1,13 +1,13 @@
 #include<ql/quantlib.hpp>
 
-namespace QuantLib {
+namespace QL {
 
   /*
    * Multipath simulator
    */
 
-    void simulateMP(const boost::shared_ptr<StochasticProcess>& process,
-                    int nbPaths, int nbSteps, Time horizon, BigNatural seed,
+    void simulateMP(const boost::shared_ptr<QuantLib::StochasticProcess>& process,
+                    int nbPaths, int nbSteps, QuantLib::Time horizon, QuantLib::BigNatural seed,
                     bool antithetic_variates, double *res);
 
 

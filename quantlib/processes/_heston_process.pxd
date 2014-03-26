@@ -24,7 +24,7 @@ cdef extern from 'ql/processes/hestonprocess.hpp' namespace 'QuantLib':
         HestonProcess(
             Handle[YieldTermStructure]& riskFreeRate,
             Handle[YieldTermStructure]& dividendYield,
-            Handle[_qt.Quote]& s0,
+            Handle[Quote]& s0,
             Real v0, Real kappa,
             Real theta, Real sigma, Real rho, Discretization d) except +
             
@@ -35,7 +35,7 @@ cdef extern from 'ql/processes/hestonprocess.hpp' namespace 'QuantLib':
         Real theta() except +
         Real sigma() except +
 
-        Handle[_qt.Quote] s0()
+        Handle[Quote] s0()
         Handle[YieldTermStructure] dividendYield()
         Handle[YieldTermStructure] riskeFreeRate()
 
@@ -45,7 +45,7 @@ cdef extern from 'ql/processes/batesprocess.hpp' namespace 'QuantLib':
         BatesProcess(
             Handle[YieldTermStructure]& riskFreeRate,
             Handle[YieldTermStructure]& dividendYield,
-            Handle[_qt.Quote]& s0,
+            Handle[Quote]& s0,
             Real v0, Real kappa,
             Real theta, Real sigma, Real rho,
             Real lambda_, Real nu, Real delta, Discretization d) except +

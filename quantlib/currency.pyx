@@ -7,11 +7,11 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-from quantlib.ql cimport _currency as _cu
+from quantlib cimport ql
 
 cdef class Currency:
     def __cinit__(self):
-        self._thisptr = new _cu.Currency()
+        self._thisptr = new ql.Currency()
 
     property name:
         def __get__(self):
@@ -41,8 +41,8 @@ cdef class Currency:
 
 cdef class USDCurrency(Currency):
     def __cinit__(self):
-        self._thisptr = <_cu.Currency*> new _cu.USDCurrency()
+        self._thisptr = <ql.Currency*> new ql.USDCurrency()
 
 cdef class EURCurrency(Currency):
     def __cinit__(self):
-        self._thisptr = <_cu.Currency*> new _cu.EURCurrency()
+        self._thisptr = <ql.Currency*> new ql.EURCurrency()

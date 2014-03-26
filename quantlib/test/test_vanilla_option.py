@@ -115,8 +115,6 @@ class VanillaOptionTestCase(unittest.TestCase):
 
         european_option.set_pricing_engine(analytic_european_engine)
 
-        print 'Eval', self.settings.evaluation_date
-        print 'Option', european_option.valuation_date
         self.assertAlmostEquals(3.844308, european_option.net_present_value, 6)
 
     def test_american_vanilla_option(self):

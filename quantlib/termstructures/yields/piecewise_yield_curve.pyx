@@ -4,10 +4,8 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
-from quantlib.ql cimport (
-    _piecewise_yield_curve as _pyc, _rate_helpers as _rh, _flat_forward as _ff,
-    shared_ptr
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr 
 
 from rate_helpers cimport RateHelper
 from quantlib.time.date cimport Date
@@ -37,7 +35,7 @@ def term_structure_factory(str traits, str interpolator, Date settlement_date,
         )
 
     # convert rate_helpers list to std::vetor
-    cdef vector[shared_ptr[_rh.RateHelper]]* curve_inputs = new vector[shared_ptr[_rh.RateHelper]]()
+    cdef vector[shared_ptr[ql.RateHelper]]* curve_inputs = new vector[shared_ptr[ql.RateHelper]]()
     for helper in rate_helpers:
         curve_inputs.push_back( deref((<RateHelper>helper)._thisptr))
 
@@ -45,7 +43,7 @@ def term_structure_factory(str traits, str interpolator, Date settlement_date,
     cdef string traits_string = string(PyString_AsString(traits))
     cdef string interpolator_string = string(PyString_AsString(interpolator)),
 
-    cdef shared_ptr[_ff.YieldTermStructure] ts_ptr = _pyc.term_structure_factory(
+    cdef shared_ptr[ql.YieldTermStructure] ts_ptr = ql.term_structure_factory(
         traits_string,
         interpolator_string,
         deref(settlement_date._thisptr.get()),
@@ -55,7 +53,7 @@ def term_structure_factory(str traits, str interpolator, Date settlement_date,
     )
 
     term_structure = YieldTermStructure(relinkable=False)
-    term_structure._thisptr = new shared_ptr[_ff.YieldTermStructure](ts_ptr)
+    term_structure._thisptr = new shared_ptr[ql.YieldTermStructure](ts_ptr)
     return term_structure
 
 cdef class PiecewiseYieldCurve(YieldTermStructure):
@@ -100,16 +98,16 @@ cdef class PiecewiseYieldCurve(YieldTermStructure):
         cdef string interpolator_string = string(PyString_AsString(interpolator)),
 
         # convert Python list to std::vector
-        cdef vector[shared_ptr[_rh.RateHelper]]* instruments = \
-                new vector[shared_ptr[_rh.RateHelper]]()
+        cdef vector[shared_ptr[ql.RateHelper]]* instruments = \
+                new vector[shared_ptr[ql.RateHelper]]()
 
         for helper in helpers:
             instruments.push_back(
                 deref((<RateHelper> helper)._thisptr)
             )
 
-        self._thisptr = new shared_ptr[_ff.YieldTermStructure](
-            _pyc.term_structure_factory(
+        self._thisptr = new shared_ptr[ql.YieldTermStructure](
+            ql.term_structure_factory(
                     trait_string,
                     interpolator_string,
                     deref(settlement_date._thisptr.get()),

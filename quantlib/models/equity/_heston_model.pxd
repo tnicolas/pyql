@@ -1,6 +1,3 @@
-
-#from quantlib.processes._heston_process cimport HestonProcess
-
 cdef extern from 'ql/models/calibrationhelper.hpp' namespace 'QuantLib':
 
     cdef cppclass CalibrationHelper:
@@ -26,7 +23,7 @@ cdef extern from 'ql/models/equity/hestonmodelhelper.hpp' namespace 'QuantLib':
             Calendar& calendar,
             Real s0,
             Real strikePrice,
-            Handle[_qt.Quote]& volatility,
+            Handle[Quote]& volatility,
             Handle[YieldTermStructure]& riskFreeRate,
             Handle[YieldTermStructure]& dividendYield,
             CalibrationErrorType errorType

@@ -7,14 +7,14 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-from quantlib.ql cimport _heston_model as _hm, shared_ptr
+from quantlib cimport ql
 
 
 cdef class HestonModelHelper:
 
-    cdef shared_ptr[_hm.HestonModelHelper]* _thisptr
+    cdef ql.shared_ptr[ql.HestonModelHelper]* _thisptr
 
 cdef class HestonModel:
 
-    cdef shared_ptr[_hm.HestonModel]* _thisptr
+    cdef ql.shared_ptr[ql.HestonModel]* _thisptr
 

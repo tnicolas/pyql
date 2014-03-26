@@ -1,7 +1,7 @@
-from quantlib.ql cimport shared_ptr, Handle, _credit_helpers as _ci
+from quantlib cimport ql
 
 cdef class CdsHelper:
-    cdef shared_ptr[_ci.CdsHelper]* _thisptr
+    cdef ql.shared_ptr[ql.CdsHelper]* _thisptr
 
 cdef class SpreadCdsHelper(CdsHelper):
     pass

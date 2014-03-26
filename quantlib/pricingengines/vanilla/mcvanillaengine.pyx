@@ -6,10 +6,11 @@ from cpython.string cimport PyString_AsString
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    shared_ptr, _heston_process as _hp, _pricing_engine as _pe,
-    mc_vanilla_engine_factory
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr 
+# _heston_process as _hp, _pricing_engine as _pe,
+#    mc_vanilla_engine_factory
+
 
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.pricingengines.engine cimport PricingEngine
@@ -43,16 +44,16 @@ cdef class MCVanillaEngine(PricingEngine):
         # the input may be a Heston process or a Bates process
         # this may not be needed ...
         
-        cdef shared_ptr[_hp.HestonProcess]* hp_pt = <shared_ptr[_hp.HestonProcess] *> process._thisptr
+        cdef shared_ptr[ql.HestonProcess]* hp_pt = <shared_ptr[ql.HestonProcess] *> process._thisptr
 
-        cdef shared_ptr[_pe.PricingEngine] engine = mc_vanilla_engine_factory(
+        cdef shared_ptr[ql.PricingEngine] engine = ql.mc_vanilla_engine_factory(
           traits_string, 
           RNG_string,
-          deref(<shared_ptr[_hp.HestonProcess]*> hp_pt),
+          deref(<shared_ptr[ql.HestonProcess]*> hp_pt),
           doAntitheticVariate,
           stepsPerYear,
           requiredSamples,
           seed)
 
-        self._thisptr = new shared_ptr[_pe.PricingEngine](engine)
+        self._thisptr = new shared_ptr[ql.PricingEngine](engine)
 

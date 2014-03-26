@@ -1,5 +1,5 @@
-from quantlib.ql cimport Handle, shared_ptr, _heston_process as _hp
+from quantlib cimport ql
 
 cdef class HestonProcess:
 
-    cdef shared_ptr[_hp.HestonProcess]* _thisptr
+    cdef ql.shared_ptr[ql.HestonProcess]* _thisptr

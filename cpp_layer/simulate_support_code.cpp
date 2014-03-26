@@ -6,7 +6,9 @@
  * the simulation of the variance process and the simulation of the price process
  */
 
-namespace QuantLib {
+using namespace QuantLib;
+
+namespace QL {
 
     void simulateMP(const boost::shared_ptr<StochasticProcess>& process,
                     int nbPaths, int nbSteps, Time horizon, BigNatural seed,

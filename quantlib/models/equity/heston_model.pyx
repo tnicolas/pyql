@@ -13,10 +13,9 @@ from cython.operator cimport dereference as deref
 
 from libcpp.vector cimport vector
 
-from quantlib.ql cimport (
-    _heston_model as _hm, _heston_process as _hp, _flat_forward as _ffwd,
-    _quote as _qt, _pricing_engine as _pe, Handle, shared_ptr
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
+
 from quantlib.math.optimization cimport OptimizationMethod, EndCriteria
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.pricingengines.engine cimport PricingEngine
@@ -28,9 +27,9 @@ from quantlib.termstructures.yields.flat_forward cimport (
 )
 
 cdef public enum CALIBRATION_ERROR_TYPE:
-    RelativePriceError = _hm.RelativePriceError
-    PriceError = _hm.PriceError
-    ImpliedVolError = _hm.ImpliedVolError
+    RelativePriceError = ql.RelativePriceError
+    PriceError = ql.PriceError
+    ImpliedVolError = ql.ImpliedVolError
 
 cdef class HestonModelHelper:
 
@@ -39,7 +38,6 @@ cdef class HestonModelHelper:
 
     def __dealloc__(self):
         if self._thisptr is not NULL:
-            # print('heston dealloc')
             del self._thisptr
 
     def __str__(self):
@@ -56,18 +54,18 @@ cdef class HestonModelHelper:
         error_type=RelativePriceError
     ):
         # create handles
-        cdef Handle[_qt.Quote] volatility_handle = \
-                Handle[_qt.Quote](deref(volatility._thisptr))
+        cdef ql.Handle[ql.Quote] volatility_handle = \
+                ql.Handle[ql.Quote](deref(volatility._thisptr))
 
-        cdef Handle[_ffwd.YieldTermStructure] dividend_yield_handle = \
-            Handle[_ffwd.YieldTermStructure](deref(dividend_yield._thisptr))
+        cdef ql.Handle[ql.YieldTermStructure] dividend_yield_handle = \
+            ql.Handle[ql.YieldTermStructure](deref(dividend_yield._thisptr))
 
-        cdef Handle[_ffwd.YieldTermStructure]risk_free_rate_handle = \
-            Handle[_ffwd.YieldTermStructure](
+        cdef ql.Handle[ql.YieldTermStructure]risk_free_rate_handle = \
+            ql.Handle[ql.YieldTermStructure](
                deref(risk_free_rate._thisptr))
 
-        self._thisptr = new shared_ptr[_hm.HestonModelHelper](
-            new _hm.HestonModelHelper(
+        self._thisptr = new shared_ptr[ql.HestonModelHelper](
+            new ql.HestonModelHelper(
                 deref(maturity._thisptr.get()),
                 deref(calendar._thisptr),
                 s0,
@@ -75,13 +73,13 @@ cdef class HestonModelHelper:
                 volatility_handle,
                 risk_free_rate_handle,
                 dividend_yield_handle,
-                <_hm.CalibrationErrorType>error_type
+                <ql.CalibrationErrorType>error_type
             )
         )
 
     def set_pricing_engine(self, PricingEngine engine):
-        cdef shared_ptr[_pe.PricingEngine] pengine = \
-            shared_ptr[_pe.PricingEngine](<shared_ptr[_pe.PricingEngine] &>deref(engine._thisptr))
+        cdef shared_ptr[ql.PricingEngine] pengine = \
+            shared_ptr[ql.PricingEngine](<shared_ptr[ql.PricingEngine] &>deref(engine._thisptr))
 
         self._thisptr.get().setPricingEngine(pengine)
 
@@ -102,7 +100,7 @@ cdef class HestonModelHelper:
         Volatility minVol, Volatility maxVol):
 
         vol = \
-        (<_hm.CalibrationHelper *> self._thisptr.get()).impliedVolatility(targetValue,
+        (<ql.CalibrationHelper *> self._thisptr.get()).impliedVolatility(targetValue,
         accuracy, maxEvaluations, minVol, maxVol)
 
         return vol
@@ -118,14 +116,14 @@ cdef class HestonModel:
 
     def __init__(self, HestonProcess process):
 
-        self._thisptr = new shared_ptr[_hm.HestonModel](
-            new _hm.HestonModel(deref(process._thisptr))
+        self._thisptr = new shared_ptr[ql.HestonModel](
+            new ql.HestonModel(deref(process._thisptr))
         )
 
     def process(self):
         process = HestonProcess(noalloc=True)
-        cdef shared_ptr[_hp.HestonProcess] hp_ptr = self._thisptr.get().process()
-        cdef shared_ptr[_hp.HestonProcess]* hp_pt = new shared_ptr[_hp.HestonProcess](hp_ptr)
+        cdef shared_ptr[ql.HestonProcess] hp_ptr = self._thisptr.get().process()
+        cdef shared_ptr[ql.HestonProcess]* hp_pt = new shared_ptr[ql.HestonProcess](hp_ptr)
         process._thisptr = hp_pt
         
         return process
@@ -154,12 +152,12 @@ cdef class HestonModel:
             end_criteria):
 
         #convert list to vector
-        cdef vector[shared_ptr[_hm.CalibrationHelper]]* helpers_vector = \
-            new vector[shared_ptr[_hm.CalibrationHelper]]()
+        cdef vector[shared_ptr[ql.CalibrationHelper]]* helpers_vector = \
+            new vector[shared_ptr[ql.CalibrationHelper]]()
 
-        cdef shared_ptr[_hm.CalibrationHelper]* chelper
+        cdef shared_ptr[ql.CalibrationHelper]* chelper
         for helper in helpers:
-            chelper = new shared_ptr[_hm.CalibrationHelper](
+            chelper = new shared_ptr[ql.CalibrationHelper](
                 (<HestonModelHelper>helper)._thisptr.get()
             )
             helpers_vector.push_back(deref(chelper))

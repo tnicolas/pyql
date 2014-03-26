@@ -1,4 +1,5 @@
-from quantlib.ql cimport shared_ptr, _optimization as opt
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 cdef class OptimizationMethod:
     def __cinit__(self):
@@ -11,8 +12,8 @@ cdef class OptimizationMethod:
 cdef class LevenbergMarquardt(OptimizationMethod):
 
     def __init__(self, double epsfcn=1e-8, double xtol=1e-8, double gtol=1e-8):
-        self._thisptr = new shared_ptr[_opt.OptimizationMethod](
-            new _opt.LevenbergMarquardt(
+        self._thisptr = new shared_ptr[ql.OptimizationMethod](
+            new ql.LevenbergMarquardt(
                 epsfcn,
                 xtol,
                 gtol
@@ -31,8 +32,8 @@ cdef class EndCriteria:
             double root_epsilon, double function_epsilon,
             double gradient_epsilon
     ):
-        self._thisptr = new shared_ptr[_opt.EndCriteria](
-            new _opt.EndCriteria(
+        self._thisptr = new shared_ptr[ql.EndCriteria](
+            new ql.EndCriteria(
                 max_iterations,
                 max_stationary_state_iterations,
                 root_epsilon,

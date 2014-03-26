@@ -334,14 +334,65 @@ def collect_extensions():
         ['quantlib/termstructures/volatility/equityfx/black_vol_term_structure.pyx'],
         **ql_ext_args
     )
+
+    vanilla_pe_extension = Extension(
+        'quantlib.pricingengines.vanilla.vanilla',
+        ['quantlib/pricingengines/vanilla/vanilla.pyx'],
+        **ql_ext_args
+    )
     
+    black_pe_extension = Extension(
+        'quantlib.pricingengines.blackformula',
+        ['quantlib/pricingengines/blackformula.pyx'],
+        **ql_ext_args
+    )
+    
+    heston_model_extension = Extension(
+        'quantlib.models.equity.heston_model',
+        ['quantlib/models/equity/heston_model.pyx'],
+        **ql_ext_args
+    )
+    
+    bates_model_extension = Extension(
+        'quantlib.models.equity.bates_model',
+        ['quantlib/models/equity/bates_model.pyx'],
+        **ql_ext_args
+    )
+    
+    optimization_extension = Extension(
+        'quantlib.math.optimization',
+        ['quantlib/math/optimization.pyx'],
+        **ql_ext_args
+    )
+    
+    heston_process_extension = Extension(
+        'quantlib.processes.heston_process',
+        ['quantlib/processes/heston_process.pyx'],
+        **ql_ext_args
+    )
+
+    bates_process_extension = Extension(
+        'quantlib.processes.bates_process',
+        ['quantlib/processes/bates_process.pyx'],
+        **ql_ext_args
+    )
+    
+    currency_extension = Extension(
+        'quantlib.currency',
+        ['quantlib/currency.pyx'],
+        **ql_ext_args
+    )
+    
+    default_probability_helpers_extension = Extension(
+        'quantlib.termstructres.credit.default_probability_helpers',
+        ['quantlib/termstructres/credit/default_probability_helpers.pyx'],
+        **ql_ext_args
+    ) 
 
     manual_extensions = [
         ql_extension,
         #multipath_extension,
         #mc_vanilla_engine_extension,
-        #piecewise_yield_curve_extension,
-        #piecewise_default_curve_extension,
         settings_extension,
         test_extension,
         instrument_extension,
@@ -371,6 +422,17 @@ def collect_extensions():
         bs_process_extension,
         ir_extension,
         black_vol_extension,
+        vanilla_pe_extension,
+        heston_model_extension,
+        bates_model_extension,
+        optimization_extension,
+        heston_process_extension,
+        bates_process_extension,
+        currency_extension,
+        black_pe_extension,
+        #default_probability_helpers_extension,
+        #piecewise_yield_curve_extension,
+        #piecewise_default_curve_extension,
     ]
     
     for mod in ['calendar', 'date', 'daycounter', 'schedule']:

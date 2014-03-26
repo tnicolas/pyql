@@ -1,16 +1,13 @@
-include '../types.pxi'
-from quantlib.instruments._option cimport Type as OptionType
-
 cdef extern from 'ql/pricingengines/blackformula.hpp' namespace 'QuantLib':
 
-    Real blackFormula(OptionType optionType,
+    Real blackFormula(Type optionType,
                       Real strike,
                       Real forward,
                       Real stdDev,
                       Real discount,
                       Real displacement) except +
 
-    Real blackFormulaImpliedStdDev(OptionType optionType,
+    Real blackFormulaImpliedStdDev(Type optionType,
                                    Real strike,
                                    Real forward,
                                    Real blackPrice,

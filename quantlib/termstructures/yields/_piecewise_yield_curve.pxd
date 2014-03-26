@@ -1,22 +1,4 @@
-include '../../types.pxi'
-
-from libcpp cimport bool
-from libcpp.vector cimport vector
-from libcpp.string cimport string
-
-from quantlib.handle cimport shared_ptr, Handle, RelinkableHandle
-from quantlib.time._calendar cimport Calendar
-from quantlib.time._date cimport Date
-from quantlib.time._daycounter cimport DayCounter
-from quantlib.time._period cimport Frequency
-from quantlib.termstructures.yields._flat_forward cimport YieldTermStructure
-
-cdef extern from 'ql/termstructures/yield/ratehelpers.hpp' namespace 'QuantLib':
-
-    cdef cppclass RateHelper:
-        pass
-
-cdef extern from 'yield_piecewise_support_code.hpp' namespace 'QuantLib':
+cdef extern from 'yield_piecewise_support_code.hpp' namespace 'QL':
 
     cdef shared_ptr[YieldTermStructure] term_structure_factory(
         string& traits,

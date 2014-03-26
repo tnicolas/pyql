@@ -1,9 +1,8 @@
 include '../types.pxi'
 
+from quantlib cimport ql
+
 from quantlib.instruments.payoffs import Call, Put
-
-from quantlib.ql cimport _blackformula as _bf, _option as _opt
-
 from math import sqrt, log
 import types
 
@@ -44,7 +43,7 @@ def blackFormula(option_type, Real strike,
         else:
             option_type = STR_TO_OPTION_TYPE[option_type.upper()]
 
-    return _bf.blackFormula(<_opt.Type>option_type,
+    return ql.blackFormula(<ql.Type>option_type,
                       <Real> strike,
                       <Real> forward,
                       <Real> stdDev,
@@ -78,7 +77,7 @@ def blackFormulaImpliedStdDev(cp, Real strike,
 
         guess = guess * sqrt(TTM)
 
-    return _bf.blackFormulaImpliedStdDev(<_opt.Type> cpType,
+    return ql.blackFormulaImpliedStdDev(<ql.Type> cpType,
                                    <Real> strike,
                                    <Real> forward,
                                    <Real> blackPrice,

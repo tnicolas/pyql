@@ -5,8 +5,8 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 from cpython.string cimport PyString_AsString
 
-from quantlib.ql cimport shared_ptr, _credit_helpers, _default_term_structure
-from quantlib.ql cimport _piecewise_default_curve as _pdc
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from quantlib.time.date cimport Date
 from quantlib.time.daycounter cimport DayCounter
@@ -42,16 +42,16 @@ cdef class PiecewiseDefaultCurve:
         cdef string interpolator_string = string(PyString_AsString(interpolator)),
 
         # convert Python list to std::vector
-        cdef vector[shared_ptr[_credit_helpers.DefaultProbabilityHelper]]* instruments = \
-                new vector[shared_ptr[_credit_helpers.DefaultProbabilityHelper]]()
+        cdef vector[shared_ptr[ql.DefaultProbabilityHelper]]* instruments = \
+                new vector[shared_ptr[ql.DefaultProbabilityHelper]]()
 
         for helper in helpers:
             instruments.push_back(
-                <shared_ptr[_credit_helpers.DefaultProbabilityHelper]>deref((<CdsHelper> helper)._thisptr)
+                <shared_ptr[ql.DefaultProbabilityHelper]>deref((<CdsHelper> helper)._thisptr)
             )
 
-        self._thisptr = new shared_ptr[_default_term_structure.DefaultProbabilityTermStructure](
-            _pdc.credit_term_structure_factory(
+        self._thisptr = new shared_ptr[ql.DefaultProbabilityTermStructure](
+            ql.credit_term_structure_factory(
                 trait_string, interpolator_string,
                 deref(reference_date._thisptr.get()),
                 deref(instruments),

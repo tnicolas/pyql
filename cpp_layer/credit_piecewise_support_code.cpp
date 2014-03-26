@@ -12,7 +12,9 @@
 #include <ql/time/daycounter.hpp>
 #include <ql/math/interpolations/all.hpp>
 
-namespace QuantLib {
+using namespace QuantLib;
+
+namespace QL {
 
     typedef boost::shared_ptr<DefaultProbabilityTermStructure> TS;
 

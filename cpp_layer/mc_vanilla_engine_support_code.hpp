@@ -8,14 +8,14 @@
 #include <ql/quantlib.hpp>
 #include <ql/processes/hestonprocess.hpp>
 
-namespace QuantLib {
+namespace QL {
 
-    boost::shared_ptr<PricingEngine> mc_vanilla_engine_factory(
+    boost::shared_ptr<QuantLib::PricingEngine> mc_vanilla_engine_factory(
       std::string& trait, 
       std::string& rng,
-      const boost::shared_ptr<HestonProcess>& process,
+      const boost::shared_ptr<QuantLib::HestonProcess>& process,
       bool doAntitheticVariate,
-      Size stepsPerYear,
-      Size requiredSamples,
-      BigNatural seed);
+      QuantLib::Size stepsPerYear,
+      QuantLib::Size requiredSamples,
+      QuantLib::BigNatural seed);
 }

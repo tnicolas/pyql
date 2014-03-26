@@ -2,10 +2,8 @@
 
 from cython.operator cimport dereference as deref
 
-cimport quantlib.ql
-from quantlib.ql cimport (
-    _heston_process as _hp, _stochastic_process as _sp, shared_ptr, simulateMP
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from quantlib.processes.heston_process cimport HestonProcess
 from quantlib.processes.bates_process cimport BatesProcess
@@ -21,9 +19,9 @@ cdef simulate_sub(void *tmp, int nbPaths, int nbSteps,
 
     cdef cnp.ndarray[cnp.double_t, ndim=2] res = np.zeros((nbPaths+1, nbSteps+1), dtype=np.double)
 
-    cdef shared_ptr[_sp.StochasticProcess]* hp_pt = <shared_ptr[_sp.StochasticProcess] *> tmp
+    cdef shared_ptr[ql.StochasticProcess]* hp_pt = <shared_ptr[ql.StochasticProcess] *> tmp
   
-    simulateMP(deref(<shared_ptr[_sp.StochasticProcess]*> hp_pt),
+    ql.simulateMP(deref(<shared_ptr[ql.StochasticProcess]*> hp_pt),
                nbPaths, nbSteps, horizon, seed, antithetic, <double*> res.data)
 
     return res
@@ -40,7 +38,7 @@ cdef simulate_process(process_type* process,
     cdef cnp.ndarray[cnp.double_t, ndim=2] result = \
             np.zeros((nb_paths + 1, nb_steps + 1), dtype=np.double)
 
-    simulateMP(deref(process), nb_paths, nb_steps, horizon, seed, antithetic,
+    ql.simulateMP(deref(process), nb_paths, nb_steps, horizon, seed, antithetic,
             <double*> result.data)
 
     return result

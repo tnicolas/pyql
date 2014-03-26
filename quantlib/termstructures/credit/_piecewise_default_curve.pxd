@@ -7,23 +7,12 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-include '../../types.pxi'
-
-from libcpp.vector cimport vector
-from libcpp.string cimport string
-
-from quantlib.handle cimport shared_ptr
-from quantlib.termstructures.credit._credit_helpers cimport DefaultProbabilityHelper
-from quantlib.termstructures._default_term_structure cimport DefaultProbabilityTermStructure
-from quantlib.time._date cimport Date
-from quantlib.time._daycounter cimport DayCounter
-
 cdef extern from 'ql/termstructures/credit/probabilitytraits.hpp' namespace 'QuantLib':
 
     cdef struct HazardRate:
         pass
 
-cdef extern from 'credit_piecewise_support_code.hpp' namespace 'QuantLib':
+cdef extern from 'credit_piecewise_support_code.hpp' namespace 'QL':
 
     cdef shared_ptr[DefaultProbabilityTermStructure] credit_term_structure_factory(
         string& traits,
