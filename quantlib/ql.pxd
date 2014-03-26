@@ -77,12 +77,11 @@ cdef extern from "ql_settings.hpp" namespace "QL":
     Date get_evaluation_date()
     void set_evaluation_date(Date& date)
 
-#cdef extern from "simulate_support_code.hpp" namespace 'QL':
-#
-#    void simulateMP(shared_ptr[StochasticProcess]& process,
-#                    int nbPaths, int nbSteps, Time horizon, BigNatural seed,
-#                    bool antithetic_variates, double *res) except +
-#
+cdef extern from "simulate_support_code.hpp" namespace 'QL':
+    void simulateMP(shared_ptr[StochasticProcess]& process,
+                    int nbPaths, int nbSteps, Time horizon, BigNatural seed,
+                    bool antithetic_variates, double *res) except +
+
 #cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QL':
 #
 #    cdef shared_ptr[PricingEngine] mc_vanilla_engine_factory(
