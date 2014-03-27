@@ -1,9 +1,9 @@
-?set_evaluation_date@QL@@YAXAAVDate@QuantLib@@@Z
-?get_evaluation_date@QL@@YA?AVDate@QuantLib@@XZ
-?simulateMP@QL@@YAXABV?$shared_ptr@VStochasticProcess@QuantLib@@@boost@@HHNK_NPAN@Z
-?term_structure_factory@QL@@YA?AV?$shared_ptr@VYieldTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@QuantLib@@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@7@N@Z
-?mc_vanilla_engine_factory@QL@@YA?AV?$shared_ptr@VPricingEngine@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABV?$shared_ptr@VHestonProcess@QuantLib@@@3@_NIIK@Z
-?credit_term_structure_factory@QL@@YA?AV?$shared_ptr@VDefaultProbabilityTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@QuantLib@@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@7@N@Z
+?set_evaluation_date@QuantLib@@YAXAAVDate@1@@Z
+?get_evaluation_date@QuantLib@@YA?AVDate@1@XZ
+?simulateMP@QuantLib@@YAXABV?$shared_ptr@VStochasticProcess@QuantLib@@@boost@@HHNK_NPAN@Z
+?term_structure_factory@QuantLib@@YA?AV?$shared_ptr@VYieldTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@1@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@1@N@Z
+?mc_vanilla_engine_factory@QuantLib@@YA?AV?$shared_ptr@VPricingEngine@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABV?$shared_ptr@VHestonProcess@QuantLib@@@3@_NIIK@Z
+?credit_term_structure_factory@QuantLib@@YA?AV?$shared_ptr@VDefaultProbabilityTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@1@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@1@N@Z
 # Start of QL symbols
 # FIXME: this should be generated ... Can be found using `nm -ug target.obj`
 ??0Period@QuantLib@@QAE@W4Frequency@1@@Z
@@ -22,11 +22,9 @@
 ??0Date@QuantLib@@QAE@HW4Month@1@H@Z
 ?settlementDate@Bond@QuantLib@@QBE?AVDate@2@V32@@Z
 ??0ZeroCouponBond@QuantLib@@QAE@IABVCalendar@1@NABVDate@1@W4BusinessDayConvention@1@N1@Z
-?what@Error@QuantLib@@UBEPBDXZ
 ?dirtyPrice@Bond@QuantLib@@QBENXZ
 ?maturityDate@Bond@QuantLib@@QBE?AVDate@2@XZ
 ?cleanPrice@Bond@QuantLib@@QBENXZ
-??0Error@QuantLib@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@J00@Z
 ?holidayList@Calendar@QuantLib@@SA?AV?$vector@VDate@QuantLib@@V?$allocator@VDate@QuantLib@@@std@@@std@@ABV12@ABVDate@2@1_N@Z
 ?advance@Calendar@QuantLib@@QBE?AVDate@2@ABV32@ABVPeriod@2@W4BusinessDayConvention@2@_N@Z
 ?removeHoliday@Calendar@QuantLib@@QAEXABVDate@2@@Z

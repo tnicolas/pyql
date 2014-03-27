@@ -6,6 +6,7 @@ from cython.operator cimport dereference as deref
 
 # cannot use date.pxd because of name clashing
 from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 cdef public enum Month:
     January   = ql.January

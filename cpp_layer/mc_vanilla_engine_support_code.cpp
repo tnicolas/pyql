@@ -11,7 +11,7 @@
 
 using namespace QuantLib;
 
-namespace QL {
+namespace QuantLib {
 
     typedef boost::shared_ptr<PricingEngine> PE;
 

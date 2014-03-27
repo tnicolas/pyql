@@ -1,4 +1,4 @@
-cdef extern from 'yield_piecewise_support_code.hpp' namespace 'QL':
+cdef extern from 'yield_piecewise_support_code.hpp' namespace 'QuantLib':
 
     cdef shared_ptr[YieldTermStructure] term_structure_factory(
         string& traits,

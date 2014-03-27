@@ -73,16 +73,16 @@ include "pricingengines/vanilla/_vanilla.pxd"
 
 ##### Local imports from the C++ support code
 
-cdef extern from "ql_settings.hpp" namespace "QL":
+cdef extern from "ql_settings.hpp" namespace "QuantLib":
     Date get_evaluation_date()
     void set_evaluation_date(Date& date)
 
-cdef extern from "simulate_support_code.hpp" namespace 'QL':
+cdef extern from "simulate_support_code.hpp" namespace 'QuantLib':
     void simulateMP(shared_ptr[StochasticProcess]& process,
                     int nbPaths, int nbSteps, Time horizon, BigNatural seed,
                     bool antithetic_variates, double *res) except +
 
-cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QL':
+cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QuantLib':
 
     cdef shared_ptr[PricingEngine] mc_vanilla_engine_factory(
       string& trait, 
@@ -97,9 +97,7 @@ cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QL':
 include "termstructures/yields/_piecewise_yield_curve.pxd"
 include "termstructures/credit/_piecewise_default_curve.pxd"
 
-
-
-#include "pricingengines/_blackformula.pxd"
+include "pricingengines/_blackformula.pxd"
 
 
 

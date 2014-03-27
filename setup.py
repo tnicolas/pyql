@@ -121,6 +121,12 @@ def collect_extensions():
     ql_ext_args = default_args.copy()
     if BUILDING_ON_WINDOWS:
         ql_ext_args['libraries'] = ['ql']
+        ql_ext_args['library_dirs'] = default_args['library_dirs'][:]
+        # FIXME: if I remove the path to the QuantLib-vc90-mt.lib from the path,
+        # the linker fails shouting about no access to the QuantLib lib.
+        # Why is that? There should be no link between the extensions and
+        # QuantLib except through quantlib.ql
+        #ql_ext_args['library_dirs'].pop(1)
 
     ql_extension = Extension('quantlib.ql',
         ['quantlib/ql.pyx',
