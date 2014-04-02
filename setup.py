@@ -406,6 +406,12 @@ def collect_extensions():
         ['quantlib/instruments/credit_default_swap.pyx'],
         **ql_ext_args
     )
+    
+    swap_pe_extension = Extension(
+        'quantlib.pricingengines.swap',
+        ['quantlib/pricingengines/swap.pyx'],
+        **ql_ext_args
+    )
 
     manual_extensions = [
         ql_extension,
@@ -417,6 +423,7 @@ def collect_extensions():
         bond_extension,
         cashflow_extension,
         engine_extension,
+        swap_pe_extension,
         bond_engine_extension,
         actual_actual_extension,
         joint_calendar_extension,

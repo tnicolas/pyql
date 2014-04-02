@@ -62,6 +62,7 @@ include "termstructures/_default_term_structure.pxd"
 
 include "termstructures/credit/_credit_helpers.pxd"
 
+include "pricingengines/_swap.pxd"
 include "pricingengines/_bond.pxd"
 
 include "math/_optimization.pxd"
@@ -98,13 +99,3 @@ include "termstructures/yields/_piecewise_yield_curve.pxd"
 include "termstructures/credit/_piecewise_default_curve.pxd"
 
 include "pricingengines/_blackformula.pxd"
-
-
-
-## Cython does not seem to handle nested templates
-## cdef extern from 'ql/pricingengines/vanilla/mcvanillaengine.hpp' namespace 'QuantLib':
-
-##     cdef cppclass MCVanillaEngine[[MC], RNG, S, Inst]:
-##         pass
-##         # Not using the constructor because of the missing support for typemaps
-##         # in Cython --> use only the vanilla_engine_factory!
