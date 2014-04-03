@@ -5,14 +5,11 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
-# distutils: language = c++
 
 from cython.operator cimport dereference as deref
 
-from quantlib.ql cimport (
-    Handle, shared_ptr, _pricing_engine as _pe, _credit, 
-    _default_term_structure as _dts, _yield_term_structure as _yts
-)
+from quantlib cimport ql
+from quantlib.ql cimport shared_ptr
 
 from engine cimport PricingEngine
 from quantlib.termstructures.credit.piecewise_default_curve cimport PiecewiseDefaultCurve
@@ -29,12 +26,12 @@ cdef class MidPointCdsEngine(PricingEngine):
         """
 
 
-        cdef Handle[_dts.DefaultProbabilityTermStructure] handle = \
-            Handle[_dts.DefaultProbabilityTermStructure](deref(ts._thisptr))
+        cdef ql.Handle[ql.DefaultProbabilityTermStructure] handle = \
+            ql.Handle[ql.DefaultProbabilityTermStructure](deref(ts._thisptr))
 
-        cdef Handle[_yts.YieldTermStructure] yts_handle = \
-            Handle[_yts.YieldTermStructure](deref(discount_curve._thisptr))
+        cdef ql.Handle[ql.YieldTermStructure] yts_handle = \
+            ql.Handle[ql.YieldTermStructure](deref(discount_curve._thisptr))
 
-        self._thisptr = new shared_ptr[_pe.PricingEngine](
-            new _credit.MidPointCdsEngine(handle, recovery_rate, yts_handle)
+        self._thisptr = new shared_ptr[ql.PricingEngine](
+            new ql.MidPointCdsEngine(handle, recovery_rate, yts_handle)
         )

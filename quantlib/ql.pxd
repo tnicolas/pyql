@@ -64,6 +64,7 @@ include "termstructures/credit/_credit_helpers.pxd"
 
 include "pricingengines/_swap.pxd"
 include "pricingengines/_bond.pxd"
+include "pricingengines/_credit.pxd"
 
 include "math/_optimization.pxd"
 include "processes/_heston_process.pxd"
