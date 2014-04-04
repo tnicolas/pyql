@@ -1,12 +1,21 @@
 from quantlib cimport ql
-
 from quantlib.time.calendar cimport Calendar
 
-cdef public enum Market:
-    SETTLEMENT     = ql.USSettlement # generic settlement calendar
-    NYSE           = ql.USNYSE # New York stock exchange calendar
-    GOVERNMENTBOND = ql.USGovernmentBond # government-bond calendar
-    NERC           = ql.USNERC # off-peak days for NERC
+cdef extern from 'ql/time/calendars/unitedstates.hpp' namespace 'QuantLib::UnitedStates':
+
+    cdef enum Market:
+        Settlement
+        NYSE
+        GovernmentBond
+        NERC
+
+SETTLEMENT     = Settlement # generic settlement calendar
+GOVERNMENTBOND = GovernmentBond # government-bond calendar
+
+# FIXME:
+# Annoying name clashing issue forcing us to rename on the Python side ...
+NYSE_           = NYSE # New York stock exchange calendar
+NERC_           = NERC # off-peak days for NERC
 
 cdef class UnitedStates(Calendar):
     '''United States calendars.
@@ -83,5 +92,5 @@ cdef class UnitedStates(Calendar):
      * Christmas, December 25th (moved to Monday if Sunday)
     '''
 
-    def __cinit__(self, market=SETTLEMENT):
+    def __cinit__(self, market=Settlement):
         self._thisptr = new ql.UnitedStates(<ql.USMarket>market)

@@ -5,9 +5,9 @@ from quantlib.time.calendar import (
     holiday_list
 )
 from quantlib.time.calendars.united_kingdom import UnitedKingdom, EXCHANGE
-from quantlib.time.calendars.united_states import UnitedStates, NYSE
+from quantlib.time.calendars.united_states import UnitedStates, NYSE_
 from quantlib.time.calendars.null_calendar import NullCalendar
-from quantlib.time.calendars.germany import Germany, FrankfurtStockExchange
+from quantlib.time.calendars.germany import Germany, FRANKFURT_STOCK_EXCHANGE
 from quantlib.time.date import (
     Date, May, March, June, Jan, August, Months,November, Period, Days,
     Apr, Jul, Sep, Oct, Dec, Nov)
@@ -144,14 +144,14 @@ class TestQuantLibCalendar(unittest.TestCase):
 
         self.assertTrue(uscal.is_holiday(holiday_date))
 
-        uscal = UnitedStates(market=NYSE)
+        uscal = UnitedStates(market=NYSE_)
         holiday_date = Date(5, Sep, 2011) # Labor day 
 
         self.assertTrue(uscal.is_holiday(holiday_date))
 
     def test_german_calendar(self):
 
-        frankfcal   = Germany(FrankfurtStockExchange);
+        frankfcal   = Germany(FRANKFURT_STOCK_EXCHANGE);
         first_date  = Date(31,Oct,2009)
         second_date = Date(1,Jan ,2010);
 

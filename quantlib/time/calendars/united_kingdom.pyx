@@ -2,16 +2,20 @@ from quantlib cimport ql
 
 from quantlib.time.calendar cimport Calendar
 
-cdef public enum Market:
-    SETTLEMENT = ql.UKSettlement
-    EXCHANGE   = ql.UKExchance
-    METALS     = ql.UKMetals
-    
+cdef extern from 'ql/time/calendars/unitedkingdom.hpp' namespace 'QuantLib::UnitedKingdom':
 
+    cdef enum Market:
+        Settlement
+        Exchange
+        Metals
+
+SETTLEMENT = Settlement
+EXCHANGE   = Exchange
+METALS     = Metals
 
 cdef class UnitedKingdom(Calendar):
     ''' United Kingdom calendars.
-    
+
     Public holidays (data from http://www.dti.gov.uk/er/bankhol.htm):
 
         Saturdays
@@ -52,8 +56,7 @@ cdef class UnitedKingdom(Calendar):
         Boxing Day, December 26th (possibly moved to Monday or Tuesday)
     '''
 
-    def __cinit__(self, Market market=SETTLEMENT):
-        cdef ql.UKMarket _mkt = <ql.UKMarket>market
-        self._thisptr = new ql.UnitedKingdom(_mkt)
+    def __cinit__(self, market=SETTLEMENT):
+        self._thisptr = new ql.UnitedKingdom(market)
 
 

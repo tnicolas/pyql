@@ -56,7 +56,7 @@ elif sys.platform == 'win32':
         r'C:\dev\pyql\build\temp.win32-2.7\Release\quantlib'
     ]
     BUILDING_ON_WINDOWS = True
-    
+
 elif sys.platform == 'linux2':
     # good for Debian / ubuntu 10.04 (with QL .99 installed by default)
     INCLUDE_DIRS = ['/usr/local/include', '/usr/include', '.', SUPPORT_CODE_INCLUDE]
@@ -93,7 +93,7 @@ def get_extra_link_args():
         args = []
 
     return args
- 
+
 # FIXME: Naive way to select the QL library name ...
 QL_LIBRARY = 'QuantLib-vc90-mt' if BUILDING_ON_WINDOWS else 'QuantLib'
 
@@ -104,7 +104,7 @@ def collect_extensions():
     Th function combines static Extension declaration and calls to cythonize
     to build the list of extenions.
     """
-    
+
     default_args = dict(
         language='c++',
         include_dirs=INCLUDE_DIRS + [numpy.get_include()],
@@ -114,7 +114,7 @@ def collect_extensions():
         extra_link_args = get_extra_link_args(),
         cython_directives = CYTHON_DIRECTIVES,
     )
-    
+
     ql_extension = Extension('quantlib.ql',
         ['quantlib/ql.pyx',
          'cpp_layer/ql_settings.cpp',
@@ -123,7 +123,7 @@ def collect_extensions():
          'cpp_layer/credit_piecewise_support_code.cpp',
          'cpp_layer/mc_vanilla_engine_support_code.cpp'
         ],
-        libraries=[QL_LIBRARY],        
+        libraries=[QL_LIBRARY],
         **default_args
     )
 
@@ -131,12 +131,15 @@ def collect_extensions():
     # against the quantlib.ql extension. On Windows, it requires a
     # specific setup, reason why we can't use default_args.
     ql_ext_args = default_args.copy()
-    ql_ext_args['libraries'] = ['ql']
 
     if BUILDING_ON_WINDOWS:
+        ql_ext_args['libraries'] = ['ql']
         # We need to export the symbols of the support code for them to be
         # visible by the other Cython extensions linked to quantlib.ql
         ql_extension.export_symbols = SYMBOLS
+    else:
+        ql_ext_args['libraries'] = [QL_LIBRARY]
+
 
     settings_extension = Extension('quantlib.settings',
         ['quantlib/settings/settings.pyx'],
@@ -157,7 +160,7 @@ def collect_extensions():
         ['quantlib/pricingengines/vanilla/mcvanillaengine.pyx'],
         **ql_ext_args
     )
-    
+
     manual_extensions = [
         ql_extension,
         multipath_extension,
@@ -165,22 +168,9 @@ def collect_extensions():
         settings_extension,
         test_extension,
     ]
-    
-    #for mod in ['calendar', 'date', 'daycounter', 'schedule']:
-    #     manual_extensions.append(
-    #        Extension(
-    #        'quantlib.time.{}'.format(mod),
-    #        ['quantlib/time/{}.pyx'.format(mod)],
-    #        **ql_ext_args
-    #        )
-    #    )
 
     cython_extension_directories = []
     for dirpath, directories, files in os.walk('quantlib'):
-
-        # skip the settings package
-        if dirpath.find('settings') > -1 or dirpath.find('test') > -1:
-            continue
 
         # if the directory contains pyx files, cythonise it
         if len(glob.glob('{0}/*.pyx'.format(dirpath))) > 0:

@@ -22,11 +22,20 @@ for computational sake.
 from quantlib cimport ql
 from quantlib.time.daycounter cimport DayCounter
 
-USA           = ql.Thirty360USA
-BONDBASIS     = ql.Thirty360BondBasis
-EUROPEAN      = ql.Thirty360European
-EUROBONDBASIS = ql.Thirty360EurobondBasis
-ITALIAN       = ql.Thirty360Italian
+cdef extern from 'ql/time/daycounters/thirty360.hpp' namespace 'QuantLib::Thirty360':
+
+    cdef enum Convention:
+        USA
+        BondBasis
+        European
+        EurobondBasis
+        Italian
+
+USA_          = USA
+BONDBASIS     = BondBasis
+EUROPEAN      = European
+EUROBONDBASIS = EurobondBasis
+ITALIAN       = Italian
 
 cdef class Thirty360(DayCounter):
 
