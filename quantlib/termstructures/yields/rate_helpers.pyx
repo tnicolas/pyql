@@ -115,10 +115,11 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
         self._thisptr = ptr
 
     @classmethod
-    def from_tenor(cls, float rate, Period tenor,
-        Calendar calendar, ql.Frequency fixedFrequency,
-        ql.BusinessDayConvention fixedConvention, DayCounter fixedDayCount,
-        IborIndex iborIndex, Quote spread=None, Period fwdStart=None):
+    def from_tenor(cls, double rate, Period tenor, Calendar calendar,
+                   ql.Frequency fixedFrequency,
+                   ql.BusinessDayConvention fixedConvention,
+                   DayCounter fixedDayCount, IborIndex iborIndex,
+                   Quote spread=None, Period fwdStart=None):
 
         cdef Handle[ql.Quote] spread_handle
 
@@ -156,7 +157,7 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
         return instance
 
     @classmethod
-    def from_index(cls, float rate, SwapIndex index):
+    def from_index(cls, double rate, SwapIndex index):
 
         cdef Handle[ql.Quote] spread_handle = Handle[ql.Quote](new ql.SimpleQuote(0))
         cdef Period p = Period(2, ql.Days)

@@ -65,7 +65,6 @@ def _partition_date(date):
     date = string.lstrip(string.rstrip(date))
     for reg, idx in date_re_list:
         mo = reg.match(date)
-        print mo
         if mo != None:
             return (mo.group(idx[0]), mo.group(idx[1]),
                     mo.group(idx[2]))
@@ -96,6 +95,18 @@ def _parsedate(date):
 
     dd = string.atoi(dd)
     return (yy, mm, dd)
+
+
+def pydate(date):
+    """
+    Accomodate date inputs as string or python date
+    """
+
+    if isinstance(date, datetime.datetime):
+        return date
+    else:
+        yy, mm, dd = _parsedate(date)
+        return datetime.datetime(yy, mm, dd)
 
 
 def pydate_to_qldate(date):

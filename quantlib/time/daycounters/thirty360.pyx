@@ -37,11 +37,32 @@ EUROPEAN      = European
 EUROBONDBASIS = EurobondBasis
 ITALIAN       = Italian
 
+CONVENTIONS = {
+    "USA":       USA,
+    "BONDBASIS": BondBasis,
+    "EUROPEAN":  European,
+    "EUROBONDBASIS": EurobondBasis,
+    "ITALIAN":   Italian
+    }
+
 cdef class Thirty360(DayCounter):
 
     def __cinit__(self, convention=BONDBASIS):
         self._thisptr = <ql.DayCounter*> new \
             ql.Thirty360(<ql.Thirty360Convention> convention)
 
+    @classmethod
+    def help(cls):
+        res = 'Valid 30/360 daycounts are:\n'
+        for k in CONVENTIONS:
+            res += '30/360(' + k + ')\n'
+        return res
 
+cdef ql.DayCounter* from_name(str name, str convention):
+
+    cdef ql.Thirty360Convention ql_convention = <ql.Thirty360Convention>CONVENTIONS[convention]
+
+    cdef ql.DayCounter* return_val =  new ql.Thirty360(ql_convention)
+
+    return return_val
 

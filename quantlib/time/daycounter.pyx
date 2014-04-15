@@ -1,11 +1,12 @@
 from cython.operator cimport dereference as deref
-from quantlib cimport ql # _daycounter, _date, _calendar
+from quantlib cimport ql 
 
-from date cimport Date
-from calendar cimport Calendar
+from quantlib.time.date cimport Date
+from quantlib.time.calendar cimport Calendar
 from quantlib.time.daycounters.actual_actual cimport from_name as aa_from_name
+from quantlib.time.daycounters.thirty360 cimport from_name as th_from_name
 
-cdef class DayCounter:  
+cdef class DayCounter:
     '''This class provides methods for determining the length of a time
         period according to given market convention, both as a number
         of days and as a year fraction.
@@ -93,22 +94,27 @@ cdef ql.DayCounter* daycounter_from_name(str name, str convention):
     The QuantLib DayCounter don't have a copy constructor or any other easy
     way to get copy of a given DayCounter. """
 
+    name_u = name.upper()
 
     cdef ql.DayCounter* cnt = NULL
-    if name in ['Actual360', 'Actual/360']:
+    if name_u in ['ACTUAL360', 'ACTUAL/360', 'ACT/360']:
         cnt = new ql.Actual360()
-    elif name in ['Actual365Fixed', 'Actual/365']:
+    elif name_u in ['ACTUAL365FIXED', 'ACTUAL/365', 'ACT/365']:
         cnt = new ql.Actual365Fixed()
-    elif name == 'Business252':
+    elif name_u == 'BUSINESS252':
         raise ValueError(
             'Business252 from name is not supported. Requires a calendar'
         )
-    elif name in ['1/1', 'OneDayCounter']:
+    elif name_u in ['1/1', 'ONEDAYCOUNTER']:
         cnt = new ql.OneDayCounter()
-    elif name == 'SimpleDayCounter':
+    elif name_u == 'SIMPLEDAYCOUNTER':
         cnt = new ql.SimpleDayCounter()
-    elif name.startswith('Actual/Actual'):
+    elif name.startswith('Actual/Actual') or name.startswith('ACT/ACT') :
         cnt = aa_from_name(name, convention)
+    elif name.startswith('30/360'):
+        if convention is None:
+            convention = 'BONDBASIS'
+        cnt = th_from_name(name, convention)
     return cnt
 
 

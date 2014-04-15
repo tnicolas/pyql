@@ -27,7 +27,7 @@ cdef class BlackConstantVol(BlackVolTermStructure):
     def __init__(self,
         Date reference_date,
         Calendar calendar,
-        float volatility,
+        double volatility,
         DayCounter daycounter
     ):
 

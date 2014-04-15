@@ -137,7 +137,7 @@ reproduced below::
 
     cdef class SimpleQuote(Quote):
 
-	def __init__(self, float value=0.0):
+	def __init__(self, double value=0.0):
 	    self._thisptr = new shared_ptr[_qt.Quote](new _qt.SimpleQuote(value))
 
     def __dealloc__(self):
@@ -155,7 +155,11 @@ reproduced below::
             else:
                 return None
 
+<<<<<<< HEAD
         def __set__(self, float value):
+=======
+	    def __set__(self, double value):
+>>>>>>> master
             (<_qt.SimpleQuote*>self._thisptr.get()).setValue(value)
 
 The ''__init__'' method invokes the c++ constructor, which returns a boost

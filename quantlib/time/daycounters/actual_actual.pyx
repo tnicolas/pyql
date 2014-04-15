@@ -56,6 +56,12 @@ cdef class ActualActual(DayCounter):
         self._thisptr = <ql.DayCounter*> new \
             ql.ActualActual(<ql.Convention>convention)
 
+    @classmethod
+    def help(cls):
+        res = 'Valid ACT/ACT daycounts are:\n'
+        for k in CONVENTIONS:
+            res += 'ACT/ACT(' + k + ')\n'
+        return res
 
 cdef ql.DayCounter* from_name(str name, str convention):
 

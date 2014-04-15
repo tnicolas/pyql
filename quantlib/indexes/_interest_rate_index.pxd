@@ -7,23 +7,17 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()    
-
 cdef extern from 'ql/indexes/interestrateindex.hpp' namespace 'QuantLib':
 
     cdef cppclass InterestRateIndex(Index):
         InterestRateIndex()
-        #FIXME: why is this commented?
-#        InterestRateIndex(string& familyName,
-#                          Period& tenor,
-#                          Natural settlementDays,
-#                          Currency& currency,
-#                          Calendar& fixingCalendar,
-#                          DayCounter& dayCounter)
+        InterestRateIndex(string& familyName,
+                         Period& tenor,
+                         Natural settlementDays,
+                         Currency& currency,
+                         Calendar& fixingCalendar,
+                         DayCounter& dayCounter) except +
         string name()
-        Calendar fixingCalendar( )
         bool isValidFixingDate(Date& fixingDate)
         Rate fixing(Date& fixingDate,
                     bool forecastTodaysFixing)

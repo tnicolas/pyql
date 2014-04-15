@@ -1,6 +1,3 @@
-from libcpp.vector cimport vector
-from libcpp cimport bool
-
 cdef extern from 'ql/instruments/bond.hpp' namespace 'QuantLib':
     cdef cppclass Bond(Instrument):
 
@@ -22,6 +19,15 @@ cdef extern from 'ql/instruments/bond.hpp' namespace 'QuantLib':
         Real cleanPrice()
         Real dirtyPrice()
         Real settlementValue()
+
+        Rate clean_yield 'yield'(
+                   Real cleanPrice,
+                   DayCounter& dc,
+                   Compounding comp,
+                   Frequency freq,
+                   Date settlementDate,
+                   Real accuracy,
+                   Size maxEvaluations)
 
         Date nextCachFlowDate(Date d)
         Date previousCachFlowDate(Date d)

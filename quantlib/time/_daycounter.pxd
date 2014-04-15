@@ -1,9 +1,3 @@
-from libcpp cimport bool
-
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()
-
 cdef extern from 'ql/time/daycounter.hpp' namespace 'QuantLib':
 
     cdef cppclass DayCounter:
@@ -23,7 +17,7 @@ cdef extern from 'ql/time/daycounters/actual365fixed.hpp' namespace 'QuantLib':
     cdef cppclass Actual365Fixed(DayCounter):
         pass
 
-        
+
 cdef extern from 'ql/time/daycounters/business252.hpp' namespace 'QuantLib':
 
     cdef cppclass Business252(DayCounter):

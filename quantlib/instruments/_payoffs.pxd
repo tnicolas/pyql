@@ -1,9 +1,5 @@
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()
-
 cdef extern from 'ql/payoff.hpp' namespace 'QuantLib':
-        
+
     cdef cppclass Payoff:
         Payoff()
         string name()

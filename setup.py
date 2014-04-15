@@ -3,9 +3,11 @@ from setuptools import setup, find_packages
 # Warning : do not import the distutils extension before setuptools
 # It does break the cythonize function calls
 from distutils.extension import Extension
+from distutils.sysconfig import get_config_vars
 
 import glob
 import os
+import platform
 import sys
 
 from Cython.Distutils import build_ext
@@ -27,6 +29,12 @@ def load_symbols():
 
 SYMBOLS = list(load_symbols())
 
+## From SO: hack to remove warning about strict prototypes
+## http://stackoverflow.com/questions/8106258/cc1plus-warning-command-line-option-wstrict-prototypes-is-valid-for-ada-c-o
+
+(opt,) = get_config_vars('OPT')
+os.environ['OPT'] = " ".join(
+    flag for flag in opt.split() if flag != '-Wstrict-prototypes')
 
 SUPPORT_CODE_INCLUDE = './cpp_layer'
 CYTHON_DIRECTIVES = {"embedsignature": True}
@@ -65,8 +73,11 @@ elif sys.platform == 'linux2':
     # INCLUDE_DIRS = ['/opt/QuantLib-1.1', '.', SUPPORT_CODE_INCLUDE]
     # LIBRARY_DIRS = ['/opt/QuantLib-1.1/lib',]
 
+INCLUDE_DIRS.append(numpy.get_include())
+
 def get_define_macros():
-    defines = [ ('HAVE_CONFIG_H', None)]
+    #defines = [ ('HAVE_CONFIG_H', None)]
+    defines = []
     if sys.platform == 'win32':
         # based on the SWIG wrappers
         defines += [
@@ -88,7 +99,15 @@ def get_extra_compile_args():
 
 def get_extra_link_args():
     if sys.platform == 'win32':
-        args = ['/subsystem:windows', '/machine:I386',] # '/NODEFAULTLIB:library']
+        args = ['/subsystem:windows', '/machine:I386']
+    elif sys.platform == 'darwin':
+        major, minor, patch = [
+            int(item) for item in platform.mac_ver()[0].split('.')]
+        if major == 10 and minor >= 9:
+            # On Mac OS 10.9 we link against the libstdc++ library.
+            args = ['-stdlib=libstdc++', '-mmacosx-version-min=10.6']
+        else:
+            args = []
     else:
         args = []
 
@@ -96,6 +115,8 @@ def get_extra_link_args():
 
 # FIXME: Naive way to select the QL library name ...
 QL_LIBRARY = 'QuantLib-vc90-mt' if BUILDING_ON_WINDOWS else 'QuantLib'
+
+CYTHON_DIRECTIVES = {"embedsignature": True}
 
 def collect_extensions():
     """ Collect all the directories with Cython extensions and return the list
@@ -121,7 +142,8 @@ def collect_extensions():
          'cpp_layer/simulate_support_code.cpp',
          'cpp_layer/yield_piecewise_support_code.cpp',
          'cpp_layer/credit_piecewise_support_code.cpp',
-         'cpp_layer/mc_vanilla_engine_support_code.cpp'
+         'cpp_layer/mc_vanilla_engine_support_code.cpp',
+         'cpp_layer/businessdayconvention_support_code.cpp'
         ],
         libraries=[QL_LIBRARY],
         **default_args
@@ -139,7 +161,6 @@ def collect_extensions():
         ql_extension.export_symbols = SYMBOLS
     else:
         ql_ext_args['libraries'] = [QL_LIBRARY]
-
 
     settings_extension = Extension('quantlib.settings',
         ['quantlib/settings/settings.pyx'],
@@ -161,12 +182,22 @@ def collect_extensions():
         **ql_ext_args
     )
 
+    business_day_convention_extension = Extension(
+        name='quantlib.time.businessdayconvention',
+        sources=[
+            'quantlib/time/businessdayconvention.pyx',
+            'cpp_layer/businessdayconvention_support_code.cpp'
+        ],
+        **ql_ext_args
+    )
+
     manual_extensions = [
         ql_extension,
         multipath_extension,
         mc_vanilla_engine_extension,
         settings_extension,
         test_extension,
+        business_day_convention_extension
     ]
 
     cython_extension_directories = []
@@ -189,8 +220,6 @@ def collect_extensions():
         if ext.name in names:
             collected_extensions.remove(ext)
             continue
-        else:
-            print 'Keeping ', ext.name
 
     extensions = manual_extensions + collected_extensions
 
@@ -198,7 +227,7 @@ def collect_extensions():
 
 setup(
     name = 'quantlib',
-    version = '0.1',
+    version = '0.2',
     author = 'Didrik Pinte, Patrick Henaff',
     license = 'BSD',
     packages = find_packages(),

@@ -1,10 +1,6 @@
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()
-
 cdef extern from 'ql/time/calendars/jointcalendar.hpp' namespace 'QuantLib':
 
-    cdef enum JointCalendarRule: 
+    cdef enum JointCalendarRule:
         JoinHolidays    # A date is a holiday for the joint calendar
                         # if it is a holiday for any of the given calendars 
         JoinBusinessDays # A date is a business day for the joint calendar

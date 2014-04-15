@@ -1,13 +1,5 @@
-
-from libcpp cimport bool
-from libcpp.vector cimport vector
-
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()
-
 cdef extern from 'ql/time/businessdayconvention.hpp' namespace 'QuantLib':
-    cdef enum BusinessDayConvention: 
+    cdef enum BusinessDayConvention:
         #ISDA
         Following          # Choose the first business day after
                            #     the given holiday. */

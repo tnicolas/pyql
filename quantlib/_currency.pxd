@@ -7,10 +7,6 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()    
-
 cdef extern from 'ql/currency.hpp' namespace 'QuantLib':
 
     cdef cppclass Currency:
@@ -22,16 +18,53 @@ cdef extern from 'ql/currency.hpp' namespace 'QuantLib':
         string fractionSymbol()
         Integer fractionsPerUnit()
         #Rounding& rounding()
-    
+
         string format()
         bool empty()
 
-cdef extern from 'ql/currencies/america.hpp' namespace 'QuantLib':
+cdef extern from 'ql/currencies/all.hpp' namespace 'QuantLib':
 
     cdef cppclass USDCurrency(Currency):
         USDCurrency()
 
-cdef extern from 'ql/currencies/europe.hpp' namespace 'QuantLib':
-
     cdef cppclass EURCurrency(Currency):
         EURCurrency()
+
+    cdef cppclass GBPCurrency(Currency):
+        GBPCurrency()
+
+    cdef cppclass JPYCurrency(Currency):
+        JPYCurrency()
+
+    cdef cppclass CHFCurrency(Currency):
+        CHFCurrency()
+
+    cdef cppclass AUDCurrency(Currency):
+        AUDCurrency()
+
+    cdef cppclass DKKCurrency(Currency):
+        DKKCurrency()
+
+    cdef cppclass INRCurrency(Currency):
+        INRCurrency()
+
+    cdef cppclass HKDCurrency(Currency):
+        HKDCurrency()
+
+    cdef cppclass NOKCurrency(Currency):
+        NOKCurrency()
+
+    cdef cppclass NZDCurrency(Currency):
+        NZDCurrency()
+
+    cdef cppclass PLNCurrency(Currency):
+        PLNCurrency()
+
+    cdef cppclass SEKCurrency(Currency):
+        SEKCurrency()
+
+    cdef cppclass SGDCurrency(Currency):
+        SGDCurrency()
+
+    cdef cppclass ZARCurrency(Currency):
+        ZARCurrency()

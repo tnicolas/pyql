@@ -6,10 +6,6 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
-cdef extern from "string" namespace "std":
-    cdef cppclass string:
-        char* c_str()
-
 cdef extern from 'ql/indexes/swapindex.hpp' namespace 'QuantLib':
 
     cdef cppclass SwapIndex(InterestRateIndex):
