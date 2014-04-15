@@ -155,11 +155,7 @@ reproduced below::
             else:
                 return None
 
-<<<<<<< HEAD
-        def __set__(self, float value):
-=======
 	    def __set__(self, double value):
->>>>>>> master
             (<_qt.SimpleQuote*>self._thisptr.get()).setValue(value)
 
 The ''__init__'' method invokes the c++ constructor, which returns a boost

@@ -71,12 +71,7 @@ Prerequisites:
 
 1. Install Quantlib
 
-<<<<<<< HEAD
-   a. Install boost 1.46 from the repository. By default, boost will be
-      installed in /usr/lib and /usr/include.
-=======
    a. Install the latest version of Boost from the repository. Here we use Boost 1.55.0. By default, Boost will be installed in /usr/lib and /usr/include.
->>>>>>> master
 
    b. Download Quantlib 1.4 from Quantlib.org and copy to /opt
 
@@ -107,23 +102,6 @@ Prerequisites:
 		      $ make
 		      $ sudo make install
 
-<<<<<<< HEAD
-2. Install Cython
-
-   a. Download Cython-0.20.tar.gz from cython.org
-
-   b. Extract the Cython folder
-
-      .. code-block:: bash
-
-		      $ tar xzvf Cython-0.20.tar.gz
-
-   c. Build and install Cython
-
-      .. code-block:: bash
-
-		    $ sudo python setup.py install
-=======
 2. Install Cython. While you can install Cython from source, we strongly recommend to install Cython via pip_::
 
     pip install cython
@@ -131,7 +109,6 @@ Prerequisites:
    If you do not have the required permissions to install Python packages in the system path, you can install Cython in your local user account via::
 
     pip install --user cython
->>>>>>> master
 
 3. Build and test pyql
 
