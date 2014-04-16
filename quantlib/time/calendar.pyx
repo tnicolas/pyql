@@ -157,14 +157,14 @@ cdef class Calendar:
     _lookup = dict([(cal.name, cal) for cal in
                 [TARGET(), NullCalendar(),
                  ger.Germany(), ger.Germany(ger.EUREX),
-                 ger.Germany(ger.FrankfurtStockExchange),
+                 ger.Germany(ger.FRANKFURT_STOCK_EXCHANGE),
                  ger.Germany(ger.SETTLEMENT), ger.Germany(ger.EUWAX),
                  ger.Germany(ger.XETRA),
                  uk.UnitedKingdom(),
                  uk.UnitedKingdom(uk.EXCHANGE), uk.UnitedKingdom(uk.METALS),
                  uk.UnitedKingdom(uk.SETTLEMENT),
                  us.UnitedStates(), us.UnitedStates(us.GOVERNMENTBOND),
-                 us.UnitedStates(us.NYSE), us.UnitedStates(us.NERC), 
+                 us.UnitedStates(us.NYSE_), us.UnitedStates(us.NERC_),
                  us.UnitedStates(us.SETTLEMENT),
                  jp.Japan(), sw.Switzerland()]])
 
@@ -173,7 +173,7 @@ cdef class Calendar:
                   ('NULL', NullCalendar().name),
                   ('DEU', ger.Germany().name),
                   ('EUREX', ger.Germany(ger.EUREX).name),
-                  ('FSE', ger.Germany(ger.FrankfurtStockExchange).name),
+                  ('FSE', ger.Germany(ger.FRANKFURT_STOCK_EXCHANGE).name),
                   ('EUWAX', ger.Germany(ger.EUWAX).name),
                   ('XETRA', ger.Germany(ger.XETRA).name),
                   ('GBR', uk.UnitedKingdom().name),
@@ -181,8 +181,8 @@ cdef class Calendar:
                   ('LME', uk.UnitedKingdom(uk.METALS).name),
                   ('USA', us.UnitedStates().name),
                   ('USA-GOVT-BONDS', us.UnitedStates(us.GOVERNMENTBOND).name),
-                  ('NYSE', us.UnitedStates(us.NYSE).name),
-                  ('NERC', us.UnitedStates(us.NERC).name),
+                  ('NYSE', us.UnitedStates(us.NYSE_).name),
+                  ('NERC', us.UnitedStates(us.NERC_).name),
                   ('JPN', jp.Japan().name),
                   ('CHE', sw.Switzerland().name)])
 

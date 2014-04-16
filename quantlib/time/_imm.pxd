@@ -10,7 +10,7 @@
 cdef extern from 'ql/time/imm.hpp' namespace "QuantLib::IMM":
 
     # Main cycle of the International %Money Market (a.k.a. %IMM) months
-    cdef enum Month:
+    cdef enum IMMMonth 'Month':
         F
         G
         H

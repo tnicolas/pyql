@@ -21,7 +21,7 @@ from quantlib.termstructures.yields.piecewise_yield_curve import \
 from quantlib.market.conventions.swap import SwapData
 from quantlib.time.businessdayconvention import BusinessDayConvention
 
-from quantlib.instruments.swap import VanillaSwap, Payer
+from quantlib.instruments.swap import VanillaSwap, PAYER
 from quantlib.pricingengines.swap import DiscountingSwapEngine
 from quantlib.time.schedule import Schedule, Forward
 from quantlib.termstructures.yields.api import (
@@ -367,7 +367,7 @@ class IborMarket(FixedIncomeMarket):
                                     self._forecast_term_structure,
                                     **kwargs)
 
-        swap_type = Payer
+        swap_type = PAYER
         nominal = 100.0
         fixed_convention = \
             BusinessDayConvention.from_name(_params.fixed_leg_convention)

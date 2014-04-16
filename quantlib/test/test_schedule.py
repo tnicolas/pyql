@@ -19,7 +19,8 @@ class ScheduleTestCase(unittest.TestCase):
         rule = Forward
 
         schedule = Schedule(
-            from_date, to_date, tenor, calendar, convention, termination_convention, rule
+            from_date, to_date, tenor, calendar, convention,
+            termination_convention, rule
         )
 
         self.assertIsNotNone(schedule)

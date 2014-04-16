@@ -8,7 +8,7 @@
 """
 
 from quantlib cimport ql
-from quantlib.utils.prettyprint import prettyprint
+from quantlib.util.prettyprint import prettyprint
 
 cdef class Currency:
     def __cinit__(self):

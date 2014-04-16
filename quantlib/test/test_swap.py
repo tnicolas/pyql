@@ -1,6 +1,6 @@
 from .unittest_tools import unittest
 
-from quantlib.instruments.swap import VanillaSwap, Payer
+from quantlib.instruments.swap import VanillaSwap, PAYER
 from quantlib.util.converter import pydate_to_qldate
 from quantlib.pricingengines.swap import DiscountingSwapEngine
 from quantlib.time.calendar import (
@@ -31,7 +31,7 @@ class TestQuantLibSwap(unittest.TestCase):
         Create from QL objects
         """
 
-        swap_type = Payer
+        swap_type = PAYER
         nominal = 100.0
         fixedConvention = Unadjusted
         floatingConvention = ModifiedFollowing
