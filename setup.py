@@ -29,12 +29,12 @@ def load_symbols():
 
 SYMBOLS = list(load_symbols())
 
-## From SO: hack to remove warning about strict prototypes
-## http://stackoverflow.com/questions/8106258/cc1plus-warning-command-line-option-wstrict-prototypes-is-valid-for-ada-c-o
-
-(opt,) = get_config_vars('OPT')
-os.environ['OPT'] = " ".join(
-    flag for flag in opt.split() if flag != '-Wstrict-prototypes')
+if sys.platform in ['darwin', 'linux2']:
+    ## From SO: hack to remove warning about strict prototypes
+    ## http://stackoverflow.com/questions/8106258/cc1plus-warning-command-line-option-wstrict-prototypes-is-valid-for-ada-c-o
+    (opt,) = get_config_vars('OPT')
+    os.environ['OPT'] = " ".join(
+        flag for flag in opt.split() if flag != '-Wstrict-prototypes')
 
 SUPPORT_CODE_INCLUDE = './cpp_layer'
 CYTHON_DIRECTIVES = {"embedsignature": True}
@@ -69,9 +69,6 @@ elif sys.platform == 'linux2':
     # good for Debian / ubuntu 10.04 (with QL .99 installed by default)
     INCLUDE_DIRS = ['/usr/local/include', '/usr/include', '.', SUPPORT_CODE_INCLUDE]
     LIBRARY_DIRS = ['/usr/local/lib', '/usr/lib', ]
-    # custom install of QuantLib 1.1
-    # INCLUDE_DIRS = ['/opt/QuantLib-1.1', '.', SUPPORT_CODE_INCLUDE]
-    # LIBRARY_DIRS = ['/opt/QuantLib-1.1/lib',]
 
 INCLUDE_DIRS.append(numpy.get_include())
 
@@ -143,7 +140,7 @@ def collect_extensions():
          'cpp_layer/yield_piecewise_support_code.cpp',
          'cpp_layer/credit_piecewise_support_code.cpp',
          'cpp_layer/mc_vanilla_engine_support_code.cpp',
-         'cpp_layer/businessdayconvention_support_code.cpp'
+         #'cpp_layer/businessdayconvention_support_code.cpp'
         ],
         libraries=[QL_LIBRARY],
         **default_args
@@ -181,47 +178,149 @@ def collect_extensions():
         ['quantlib/pricingengines/vanilla/mcvanillaengine.pyx'],
         **ql_ext_args
     )
-
-    business_day_convention_extension = Extension(
-        name='quantlib.time.businessdayconvention',
-        sources=[
-            'quantlib/time/businessdayconvention.pyx',
-            'cpp_layer/businessdayconvention_support_code.cpp'
-        ],
+    
+    date_extension = Extension(
+        'quantlib.time.date',
+        ['quantlib/time/date.pyx'],
+        **ql_ext_args
+    )
+    
+    calendar_extension = Extension(
+        'quantlib.time.calendar',
+        ['quantlib/time/calendar.pyx'],
+        **ql_ext_args
+    )
+    
+    null_calendar_extension = Extension(
+        'quantlib.time.calendars.null_calendar',
+        ['quantlib/time/calendars/null_calendar.pyx'],
+        **ql_ext_args
+    )
+    
+    germany_calendar_extension = Extension(
+        'quantlib.time.calendars.germany',
+        ['quantlib/time/calendars/germany.pyx'],
+        **ql_ext_args
+    )
+    
+    us_calendar_extension = Extension(
+        'quantlib.time.calendars.united_states',
+        ['quantlib/time/calendars/united_states.pyx'],
+        **ql_ext_args
+    )
+    
+    uk_calendar_extension = Extension(
+        'quantlib.time.calendars.united_kingdom',
+        ['quantlib/time/calendars/united_kingdom.pyx'],
+        **ql_ext_args
+    )
+    
+    switzerland_calendar_extension = Extension(
+        'quantlib.time.calendars.switzerland',
+        ['quantlib/time/calendars/switzerland.pyx'],
+        **ql_ext_args
+    )
+    
+    japan_calendar_extension = Extension(
+        'quantlib.time.calendars.japan',
+        ['quantlib/time/calendars/japan.pyx'],
+        **ql_ext_args
+    )
+    
+    schedule_extension = Extension(
+        'quantlib.time.schedule',
+        ['quantlib/time/schedule.pyx'],
+        **ql_ext_args
+    )
+    
+    daycounter_extension = Extension(
+        'quantlib.time.daycounter',
+        ['quantlib/time/daycounter.pyx'],
+        **ql_ext_args
+    )
+    
+    aadaycounter_extension = Extension(
+        'quantlib.time.daycounters.actual_actual',
+        ['quantlib/time/daycounters/actual_actual.pyx'],
         **ql_ext_args
     )
 
-    manual_extensions = [
-        ql_extension,
-        multipath_extension,
-        mc_vanilla_engine_extension,
-        settings_extension,
-        test_extension,
-        business_day_convention_extension
-    ]
-
-    cython_extension_directories = []
-    for dirpath, directories, files in os.walk('quantlib'):
-
-        # if the directory contains pyx files, cythonise it
-        if len(glob.glob('{0}/*.pyx'.format(dirpath))) > 0:
-            cython_extension_directories.append(dirpath)
-
-    collected_extensions = cythonize(
-        [
-            Extension('*', ['{0}/*.pyx'.format(dirpath)], **ql_ext_args
-            ) for dirpath in cython_extension_directories
-        ]
+    th360daycounter_extension = Extension(
+        'quantlib.time.daycounters.thirty360',
+        ['quantlib/time/daycounters/thirty360.pyx'],
+        **ql_ext_args
+    )
+    
+    instrument_extension = Extension(
+        'quantlib.instruments.instrument',
+        ['quantlib/instruments/instrument.pyx'],
+        **ql_ext_args
     )
 
-    # remove  all the manual extensions from the collected ones
-    names = [extension.name for extension in manual_extensions]
-    for ext in collected_extensions[:]:
-        if ext.name in names:
-            collected_extensions.remove(ext)
-            continue
+    bond_extension = Extension(
+        'quantlib.instruments.bonds',
+        ['quantlib/instruments/bonds.pyx'],
+        **ql_ext_args
+    )
 
-    extensions = manual_extensions + collected_extensions
+    engine_extension = Extension(
+        'quantlib.pricingengines.engine',
+        ['quantlib/pricingengines/engine.pyx'],
+        **ql_ext_args
+    )    
+    
+    cashflow_extension = Extension(
+        'quantlib.cashflow',
+        ['quantlib/cashflow.pyx'],
+        **ql_ext_args
+    )  
+
+    manual_extensions = [
+        ql_extension,
+        #multipath_extension,
+        #mc_vanilla_engine_extension,
+        date_extension,
+        calendar_extension,
+        null_calendar_extension,
+        germany_calendar_extension,
+        us_calendar_extension,
+        uk_calendar_extension,
+        japan_calendar_extension,
+        switzerland_calendar_extension,
+        schedule_extension,
+        settings_extension,
+        test_extension,
+        instrument_extension,
+        bond_extension,
+        engine_extension,
+        cashflow_extension,
+        daycounter_extension,
+        aadaycounter_extension,
+        th360daycounter_extension,
+    ]
+
+#    cython_extension_directories = []
+#    for dirpath, directories, files in os.walk('quantlib'):
+#
+#        # if the directory contains pyx files, cythonise it
+#        if len(glob.glob('{0}/*.pyx'.format(dirpath))) > 0:
+#            cython_extension_directories.append(dirpath)
+#
+#    collected_extensions = cythonize(
+#        [
+#            Extension('*', ['{0}/*.pyx'.format(dirpath)], **ql_ext_args
+#            ) for dirpath in cython_extension_directories
+#        ]
+#    )
+#
+#    # remove  all the manual extensions from the collected ones
+#    names = [extension.name for extension in manual_extensions]
+#    for ext in collected_extensions[:]:
+#        if ext.name in names:
+#            collected_extensions.remove(ext)
+#            continue
+#
+    extensions = manual_extensions #+ collected_extensions
 
     return extensions
 

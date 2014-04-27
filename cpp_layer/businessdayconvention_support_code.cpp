@@ -9,7 +9,7 @@
 
 using namespace QuantLib;
 
-namespace QL {
+namespace QuantLib {
     std::string repr(int b) {
       BusinessDayConvention bd = static_cast<BusinessDayConvention>(b);
       std::ostringstream s;

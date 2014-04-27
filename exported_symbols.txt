@@ -4,6 +4,7 @@
 ?term_structure_factory@QuantLib@@YA?AV?$shared_ptr@VYieldTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@1@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VYieldTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@1@N@Z
 ?mc_vanilla_engine_factory@QuantLib@@YA?AV?$shared_ptr@VPricingEngine@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABV?$shared_ptr@VHestonProcess@QuantLib@@@3@_NIIK@Z
 ?credit_term_structure_factory@QuantLib@@YA?AV?$shared_ptr@VDefaultProbabilityTermStructure@QuantLib@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0ABVDate@1@ABV?$vector@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@V?$allocator@V?$shared_ptr@V?$BootstrapHelper@VDefaultProbabilityTermStructure@QuantLib@@@QuantLib@@@boost@@@std@@@5@AAVDayCounter@1@N@Z
+#?repr@QuantLib@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@Z
 # Start of QL symbols
 # FIXME: this should be generated ... Can be found using `nm -ug target.obj`
 ??0TARGET@QuantLib@@QAE@XZ
@@ -12,11 +13,7 @@
 ??0FixedRateBond@QuantLib@@QAE@INABVSchedule@1@ABV?$vector@NV?$allocator@N@std@@@std@@ABVDayCounter@1@W4BusinessDayConvention@1@NABVDate@1@ABVCalendar@1@@Z
 ?implementation@ActualActual@QuantLib@@CA?AV?$shared_ptr@VImpl@DayCounter@QuantLib@@@boost@@W4Convention@12@@Z
 ?endOfMonth@Date@QuantLib@@SA?AV12@ABV12@@Z
-?settlementDate@Bond@QuantLib@@QBE?AVDate@2@V32@@Z
 ??0ZeroCouponBond@QuantLib@@QAE@IABVCalendar@1@NABVDate@1@W4BusinessDayConvention@1@N1@Z
-?dirtyPrice@Bond@QuantLib@@QBENXZ
-?maturityDate@Bond@QuantLib@@QBE?AVDate@2@XZ
-?cleanPrice@Bond@QuantLib@@QBENXZ
 ?holidayList@Calendar@QuantLib@@SA?AV?$vector@VDate@QuantLib@@V?$allocator@VDate@QuantLib@@@std@@@std@@ABV12@ABVDate@2@1_N@Z
 ?advance@Calendar@QuantLib@@QBE?AVDate@2@ABV32@ABVPeriod@2@W4BusinessDayConvention@2@_N@Z
 ?removeHoliday@Calendar@QuantLib@@QAEXABVDate@2@@Z
@@ -36,11 +33,6 @@
 ??0UnitedStates@QuantLib@@QAE@W4Market@01@@Z
 ??0Germany@QuantLib@@QAE@W4Market@01@@Z
 ?implementation@Thirty360@QuantLib@@CA?AV?$shared_ptr@VImpl@DayCounter@QuantLib@@@boost@@W4Convention@12@@Z
-??0DiscountingBondEngine@QuantLib@@QAE@ABV?$Handle@VYieldTermStructure@QuantLib@@@1@V?$optional@_N@boost@@@Z
-??0InterestRate@QuantLib@@QAE@XZ
-?zeroRate@YieldTermStructure@QuantLib@@QBE?AVInterestRate@2@ABVDate@2@ABVDayCounter@2@W4Compounding@2@W4Frequency@2@_N@Z
-??0InterestRate@QuantLib@@QAE@NABVDayCounter@1@W4Compounding@1@W4Frequency@1@@Z
-?discount@YieldTermStructure@QuantLib@@QBENN_N@Z
 ??0FlatForward@QuantLib@@QAE@ABVDate@1@ABV?$Handle@VQuote@QuantLib@@@1@ABVDayCounter@1@W4Compounding@1@W4Frequency@1@@Z
 ??0FlatForward@QuantLib@@QAE@ABVDate@1@NABVDayCounter@1@W4Compounding@1@W4Frequency@1@@Z
 ??0FlatForward@QuantLib@@QAE@IABVCalendar@1@ABV?$Handle@VQuote@QuantLib@@@1@ABVDayCounter@1@W4Compounding@1@W4Frequency@1@@Z
@@ -100,10 +92,8 @@
 ??0BatesEngine@QuantLib@@QAE@ABV?$shared_ptr@VBatesModel@QuantLib@@@boost@@I@Z
 ??0BlackCalculator@QuantLib@@QAE@ABV?$shared_ptr@VStrikedTypePayoff@QuantLib@@@boost@@NNN@Z
 ?applyTo@TridiagonalOperator@QuantLib@@QBE?AV?$Disposable@VArray@QuantLib@@@2@ABVArray@2@@Z
-?checkRange@TermStructure@QuantLib@@IBEXABVDate@2@_N@Z
 ?checkStrike@VolatilityTermStructure@QuantLib@@IBEXN_N@Z
 ?delta@BlackCalculator@QuantLib@@UBENN@Z
-?discount@YieldTermStructure@QuantLib@@QBENN_N@Z
 ?dividendYield@GeneralizedBlackScholesProcess@QuantLib@@QBEABV?$Handle@VYieldTermStructure@QuantLib@@@2@XZ
 ?elasticity@BlackCalculator@QuantLib@@UBENN@Z
 ?ensureStrikeInGrid@FDVanillaEngine@QuantLib@@IBEXXZ

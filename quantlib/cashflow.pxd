@@ -5,7 +5,7 @@ from quantlib.ql cimport shared_ptr
 
 from libcpp.vector cimport vector
 
-cdef class CashFlow:
+cdef class CashFlow:	
     cdef shared_ptr[ql.CashFlow]* _thisptr
 
 cdef class SimpleCashFlow(CashFlow):

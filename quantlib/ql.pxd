@@ -95,16 +95,16 @@ cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QuantLib':
       Size requiredSamples,
       BigNatural seed) except +
 
-cdef extern from "businessdayconvention_support_code.hpp" namespace "QL":
-    string repr(int b) except +
+#cdef extern from "businessdayconvention_support_code.hpp" namespace "QuantLib":
+#    string repr(int b) except +
 
 include "termstructures/yields/_piecewise_yield_curve.pxd"
 include "termstructures/credit/_piecewise_default_curve.pxd"
 
 include "pricingengines/_blackformula.pxd"
-include "instruments/_swap.pxd"
-include "instruments/_vanillaswap.pxd"
-include "termstructures/yields/_bond_helpers.pxd"
+#include "instruments/_swap.pxd"
+#include "instruments/_vanillaswap.pxd"
+#include "termstructures/yields/_bond_helpers.pxd"
 include "time/calendars/_switzerland.pxd"
 include "time/calendars/_japan.pxd"
-include "time/_imm.pxd"
+#include "time/_imm.pxd"
