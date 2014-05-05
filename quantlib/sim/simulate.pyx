@@ -1,5 +1,3 @@
-# distutils: language = c++
-
 from cython.operator cimport dereference as deref
 
 from quantlib cimport ql
@@ -12,7 +10,6 @@ from quantlib.models.equity.bates_model cimport BatesModel, BatesDetJumpModel, B
 
 import numpy as np
 cimport numpy as cnp
-
 
 cdef simulate_sub(void *tmp, int nbPaths, int nbSteps,
 	     Time horizon, BigNatural seed, bool antithetic=True):

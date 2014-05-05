@@ -12,19 +12,17 @@
 #include <ql/time/daycounter.hpp>
 #include <ql/math/interpolations/all.hpp>
 
-using namespace QuantLib;
+namespace QL {
 
-namespace QuantLib {
-
-    typedef boost::shared_ptr<DefaultProbabilityTermStructure> TS;
+    typedef boost::shared_ptr<QuantLib::DefaultProbabilityTermStructure> TS;
 
     // Creates a DefaultProbabilityTermStructure based on a 
     // PiecewiseDefaultCurve
     TS credit_term_structure_factory(
         std::string& traits, std::string& interpolator, 
-        const Date& reference_date,
-        const std::vector<boost::shared_ptr<DefaultProbabilityHelper> >& instruments, 
-        DayCounter& day_counter, Real accuracy
+        const QuantLib::Date& reference_date,
+        const std::vector<boost::shared_ptr<QuantLib::DefaultProbabilityHelper> >& instruments, 
+        QuantLib::DayCounter& day_counter, QuantLib::Real accuracy
     ) {
 
 
@@ -33,19 +31,19 @@ namespace QuantLib {
         if (traits.compare("HazardRate") == 0) {
            if (interpolator.compare("Linear") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<HazardRate,Linear>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::HazardRate, QuantLib::Linear>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
             } else if (interpolator.compare("LogLinear") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<HazardRate,LogLinear>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::HazardRate, QuantLib::LogLinear>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
             } else if (interpolator.compare("BackwardFlat") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<HazardRate,BackwardFlat>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::HazardRate, QuantLib::BackwardFlat>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
@@ -53,19 +51,19 @@ namespace QuantLib {
         } else if (traits.compare("DefaultDensity") == 0) {
            if (interpolator.compare("Linear") == 0) {
                ts = TS(
-                    new PiecewiseDefaultCurve<DefaultDensity,Linear>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::DefaultDensity, QuantLib::Linear>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
             } else if (interpolator.compare("LogLinear") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<DefaultDensity,LogLinear>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::DefaultDensity, QuantLib::LogLinear>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
             } else if (interpolator.compare("BackwardFlat") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<DefaultDensity,BackwardFlat>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::DefaultDensity, QuantLib::BackwardFlat>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
@@ -73,19 +71,19 @@ namespace QuantLib {
         } else if (traits.compare("SurvivalProbability") == 0) {
            if (interpolator.compare("Linear") == 0) {
                ts = TS(
-                    new PiecewiseDefaultCurve<SurvivalProbability,Linear>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::SurvivalProbability, QuantLib::Linear>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
             } else if (interpolator.compare("LogLinear") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<SurvivalProbability,LogLinear>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::SurvivalProbability, QuantLib::LogLinear>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
             } else if (interpolator.compare("BackwardFlat") == 0) {
                 ts = TS(
-                    new PiecewiseDefaultCurve<SurvivalProbability,BackwardFlat>(
+                    new QuantLib::PiecewiseDefaultCurve<QuantLib::SurvivalProbability, QuantLib::BackwardFlat>(
                         reference_date, instruments, day_counter, accuracy
                     )
                 );
@@ -93,7 +91,7 @@ namespace QuantLib {
        } else {
             std::cout << "traits = " << traits << std::endl;
             std::cout << "interpolator  = " << interpolator << std::endl;
-            QL_FAIL("What/How term structure options not recognized");
+            throw Exception("What/How term structure options not recognized");
         }
         return ts;
     }

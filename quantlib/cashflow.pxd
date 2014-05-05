@@ -1,5 +1,3 @@
-include 'types.pxi'
-
 from quantlib cimport ql
 from quantlib.ql cimport shared_ptr
 

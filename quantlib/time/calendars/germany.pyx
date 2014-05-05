@@ -1,20 +1,11 @@
 from quantlib cimport ql
 from quantlib.time.calendar cimport Calendar
 
-cdef extern from 'ql/time/calendars/germany.hpp' namespace 'QuantLib::Germany':
-
-    cdef enum Market:
-        Settlement
-        FrankfurtStockExchange
-        Xetra
-        Eurex
-        Euwax
-
-SETTLEMENT = Settlement
-FRANKFURT_STOCK_EXCHANGE = FrankfurtStockExchange
-XETRA = Xetra
-EUREX = Eurex
-EUWAX = Euwax
+SETTLEMENT = 0
+FRANKFURT_STOCK_EXCHANGE = 1
+XETRA = 2
+EUREX = 3
+EUWAX = 4
 
 cdef class Germany(Calendar):
     ''' Germany calendars.

@@ -28,6 +28,9 @@ include "time/calendars/_jointcalendar.pxd"
 include "time/calendars/_null_calendar.pxd"
 include "time/calendars/_united_kingdom.pxd"
 include "time/calendars/_united_states.pxd"
+include "time/calendars/_switzerland.pxd"
+include "time/calendars/_japan.pxd"
+include "time/_imm.pxd"
 
 include "_cashflow.pxd"
 include "_currency.pxd"
@@ -75,16 +78,16 @@ include "pricingengines/vanilla/_vanilla.pxd"
 
 ##### Local imports from the C++ support code
 
-cdef extern from "ql_settings.hpp" namespace "QuantLib":
-    Date get_evaluation_date()
-    void set_evaluation_date(Date& date)
-
-cdef extern from "simulate_support_code.hpp" namespace 'QuantLib':
+cdef extern from "simulate_support_code.hpp" namespace 'QL':
     void simulateMP(shared_ptr[StochasticProcess]& process,
                     int nbPaths, int nbSteps, Time horizon, BigNatural seed,
                     bool antithetic_variates, double *res) except +
 
-cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QuantLib':
+cdef extern from "ql_settings.hpp" namespace "QL":
+    Date get_evaluation_date()
+    void set_evaluation_date(Date& date)
+
+cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QL':
 
     cdef shared_ptr[PricingEngine] mc_vanilla_engine_factory(
       string& trait,
@@ -95,16 +98,14 @@ cdef extern from 'mc_vanilla_engine_support_code.hpp' namespace 'QuantLib':
       Size requiredSamples,
       BigNatural seed) except +
 
-#cdef extern from "businessdayconvention_support_code.hpp" namespace "QuantLib":
-#    string repr(int b) except +
+cdef extern from "businessdayconvention_support_code.hpp" namespace "QL":
+    string repr(int b) except +
 
 include "termstructures/yields/_piecewise_yield_curve.pxd"
 include "termstructures/credit/_piecewise_default_curve.pxd"
 
 include "pricingengines/_blackformula.pxd"
-#include "instruments/_swap.pxd"
-#include "instruments/_vanillaswap.pxd"
-#include "termstructures/yields/_bond_helpers.pxd"
-include "time/calendars/_switzerland.pxd"
-include "time/calendars/_japan.pxd"
-#include "time/_imm.pxd"
+include "instruments/_swap.pxd"
+include "instruments/_vanillaswap.pxd"
+include "termstructures/yields/_bond_helpers.pxd"
+

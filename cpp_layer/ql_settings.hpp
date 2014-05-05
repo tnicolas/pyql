@@ -7,7 +7,7 @@
 #include <ql/time/date.hpp>
 #include <ql/settings.hpp>
 
-namespace QuantLib {
+namespace QL {
     QuantLib::Date get_evaluation_date();
     void set_evaluation_date(QuantLib::Date& evaluation_date);
 }

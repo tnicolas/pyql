@@ -8,7 +8,7 @@
 #include <ql/quantlib.hpp>
 #include <ql/processes/hestonprocess.hpp>
 
-namespace QuantLib {
+namespace QL {
 
     boost::shared_ptr<QuantLib::PricingEngine> mc_vanilla_engine_factory(
       std::string& trait, 

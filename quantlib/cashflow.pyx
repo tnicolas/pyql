@@ -7,16 +7,16 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
-
-cimport quantlib.time.date as date
-
+include 'types.pxi'
 from libcpp.vector cimport vector
 from cython.operator cimport dereference as deref
-
-from quantlib.time.date import pydate_from_qldate
-
 from quantlib.ql cimport shared_ptr
 from quantlib cimport ql
+
+cimport quantlib.time.date as date
+from quantlib.time.date import pydate_from_qldate
+
+
 
 cdef class CashFlow:
     """Abstract Base Class.

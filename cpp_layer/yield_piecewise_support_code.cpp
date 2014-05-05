@@ -13,18 +13,16 @@
 #include <ql/time/date.hpp>
 #include <ql/time/daycounter.hpp>
 
-using namespace QuantLib;
-
 namespace QuantLib {
 
-    typedef boost::shared_ptr<YieldTermStructure> TS;
+    typedef boost::shared_ptr<QuantLib::YieldTermStructure> TS;
 
     // Creates a YieldTermStructure based on a PiecewiseYieldCurve
     TS term_structure_factory(
         std::string& traits, std::string& interpolator, 
         const Date& settlement_date,
-        const std::vector<boost::shared_ptr<RateHelper> >& curve_input, 
-        DayCounter& 
+        const std::vector<boost::shared_ptr<QuantLib::RateHelper> >& curve_input, 
+        QuantLib::DayCounter& 
         day_counter, Real tolerance
     ) {
         
@@ -33,21 +31,21 @@ namespace QuantLib {
         if (traits.compare("discount") == 0) {
             if (interpolator.compare("linear") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<Discount,Linear>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::Discount, QuantLib::Linear>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
                 );
             } else if (interpolator.compare("loglinear") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<Discount,LogLinear>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::Discount, QuantLib::LogLinear>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
                 );
             } else if (interpolator.compare("spline") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<Discount, Cubic>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::Discount, QuantLib::Cubic>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
@@ -56,21 +54,21 @@ namespace QuantLib {
         } else if (traits.compare("forward") == 0) {
             if (interpolator.compare("linear") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<ForwardRate,Linear>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::ForwardRate, QuantLib::Linear>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
                 );
             } else if (interpolator.compare("loglinear") == 0) {
                 ts =  TS(
-                    new PiecewiseYieldCurve<ForwardRate,LogLinear>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::ForwardRate, QuantLib::LogLinear>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
                 );
             } else if (interpolator.compare("spline") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<ForwardRate,Cubic>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::ForwardRate, QuantLib::Cubic>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
@@ -80,14 +78,14 @@ namespace QuantLib {
         } else if(traits.compare("zero") == 0) {
             if (interpolator.compare("linear") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<ZeroYield,Linear>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::ZeroYield, QuantLib::Linear>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
                 );
             } else if (interpolator.compare("loglinear") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<ZeroYield,LogLinear>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::ZeroYield, QuantLib::LogLinear>(
                         settlement_date, 
                         curve_input, day_counter, 
                         tolerance
@@ -95,7 +93,7 @@ namespace QuantLib {
                 );
             } else if (interpolator.compare("spline") == 0) {
                 ts = TS(
-                    new PiecewiseYieldCurve<ZeroYield,Cubic>(
+                    new QuantLib::PiecewiseYieldCurve<QuantLib::ZeroYield, QuantLib::Cubic>(
                         settlement_date, curve_input, day_counter, 
                         tolerance
                     )
@@ -104,7 +102,7 @@ namespace QuantLib {
         } else {
             std::cout << "traits = " << traits << std::endl;
             std::cout << "interpolator  = " << interpolator << std::endl;
-            QL_FAIL("What/How term structure options not recognized");
+            throw Exception("What/How term structure options not recognized");
         }
 
         return ts;

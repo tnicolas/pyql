@@ -4,30 +4,29 @@
  * Multipath simulator. A multipath simulator is needed when the stochastic
  * process involves more than 1 brownian. For example, Heston's model involves
  * the simulation of the variance process and the simulation of the price process
- */
+ */         
 
-using namespace QuantLib;
+namespace QL {
 
-namespace QuantLib {
-
-    void simulateMP(const boost::shared_ptr<StochasticProcess>& process,
-                    int nbPaths, int nbSteps, Time horizon, BigNatural seed,
+    void simulateMP(const boost::shared_ptr<QuantLib::StochasticProcess>& process,
+                    int nbPaths, int nbSteps, QuantLib::Time horizon, 
+                    QuantLib::BigNatural seed,
 		    bool antithetic_variates,
                     double *res) {
 
-        typedef PseudoRandom::rsg_type rsg_type; 
-        typedef MultiPathGenerator<rsg_type>::sample_type sample_type;
+        typedef QuantLib::PseudoRandom::rsg_type rsg_type; 
+        typedef QuantLib::MultiPathGenerator<rsg_type>::sample_type sample_type;
 
-        Time length = horizon;
+        QuantLib::Time length = horizon;
 
-        Size timeSteps = nbSteps;
-        boost::shared_ptr<StochasticProcess> sp = process;
+        QuantLib::Size timeSteps = nbSteps;
+        boost::shared_ptr<QuantLib::StochasticProcess> sp = process;
     
-        Size assets = sp->factors();
-        rsg_type rsg = PseudoRandom::make_sequence_generator(timeSteps*assets,
+        QuantLib::Size assets = sp->factors();
+        rsg_type rsg = QuantLib::PseudoRandom::make_sequence_generator(timeSteps*assets,
                        seed);
 
-	MultiPathGenerator<rsg_type> generator(sp, TimeGrid(length, timeSteps),
+	QuantLib::MultiPathGenerator<rsg_type> generator(sp, QuantLib::TimeGrid(length, timeSteps),
           rsg, false);
 
         // res(nbPaths+1, nbSteps+1)
@@ -47,9 +46,9 @@ namespace QuantLib {
 		 : generator.next())
                 : generator.next();
 
-            Path p1 = sample.value[0];
+            QuantLib::Path p1 = sample.value[0];
             int j=0;
-            for (Path::iterator ip = p1.begin(); ip<p1.end(); ++ip) {
+            for (QuantLib::Path::iterator ip = p1.begin(); ip<p1.end(); ++ip) {
                 res[(i+1)*(nbSteps+1)+j] = (*ip);
                 j++;
             };

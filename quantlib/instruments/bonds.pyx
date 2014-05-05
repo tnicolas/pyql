@@ -13,7 +13,7 @@ from quantlib.ql cimport shared_ptr
 from quantlib cimport ql
 
 from cython.operator cimport dereference as deref
-from libcpp.vector cimport         vector
+from libcpp.vector cimport vector
 
 from quantlib cimport cashflow
 from quantlib.instruments.instrument cimport Instrument

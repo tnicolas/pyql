@@ -1,6 +1,6 @@
 #include<ql/quantlib.hpp>
 
-namespace QuantLib {
+namespace QL {
 
   /*
    * Multipath simulator

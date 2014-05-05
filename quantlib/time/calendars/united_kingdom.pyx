@@ -1,17 +1,9 @@
 from quantlib cimport ql
-
 from quantlib.time.calendar cimport Calendar
 
-cdef extern from 'ql/time/calendars/unitedkingdom.hpp' namespace 'QuantLib::UnitedKingdom':
-
-    cdef enum Market:
-        Settlement
-        Exchange
-        Metals
-
-SETTLEMENT = Settlement
-EXCHANGE   = Exchange
-METALS     = Metals
+SETTLEMENT = 0
+EXCHANGE   = 1
+METALS     = 2
 
 cdef class UnitedKingdom(Calendar):
     ''' United Kingdom calendars.

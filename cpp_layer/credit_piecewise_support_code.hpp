@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 
-namespace QuantLib {
+namespace QL {
 
     // Creates a DefaultProbabilityTermStructure based on a PiecewiseDefaultCurve
     boost::shared_ptr<QuantLib::DefaultProbabilityTermStructure> credit_term_structure_factory(

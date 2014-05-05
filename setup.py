@@ -73,8 +73,8 @@ elif sys.platform == 'linux2':
 INCLUDE_DIRS.append(numpy.get_include())
 
 def get_define_macros():
-    #defines = [ ('HAVE_CONFIG_H', None)]
-    defines = []
+    defines = [ ('HAVE_CONFIG_H', None)]
+    #defines = []
     if sys.platform == 'win32':
         # based on the SWIG wrappers
         defines += [
@@ -136,11 +136,11 @@ def collect_extensions():
     ql_extension = Extension('quantlib.ql',
         ['quantlib/ql.pyx',
          'cpp_layer/ql_settings.cpp',
+         #'cpp_layer/yield_piecewise_support_code.cpp',
+         #'cpp_layer/credit_piecewise_support_code.cpp',
+         #'cpp_layer/mc_vanilla_engine_support_code.cpp',
+         #'cpp_layer/businessdayconvention_support_code.cpp',
          'cpp_layer/simulate_support_code.cpp',
-         'cpp_layer/yield_piecewise_support_code.cpp',
-         'cpp_layer/credit_piecewise_support_code.cpp',
-         'cpp_layer/mc_vanilla_engine_support_code.cpp',
-         #'cpp_layer/businessdayconvention_support_code.cpp'
         ],
         libraries=[QL_LIBRARY],
         **default_args
@@ -169,8 +169,9 @@ def collect_extensions():
         **ql_ext_args
     )
 
-    multipath_extension = Extension('quantlib.sim.simulate',
-        ['quantlib/sim/simulate.pyx'], **ql_ext_args
+    simulate_extension = Extension('quantlib.sim.simulate',
+        ['quantlib/sim/simulate.pyx'],
+        **ql_ext_args
     )
 
     mc_vanilla_engine_extension = Extension(
@@ -277,49 +278,42 @@ def collect_extensions():
 
     manual_extensions = [
         ql_extension,
-        #multipath_extension,
-        #mc_vanilla_engine_extension,
-        date_extension,
-        calendar_extension,
-        null_calendar_extension,
-        germany_calendar_extension,
-        us_calendar_extension,
-        uk_calendar_extension,
-        japan_calendar_extension,
-        switzerland_calendar_extension,
-        schedule_extension,
         settings_extension,
         test_extension,
-        instrument_extension,
         bond_extension,
+        date_extension,
+        calendar_extension,
+        schedule_extension,
+        instrument_extension,
         engine_extension,
         cashflow_extension,
         daycounter_extension,
         aadaycounter_extension,
         th360daycounter_extension,
+        simulate_extension,
     ]
 
-#    cython_extension_directories = []
-#    for dirpath, directories, files in os.walk('quantlib'):
-#
-#        # if the directory contains pyx files, cythonise it
-#        if len(glob.glob('{0}/*.pyx'.format(dirpath))) > 0:
-#            cython_extension_directories.append(dirpath)
-#
-#    collected_extensions = cythonize(
-#        [
-#            Extension('*', ['{0}/*.pyx'.format(dirpath)], **ql_ext_args
-#            ) for dirpath in cython_extension_directories
-#        ]
-#    )
-#
-#    # remove  all the manual extensions from the collected ones
-#    names = [extension.name for extension in manual_extensions]
-#    for ext in collected_extensions[:]:
-#        if ext.name in names:
-#            collected_extensions.remove(ext)
-#            continue
-#
+    cython_extension_directories = []
+    for dirpath, directories, files in os.walk('quantlib'):
+
+        # if the directory contains pyx files, cythonise it
+        if len(glob.glob('{0}/*.pyx'.format(dirpath))) > 0:
+            cython_extension_directories.append(dirpath)
+
+    collected_extensions = cythonize(
+        [
+            Extension('*', ['{0}/*.pyx'.format(dirpath)], **ql_ext_args
+            ) for dirpath in cython_extension_directories
+        ]
+    )
+
+    # remove  all the manual extensions from the collected ones
+    names = [extension.name for extension in manual_extensions]
+    for ext in collected_extensions[:]:
+        if ext.name in names:
+            collected_extensions.remove(ext)
+            continue
+
     extensions = manual_extensions #+ collected_extensions
 
     return extensions

@@ -5,6 +5,6 @@
 
 #include <string>
 
-namespace QuantLib {
+namespace QL {
   std::string repr(int b);
 }

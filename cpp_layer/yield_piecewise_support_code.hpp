@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 
-namespace QuantLib {
+namespace QL {
 
     // Creates a YieldTermStructure based on a PiecewiseYieldCurve
     boost::shared_ptr<QuantLib::YieldTermStructure> term_structure_factory(
