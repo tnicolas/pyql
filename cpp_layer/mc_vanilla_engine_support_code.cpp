@@ -9,14 +9,14 @@
 #include <ql/quantlib.hpp>
 #include <ql/processes/hestonprocess.hpp>
 
-namespace QuantLib {
+namespace QL {
 
     typedef boost::shared_ptr<QuantLib::PricingEngine> PE;
 
     PE mc_vanilla_engine_factory(
       std::string& trait, 
       std::string& RNG,
-      const boost::shared_ptr<HestonProcess>& process,
+      const boost::shared_ptr<QuantLib::HestonProcess>& process,
       bool doAntitheticVariate,
       QuantLib::Size stepsPerYear,
       QuantLib::Size requiredSamples,
@@ -37,7 +37,7 @@ namespace QuantLib {
         else {
             std::cout << "traits = " << trait << std::endl;
             std::cout << "RNG  = " << RNG << std::endl;
-            throw Exception("Engine factory options not recognized");
+            throw std::exception("Engine factory options not recognized");
         }
         return engine;
     }

@@ -13,17 +13,17 @@
 #include <ql/time/date.hpp>
 #include <ql/time/daycounter.hpp>
 
-namespace QuantLib {
+namespace QL {
 
     typedef boost::shared_ptr<QuantLib::YieldTermStructure> TS;
 
     // Creates a YieldTermStructure based on a PiecewiseYieldCurve
     TS term_structure_factory(
         std::string& traits, std::string& interpolator, 
-        const Date& settlement_date,
+        const QuantLib::Date& settlement_date,
         const std::vector<boost::shared_ptr<QuantLib::RateHelper> >& curve_input, 
         QuantLib::DayCounter& 
-        day_counter, Real tolerance
+        day_counter, QuantLib::Real tolerance
     ) {
         
         TS ts;
@@ -102,7 +102,7 @@ namespace QuantLib {
         } else {
             std::cout << "traits = " << traits << std::endl;
             std::cout << "interpolator  = " << interpolator << std::endl;
-            throw Exception("What/How term structure options not recognized");
+            throw std::exception("What/How term structure options not recognized");
         }
 
         return ts;

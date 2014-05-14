@@ -91,7 +91,7 @@ namespace QL {
        } else {
             std::cout << "traits = " << traits << std::endl;
             std::cout << "interpolator  = " << interpolator << std::endl;
-            throw Exception("What/How term structure options not recognized");
+            throw std::exception("What/How term structure options not recognized");
         }
         return ts;
     }
