@@ -6,7 +6,7 @@ from libcpp.vector cimport vector
 from quantlib cimport ql
 from quantlib.ql cimport shared_ptr
 
-from flat_forward cimport YieldTermStructure
+from quantlib.termstructures.yields.flat_forward cimport YieldTermStructure
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.date cimport Date
 
@@ -15,8 +15,8 @@ cdef class ZeroCurve(YieldTermStructure):
     def __init__(self, dates, yields, DayCounter daycounter):
 
         # convert dates and yields to vector
-        cdef vector[ql.Date]* _date_vector = new vector[ql.Date]()
-        cdef vector[Rate]* _yield_vector = new vector[Rate]()
+        cdef vector[ql.Date] _date_vector = vector[ql.Date]()
+        cdef vector[Rate] _yield_vector = vector[Rate]()
 
         # highly inefficient and could be improved
         for date in dates:
@@ -28,8 +28,8 @@ cdef class ZeroCurve(YieldTermStructure):
         # create the curve
         self._thisptr = new shared_ptr[ql.YieldTermStructure](
             new ql.ZeroCurve(
-                deref(_date_vector),
-                deref(_yield_vector),
+                _date_vector,
+                _yield_vector,
                 deref(daycounter._thisptr)
             )
         )

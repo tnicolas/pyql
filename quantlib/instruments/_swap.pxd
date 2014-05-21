@@ -7,13 +7,8 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 cdef extern from 'ql/instruments/swap.hpp' namespace 'QuantLib':
+
     cdef cppclass Swap(Instrument):
-
-        ## Swap(Leg& firstLeg,
-        ##      Leg& secondLeg)
-
-        ## Swap(vector[Leg]& legs,
-        ##      vector[bool]& payer)
 
         bool isExpired()
         Date startDate()

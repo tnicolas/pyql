@@ -15,7 +15,6 @@ from quantlib.processes.black_scholes_process cimport GeneralizedBlackScholesPro
 from quantlib.pricingengines.engine cimport PricingEngine
 
 cdef class VanillaOptionEngine(PricingEngine):
-
     pass
 
 cdef class AnalyticEuropeanEngine(VanillaOptionEngine):

@@ -15,4 +15,9 @@ cdef class Period:
 cdef class Date:
     cdef ql.shared_ptr[ql.Date]* _thisptr
 
-cdef Date date_from_qldate(ql.Date& date)
+cdef inline Date date_from_qldate(ql.Date& date):
+    '''Converts a QuantLib::Date (ql.Date) to a cython Date instance.
+
+    Inefficient because taking a copy of the date ... but safe!
+    '''
+    return Date(date.serialNumber())

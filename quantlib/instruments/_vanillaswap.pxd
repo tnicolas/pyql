@@ -7,10 +7,8 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 
-cdef extern from 'ql/instruments/vanillaswap.hpp' namespace 'QuantLib::VanillaSwap':
-    pass
-
 cdef extern from 'ql/instruments/vanillaswap.hpp' namespace 'QuantLib':
+    
     # renamed to avoid conflicts with the Option Type
     cdef enum VanillaSwapType 'QuantLib::VanillaSwap::Type':
         pass

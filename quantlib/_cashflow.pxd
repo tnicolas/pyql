@@ -1,12 +1,3 @@
-from libcpp cimport bool
-from libcpp.vector cimport vector
-
-# Depends on shared_ptr and Date
-
-cdef extern from 'boost/optional.hpp' namespace 'boost':
-    cdef cppclass optional[T]:
-        optional(T*)
-
 cdef extern from 'ql/event.hpp' namespace 'QuantLib':
     cdef cppclass Event:        
         Date date()

@@ -447,13 +447,6 @@ def is_leap(int year):
     '''Whether the given ql.Year is a leap one.'''
     return ql.Date_isLeap(<ql.Year> year)
 
-cdef Date date_from_qldate(ql.Date& date):
-    '''Converts a QuantLib::Date (ql.Date) to a cython Date instance.
-
-    Inefficient because taking a copy of the date ... but safe!
-    '''
-    return Date(date.serialNumber())
-
 
 # Date Interfaces
 

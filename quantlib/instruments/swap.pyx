@@ -14,30 +14,24 @@ from libcpp.vector cimport vector
 from libcpp cimport bool
 
 from quantlib cimport ql
-from quantlib.ql cimport Handle, shared_ptr, RelinkableHandle
+from quantlib.ql cimport shared_ptr
 
 from quantlib.instruments.instrument cimport Instrument
-from quantlib.pricingengines.engine cimport PricingEngine
-from quantlib.time.calendar cimport Calendar
 from quantlib.time.date cimport Date, date_from_qldate
 from quantlib.time.schedule cimport Schedule
 from quantlib.time.daycounter cimport DayCounter
-from quantlib.time.calendar import Following
-from quantlib.cashflow cimport Leg
 from quantlib.indexes.ibor_index cimport IborIndex
-from quantlib.pricingengines.swap import DiscountingSwapEngine
-from quantlib.market.conventions.swap import SwapData
-from quantlib.cashflow cimport SimpleLeg, leg_items
+from quantlib.cashflow cimport SimpleLeg
 
 import datetime
+
 cdef extern from 'ql/instruments/vanillaswap.hpp' namespace 'QuantLib::VanillaSwap':
     cdef enum Type:
         Payer
         Receiver
 
-cdef public enum SwapType:
-    PAYER    = Payer
-    RECEIVER = Receiver
+PAYER    = Payer
+RECEIVER = Receiver
 
 
 cdef ql.Swap* get_swap(Swap swap):
@@ -56,32 +50,6 @@ cdef class Swap(Instrument):
     def __init__(self):
         raise NotImplementedError('Generic swap not yet implemented. \
         Please use child classes.')
-
-    ## def __init__(self, Leg firstLeg,
-    ##              Leg secondLeg):
-
-    ##     cdef ql.Leg* leg1 = firstLeg._thisptr.get()
-    ##     cdef ql.Leg* leg2 = secondLeg._thisptr.get()
-        
-    ##     self._thisptr = new shared_ptr[ql.Instrument](\
-    ##        new ql.Swap(deref(leg1),
-    ##                       deref(leg2)))
-        
-
-    ## def __init__(self, vector[Leg] legs,
-    ##          vector[bool] payer):
-
-    ##     cdef vector[ql.Leg]* _legs = new vector[ql.Leg](len(legs))
-    ##     for l in legs:
-    ##         _legs.push_back(l)
-
-    ##     cdef vector[bool]* _payer = new vector[bool](len(payer))
-    ##     for p in payer:
-    ##         _payer.push_back(p)
-
-    ##     self._thisptr = new shared_ptr[ql.Instrument](\
-    ##         new ql.Swap(_legs, payer)
-    ##         )
             
     property is_expired:
         def __get__(self):
@@ -126,7 +94,7 @@ cdef class VanillaSwap(Swap):
     Vanilla swap class
     """
 
-    def __init__(self, SwapType type_,
+    def __init__(self, Type type_,
                      Real nominal,
                      Schedule fixed_schedule,
                      Rate fixed_rate,
@@ -191,7 +159,6 @@ cdef class VanillaSwap(Swap):
 
         cdef int k
         cdef shared_ptr[ql.CashFlow] _thiscf
-        cdef Date _thisdate
 
         itemlist = []
         cdef int size = leg.size()
@@ -202,4 +169,3 @@ cdef class VanillaSwap(Swap):
             itemlist.append((_thiscf.get().amount(), _thisdate))
 
         return SimpleLeg(itemlist)
-

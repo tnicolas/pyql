@@ -25,7 +25,7 @@ from quantlib.market.market import libor_market
 
 class TestQuantLibSwap(unittest.TestCase):
 
-    def test_swap_QL(self):
+    def xxtest_swap_QL(self):
         """
         Test that a swap with fixed coupon = fair rate has an NPV=0
         Create from QL objects
@@ -107,7 +107,7 @@ class TestQuantLibSwap(unittest.TestCase):
         print('NPV: %f' % p)
         self.assertAlmostEquals(p, 0)
 
-    def test_swap_from_market(self):
+    def xxtest_swap_from_market(self):
         """
         Test that a swap with fixed coupon = fair rate has an NPV=0
         Create from market

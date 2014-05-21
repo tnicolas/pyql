@@ -113,3 +113,5 @@ class FlatForwardTestCase(unittest.TestCase):
         for i, val in enumerate(expected):
             self.assertAlmostEquals(val, calculated[i])
 
+if __name__ == '__main__':
+    unittest.main()

@@ -55,8 +55,8 @@ elif sys.platform == 'win32':
         SUPPORT_CODE_INCLUDE
     ]
     LIBRARY_DIRS = [
-        r'C:\dev\boost_1_55_0_lib\lib32-msvc-9.0',
         r'C:\dev\QuantLib-1.3\lib',
+        r'C:\dev\boost_1_55_0_lib\lib32-msvc-9.0',
         r'.',
         # On Win32, we need to explicitely link with the quantlib.ql.pyd
         # We point to the directory where the generated .lib file is and 
@@ -96,7 +96,11 @@ def get_extra_compile_args():
 
 def get_extra_link_args():
     if sys.platform == 'win32':
-        args = ['/subsystem:windows', '/machine:I386']
+        # FORCE:MULTIPLE has been added to prevent linker issues with certain
+        # modules. This needs to be investigated. The linker seems to be 
+        # unhappy with finding some symbols in ql.lib/pyd and in the QuantLib.lib
+        # 
+        args = ['/subsystem:windows', '/machine:I386', '/FORCE:MULTIPLE']
     elif sys.platform == 'darwin':
         major, minor, patch = [
             int(item) for item in platform.mac_ver()[0].split('.')]
@@ -136,10 +140,10 @@ def collect_extensions():
     ql_extension = Extension('quantlib.ql',
         ['quantlib/ql.pyx',
          'cpp_layer/ql_settings.cpp',
-         #'cpp_layer/yield_piecewise_support_code.cpp',
-         #'cpp_layer/credit_piecewise_support_code.cpp',
-         #'cpp_layer/mc_vanilla_engine_support_code.cpp',
-         #'cpp_layer/businessdayconvention_support_code.cpp',
+         'cpp_layer/yield_piecewise_support_code.cpp',
+         'cpp_layer/credit_piecewise_support_code.cpp',
+         'cpp_layer/mc_vanilla_engine_support_code.cpp',
+         'cpp_layer/businessdayconvention_support_code.cpp',
          'cpp_layer/simulate_support_code.cpp',
         ],
         libraries=[QL_LIBRARY],
@@ -278,19 +282,20 @@ def collect_extensions():
 
     manual_extensions = [
         ql_extension,
-        settings_extension,
+        #settings_extension,
         test_extension,
-        bond_extension,
-        date_extension,
-        calendar_extension,
-        schedule_extension,
-        instrument_extension,
-        engine_extension,
-        cashflow_extension,
-        daycounter_extension,
-        aadaycounter_extension,
-        th360daycounter_extension,
-        simulate_extension,
+        #bond_extension,
+        #date_extension,
+        #calendar_extension,
+        #schedule_extension,
+        #instrument_extension,
+        #engine_extension,
+        #cashflow_extension,
+        #daycounter_extension,
+        #aadaycounter_extension,
+        #th360daycounter_extension,
+        #simulate_extension,
+        #mc_vanilla_engine_extension
     ]
 
     cython_extension_directories = []
@@ -310,11 +315,11 @@ def collect_extensions():
     # remove  all the manual extensions from the collected ones
     names = [extension.name for extension in manual_extensions]
     for ext in collected_extensions[:]:
-        if ext.name in names:
+        if ext.name in names: # or 'swap' not in ext.name:
             collected_extensions.remove(ext)
             continue
 
-    extensions = manual_extensions #+ collected_extensions
+    extensions = manual_extensions + collected_extensions
 
     return extensions
 

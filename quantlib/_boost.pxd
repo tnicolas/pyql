@@ -8,6 +8,10 @@ cdef extern from 'boost/shared_ptr.hpp' namespace 'boost':
         long use_count()
         #void reset(shared_ptr[T]&)
 
+cdef extern from 'boost/optional.hpp' namespace 'boost':
+    cdef cppclass optional[T]:
+        optional(T*)
+
 cdef extern from 'ql/handle.hpp' namespace 'QuantLib':
     cdef cppclass Handle[T]:
         Handle()
@@ -21,7 +25,3 @@ cdef extern from 'ql/handle.hpp' namespace 'QuantLib':
         RelinkableHandle(shared_ptr[T]*)
         void linkTo(shared_ptr[T]&)
         void linkTo(shared_ptr[T]&, bool registerAsObserver)
-
-cdef extern from 'boost/optional.hpp' namespace 'boost':
-    cdef cppclass optional[T]:
-        optional(T*)
