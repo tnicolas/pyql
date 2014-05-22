@@ -37,7 +37,7 @@ namespace QL {
         else {
             std::cout << "traits = " << trait << std::endl;
             std::cout << "RNG  = " << RNG << std::endl;
-            throw std::exception("Engine factory options not recognized");
+            throw std::invalid_argument("Engine factory options not recognized");
         }
         return engine;
     }
