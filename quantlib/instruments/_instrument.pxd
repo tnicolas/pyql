@@ -4,6 +4,7 @@ cdef extern from 'ql/instrument.hpp' namespace 'QuantLib':
 
         Real NPV()
         const Date& valuationDate() except +
-        void setPricingEngine(shared_ptr[PricingEngine]&)
+        void setPricingEngine(shared_ptr[PricingEngine]&) except +
+        bool isExpired()
 
 

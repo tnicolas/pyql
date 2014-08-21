@@ -40,8 +40,8 @@ cdef extern from 'ql/instruments/vanillaswap.hpp' namespace 'QuantLib':
 
         BusinessDayConvention paymentConvention()
 
-        Leg& fixedLeg()
-        Leg& floatingLeg()
+        const Leg& fixedLeg()
+        const Leg& floatingLeg()
 
         Real fixedLegBPS() except +
         Real fixedLegNPV() except +

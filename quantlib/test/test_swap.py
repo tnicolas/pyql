@@ -1,31 +1,25 @@
 from .unittest_tools import unittest
 
-from quantlib.instruments.swap import VanillaSwap, PAYER
-from quantlib.util.converter import pydate_to_qldate
-from quantlib.pricingengines.swap import DiscountingSwapEngine
-from quantlib.time.calendar import (
-    Unadjusted, ModifiedFollowing
-)
-
-from quantlib.time.date import (
-    Date, Days, Semiannual, January, Period,
-    Annual, Years, Months)
-
-from quantlib.time.api import Actual365Fixed, Thirty360, TARGET, Actual360
-from quantlib.time.schedule import Schedule, Forward
-from quantlib.settings import Settings
-from quantlib.termstructures.yields.api import (
-    FlatForward, YieldTermStructure)
-
 from quantlib.currency import USDCurrency
 from quantlib.indexes.libor import Libor
-
+from quantlib.instruments.swap import VanillaSwap, PAYER
 from quantlib.market.market import libor_market
-
+from quantlib.pricingengines.swap import DiscountingSwapEngine
+from quantlib.settings import Settings
+from quantlib.termstructures.yields.api import (
+    FlatForward, YieldTermStructure
+)
+from quantlib.time.api import Actual365Fixed, Thirty360, TARGET, Actual360
+from quantlib.time.calendar import Unadjusted, ModifiedFollowing
+from quantlib.time.date import (
+    Date, Days, Semiannual, January, Period, Annual, Years, Months
+)
+from quantlib.time.schedule import Schedule, Forward
+from quantlib.util.converter import pydate_to_qldate
 
 class TestQuantLibSwap(unittest.TestCase):
 
-    def xxtest_swap_QL(self):
+    def test_swap_QL(self):
         """
         Test that a swap with fixed coupon = fair rate has an NPV=0
         Create from QL objects
@@ -60,7 +54,7 @@ class TestQuantLibSwap(unittest.TestCase):
 
         length = 5
         fixedRate = .05
-        floatingSpread = 0.0
+        floatingSpread = 0.1
 
         maturity = calendar.advance(settlement_date, length, Years,
                                     convention=floatingConvention)
@@ -86,12 +80,17 @@ class TestQuantLibSwap(unittest.TestCase):
                                        settlement_date, settlement_date)
         swap.set_pricing_engine(engine)
 
-        l = swap.leg(0)
+        print 'before leg 0'
+        l = swap.fixed_leg
         print l.to_str()
 
-        l = swap.leg(1)
+        if swap.is_expired():
+            print 'Swap is expired'
+        print 'before leg 1'
+        l = swap.floating_leg
         print l.to_str()
 
+        print 'RATES'
         f = swap.fair_rate
         print('fair rate: %f' % f)
         p = swap.net_present_value
@@ -107,7 +106,7 @@ class TestQuantLibSwap(unittest.TestCase):
         print('NPV: %f' % p)
         self.assertAlmostEquals(p, 0)
 
-    def xxtest_swap_from_market(self):
+    def xx_test_swap_from_market(self):
         """
         Test that a swap with fixed coupon = fair rate has an NPV=0
         Create from market

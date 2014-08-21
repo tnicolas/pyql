@@ -9,10 +9,7 @@ cdef class CashFlow:
 cdef class SimpleCashFlow(CashFlow):
     pass
 
-cdef class Leg:
-    cdef shared_ptr[ql.Leg]* _thisptr
-
 cdef class SimpleLeg:
-    cdef shared_ptr[vector[shared_ptr[ql.CashFlow]]] *_thisptr
+    cdef ql.Leg* _thisptr
 
-cdef object leg_items(vector[shared_ptr[ql.CashFlow]] leg)
+cdef object leg_items(ql.Leg& leg)

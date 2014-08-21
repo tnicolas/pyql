@@ -46,3 +46,6 @@ cdef class Instrument:
             cdef ql.Date valuation_date
             valuation_date = self._thisptr.get().valuationDate()
             return date_from_qldate(valuation_date)
+            
+    def is_expired(self):
+        return self._thisptr.get().isExpired()

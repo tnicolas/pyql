@@ -12,7 +12,6 @@ cdef extern from 'ql/cashflow.hpp' namespace 'QuantLib':
 
 cdef extern from 'ql/cashflows/simplecashflow.hpp' namespace 'QuantLib':
     cdef cppclass SimpleCashFlow(CashFlow):
-        SimpleCashFlow(Real amount,
-                       Date& date)
+        SimpleCashFlow(Real amount, Date& date)
         
 

@@ -29,6 +29,8 @@ def load_symbols():
 
 SYMBOLS = list(load_symbols())
 
+DEBUG_BUILD = True
+
 if sys.platform in ['darwin', 'linux2']:
     ## From SO: hack to remove warning about strict prototypes
     ## http://stackoverflow.com/questions/8106258/cc1plus-warning-command-line-option-wstrict-prototypes-is-valid-for-ada-c-o
@@ -56,6 +58,7 @@ elif sys.platform == 'win32':
     ]
     LIBRARY_DIRS = [
         r'C:\dev\QuantLib-1.3\lib',
+        r'C:\dev\QuantLib-1.3\Release',
         r'C:\dev\boost_1_55_0_lib\lib32-msvc-9.0',
         r'.',
         # On Win32, we need to explicitely link with the quantlib.ql.pyd
@@ -89,6 +92,8 @@ def get_define_macros():
 def get_extra_compile_args():
     if sys.platform == 'win32':
         args = ['/GR', '/FD', '/Zm250', '/EHsc' ]
+        if DEBUG_BUILD:
+            args.append('/Z7')
     else:
         args = []
 
@@ -101,6 +106,8 @@ def get_extra_link_args():
         # unhappy with finding some symbols in ql.lib/pyd and in the QuantLib.lib
         # 
         args = ['/subsystem:windows', '/machine:I386', '/FORCE:MULTIPLE']
+        if DEBUG_BUILD:
+            args.append('/DEBUG')
     elif sys.platform == 'darwin':
         major, minor, patch = [
             int(item) for item in platform.mac_ver()[0].split('.')]
@@ -115,7 +122,7 @@ def get_extra_link_args():
     return args
 
 # FIXME: Naive way to select the QL library name ...
-QL_LIBRARY = 'QuantLib-vc90-mt' if BUILDING_ON_WINDOWS else 'QuantLib'
+QL_LIBRARY = 'test_dll' if BUILDING_ON_WINDOWS else 'QuantLib'
 
 CYTHON_DIRECTIVES = {"embedsignature": True}
 
@@ -146,7 +153,7 @@ def collect_extensions():
          'cpp_layer/businessdayconvention_support_code.cpp',
          'cpp_layer/simulate_support_code.cpp',
         ],
-        libraries=[QL_LIBRARY],
+        libraries=[QL_LIBRARY], #, 'Quantlib-vc90-mt'],
         **default_args
     )
 
@@ -156,7 +163,7 @@ def collect_extensions():
     ql_ext_args = default_args.copy()
 
     if BUILDING_ON_WINDOWS:
-        ql_ext_args['libraries'] = ['ql']
+        ql_ext_args['libraries'] = ['ql','test_dll']
         # We need to export the symbols of the support code for them to be
         # visible by the other Cython extensions linked to quantlib.ql
         ql_extension.export_symbols = SYMBOLS

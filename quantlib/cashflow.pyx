@@ -8,13 +8,15 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 """
 include 'types.pxi'
+import datetime
+
 from libcpp.vector cimport vector
 from cython.operator cimport dereference as deref
 from quantlib.ql cimport shared_ptr
 from quantlib cimport ql
 
 cimport quantlib.time.date as date
-from quantlib.time.date import pydate_from_qldate
+from quantlib.time.date import pydate_from_qldate, qldate_from_pydate
 
 
 
@@ -68,22 +70,33 @@ cdef class SimpleCashFlow(CashFlow):
         return 'Simple Cash Flow: %f, %s' % (self.amount,
                                              self.date)
 
-cdef object leg_items(vector[shared_ptr[ql.CashFlow]] leg):
+cdef object leg_items(ql.Leg& leg):
     """
     Returns a list of (amount, pydate)
     """
     cdef int i
     cdef shared_ptr[ql.CashFlow] _thiscf
     cdef date.Date _thisdate
-    cdef int size = leg.size()
 
     itemlist = []
-    for i from 0 <= i < size:
+    print 'Size ', leg.size()
+    for i in range(<int>leg.size()):
+        print i
         _thiscf = leg.at(i)
+        if _thiscf.get() is NULL:
+            raise ValueError()
+        else:
+            print 'has cashflow'
+        print 'Use count ', _thiscf.use_count()
+        print 'Amount '
+        print _thiscf.get().amount()
+        print 'Date '
+        print _thiscf.get().date().serialNumber()
         _thisdate = date.Date(_thiscf.get().date().serialNumber())
+        
 
         itemlist.append((_thiscf.get().amount(), pydate_from_qldate(_thisdate)))
-
+        print itemlist
     return itemlist
 
 cdef class SimpleLeg:
@@ -95,29 +108,22 @@ cdef class SimpleLeg:
         '''Takes as input a list of (amount, QL Date) tuples. '''
 
         #TODO: make so that it handles pydate as well as QL Dates.
-        cdef shared_ptr[ql.CashFlow] *_thiscf
-        cdef date.Date testDate
-        cdef ql.Date _testDate
+        cdef shared_ptr[ql.CashFlow] _thiscf
         cdef ql.Date *_thisdate
         cdef int i
 
         if noalloc:
             return
 
-        self._thisptr = new shared_ptr[vector[shared_ptr[ql.CashFlow]]](\
-                    new vector[shared_ptr[ql.CashFlow]]()
-                    )
-
-        for i in range(len(leg)):
-            _thisamount = leg[i][0]
-            _thisdate = <ql.Date*>((<date.Date>leg[i][1])._thisptr.get())
-
-            _thiscf = new shared_ptr[ql.CashFlow]( \
-                                new ql.SimpleCashFlow(_thisamount,
-                                                       deref(_thisdate))
-                                                  )
-
-            self._thisptr.get().push_back(deref(_thiscf))
+        self._thisptr = new ql.Leg()   
+        for _amount, _date in leg:
+            if isinstance(_date, datetime.date):
+                _date  = qldate_from_pydate(_date)
+            _thisdate = <ql.Date*>((<date.Date>_date)._thisptr.get())
+            _thiscf = shared_ptr[ql.CashFlow](
+                new ql.SimpleCashFlow(_amount, deref(_thisdate))
+            )
+            self._thisptr.push_back(_thiscf)
 
     def __dealloc__(self):
         if self._thisptr is not NULL:
@@ -125,7 +131,7 @@ cdef class SimpleLeg:
 
     property size:
         def __get__(self):
-            cdef int size = self._thisptr.get().size()
+            cdef int size = self._thisptr.size()
             return size
 
     property items:
@@ -133,8 +139,7 @@ cdef class SimpleLeg:
             '''Return Leg as (amount, date) list
 
             '''
-            cdef vector[shared_ptr[ql.CashFlow]] leg = \
-                                        deref(self._thisptr.get())
+            cdef ql.Leg leg = deref(self._thisptr)
             return leg_items(leg)
 
 
@@ -143,8 +148,8 @@ cdef class SimpleLeg:
             pretty print cash flow schedule
             """
             _items = self.items
-            str = "Cash Flow Schedule:\n"
+            text = "Cash Flow Schedule:\n"
             for _it in _items:
-                str += ("%s %f\n" % (_it[1], _it[0]))
-            return str
+                text += ("%s %f\n" % (_it[1], _it[0]))
+            return text
 

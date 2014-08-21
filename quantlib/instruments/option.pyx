@@ -107,11 +107,6 @@ cdef class OneAssetOption(Instrument):
             payoff.set_payoff(get_option(self).payoff())
             return payoff
 
-    property is_expired:
-        def __get__(self):
-            if self._has_pricing_engine:
-                return (<ql.OneAssetOption *> self._thisptr.get()).isExpired()
-
     property delta:
         def __get__(self):
             if self._has_pricing_engine:

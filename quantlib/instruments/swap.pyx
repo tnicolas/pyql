@@ -21,7 +21,7 @@ from quantlib.time.date cimport Date, date_from_qldate
 from quantlib.time.schedule cimport Schedule
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.indexes.ibor_index cimport IborIndex
-from quantlib.cashflow cimport SimpleLeg
+from quantlib.cashflow cimport SimpleLeg, leg_items
 
 import datetime
 
@@ -50,11 +50,6 @@ cdef class Swap(Instrument):
     def __init__(self):
         raise NotImplementedError('Generic swap not yet implemented. \
         Please use child classes.')
-            
-    property is_expired:
-        def __get__(self):
-            cdef bool is_expired = get_swap(self).isExpired()
-            return is_expired
 
     property start_date:
         def __get__(self):
@@ -80,6 +75,23 @@ cdef class Swap(Instrument):
 
     ## def npvDateDiscount(self):
     ##     return get_swap(self).npvDateDiscount()
+    
+    def leg(self, int i):
+        """
+        Return a swap leg
+        TODO: optimize this - avoid copy
+        """
+
+        cdef ql.Swap* _swap = get_swap(self)
+        if _swap is NULL:
+            raise ValueError('self pointer is null')
+        cdef ql.Leg leg = _swap.leg(i)
+        print 'Got leg ', i
+
+        items = leg_items(leg)
+        print 'Got items ', items
+
+        return SimpleLeg(items)
 
 cdef ql.VanillaSwap* get_vanilla_swap(VanillaSwap swap):
     """ Utility function to extract a properly casted Swap pointer out of the
@@ -149,23 +161,32 @@ cdef class VanillaSwap(Swap):
             cdef Real res = get_vanilla_swap(self).floatingLegNPV()
             return res
 
-    def leg(self, int i):
-        """
-        Return a swap leg
-        TODO: optimize this - avoid copy
-        """
+    property fixed_leg:
+        def __get__(self):
+            """ Return the fixed leg. """
 
-        cdef vector[shared_ptr[ql.CashFlow]] leg = get_vanilla_swap(self).leg(i)
+            cdef ql.VanillaSwap* _swap = get_vanilla_swap(self)
+            if _swap is NULL:
+                raise ValueError('self pointer is null')
+            cdef ql.Leg leg = _swap.fixedLeg()
+            print 'Got fixed leg'
+    
+            items = leg_items(leg)
+            print 'Got items ', items
+    
+            return SimpleLeg(items)
+            
+    property floating_leg:
+        def __get__(self):
+            """ Return the floating leg. """
 
-        cdef int k
-        cdef shared_ptr[ql.CashFlow] _thiscf
-
-        itemlist = []
-        cdef int size = leg.size()
-
-        for k from 0 <= k < size:
-            _thiscf = leg.at(k)
-            _thisdate = Date(_thiscf.get().date().serialNumber())
-            itemlist.append((_thiscf.get().amount(), _thisdate))
-
-        return SimpleLeg(itemlist)
+            cdef ql.VanillaSwap* _swap = get_vanilla_swap(self)
+            if _swap is NULL:
+                raise ValueError('self pointer is null')
+            cdef ql.Leg leg = _swap.floatingLeg()
+            print 'Got floating leg'
+    
+            items = leg_items(leg)
+            print 'Got items ', items
+    
+            return SimpleLeg(items)
