@@ -35,17 +35,15 @@ if sys.platform == 'darwin':
 
 elif sys.platform == 'win32':
     INCLUDE_DIRS = [
-        r'c:\dev\QuantLib-1.4',  # QuantLib headers
-        r'c:\dev\boost_1_56_0',  # Boost headers
+        r'C:\QL\QuantLib-1.4',  # QuantLib headers
+        r'C:\QL\boost_1_55_0',  # Boost headers
         '.',
         SUPPORT_CODE_INCLUDE
     ]
     LIBRARY_DIRS = [
-        r"C:\dev\QuantLib-1.4\build\vc90\Win32\Release", # for the dll lib
-        r"C:\dev\QuantLib-1.4\lib", # for the static lib needed for two extensions
-        '.',
-        r'.\dll',
-    ]
+        r"C:\pyql-master\QL-Lib", # for the dll lib
+        r"C:\QL\QuantLib-1.4\x64\Release", # for the static lib needed for two extensions
+        '.' ]
 elif sys.platform == 'linux2':
     # good for Debian / ubuntu 10.04 (with QL .99 installed by default)
     INCLUDE_DIRS = ['/usr/local/include', '/usr/include', '.', SUPPORT_CODE_INCLUDE]
@@ -82,12 +80,12 @@ def get_extra_compile_args():
 
 def get_extra_link_args():
     if sys.platform == 'win32':
-        args = ['/subsystem:windows', '/machine:I386']
+        args = ['/subsystem:windows', '/machine:x64']
         if DEBUG:
             args.append('/DEBUG')
     elif sys.platform == 'darwin':
-        major, minor = [
-            int(item) for item in platform.mac_ver()[0].split('.')[:2]]
+        major, minor, patch = [
+            int(item) for item in platform.mac_ver()[0].split('.')]
         if major == 10 and minor >= 9:
             # On Mac OS 10.9 we link against the libstdc++ library.
             args = ['-stdlib=libstdc++', '-mmacosx-version-min=10.6']
