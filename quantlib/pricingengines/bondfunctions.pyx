@@ -31,6 +31,15 @@ cdef extern from 'ql/compounding.hpp' namespace 'QuantLib':
         SimpleThenCompounded = 3    
 
 
+cdef extern from 'ql/compounding.hpp' namespace 'QuantLib':
+    cdef class Duration:
+        def __cinit__(self):
+            pass
+        cdef enum Type:
+            Simple=0
+            Macaulay=1
+            Modified=2;
+    
 cdef class BondFunctions:
     
     def __cinit__(self):
@@ -52,7 +61,14 @@ cdef class BondFunctions:
         cpdef QLBond* _bp = <QLBond*>bond._thisptr.get()
         d =  self._thisptr.startDate(deref(<QLBond*>_bp))
         return date_from_qldate(d)
-        
+      
+        static Time duration(const Bond& bond,
+                             Rate yield,
+                             const DayCounter& dayCounter,
+                             Compounding compounding,
+                             Frequency frequency,
+                             Duration::Type type = Duration::Modified,
+                             Date settlementDate = Date() );          
         
     def zSpread(self, Bond bond, Real cleanPrice,
         YieldTermStructure pyts,
