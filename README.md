@@ -21,3 +21,5 @@ Building the library
 
 See the getting_started.rst documentation in docs/source for the 
 full details!
+
+Testing commit via git - Abe
