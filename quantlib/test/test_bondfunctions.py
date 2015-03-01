@@ -11,7 +11,7 @@ from quantlib.time.calendar import (
 from quantlib.time.calendars.united_states import (
     UnitedStates, GOVERNMENTBOND
 )
-from quantlib.currency import USDCurrency
+from quantlib.currency.api import USDCurrency
 
 from quantlib.time.calendars.null_calendar import NullCalendar
 from quantlib.compounding import Compounded, Continuous
@@ -30,8 +30,8 @@ from quantlib.indexes.libor import Libor
 from quantlib.termstructures.yields.rate_helpers import (
     DepositRateHelper, SwapRateHelper)
 from quantlib.termstructures.yields.piecewise_yield_curve import (
-    term_structure_factory, VALID_TRAITS, VALID_INTERPOLATORS,
-    PiecewiseYieldCurve)
+    PiecewiseYieldCurve
+)
 from quantlib.termstructures.yields.api import (
     FlatForward, YieldTermStructure
 )
@@ -158,15 +158,15 @@ class BondFunctionTestCase(unittest.TestCase):
         ts_day_counter = ActualActual(ISDA)
         tolerance = 1.0e-15
 
-        ts = term_structure_factory(
+        ts = PiecewiseYieldCurve(
             'discount', 'loglinear', settlement_date, rate_helpers,
             ts_day_counter, tolerance)   
 
         pyc_zspd=bfs.zSpread(bond,102.0,ts,ActualActual(ISDA),
-        Compounded,Semiannual,settlement_date,1e-6,100,0.5)                                      
+        Compounded,Semiannual,settlement_date,1e-6,100,0.5)                     
 
         pyc_zspd_disco=bfs.zSpread(bond,95.0,ts,ActualActual(ISDA),
-        Compounded,Semiannual,settlement_date,1e-6,100,0.5)                                      
+        Compounded,Semiannual,settlement_date,1e-6,100,0.5)
                                                           
         # tests
         #self.assertTrue(Date(27, January, 2011), bond.issue_date)
