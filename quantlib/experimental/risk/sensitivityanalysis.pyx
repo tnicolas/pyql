@@ -62,8 +62,8 @@ def bucketAnalysis(quotes, instruments,
         sqh_vector.push_back(sq_handle)
 
         #Quote Implementation (will work but bucketAnalysis takes SimpleQuotes)
-        #q_handle = Handle[_qt.Quote](deref((<SimpleQuote>obj)._thisptr))
-        #quote_vector.push_back(q_handle)
+        #q_handle = Handle[_qt.Quote](deref((<SimpleQuote>qlsq)._thisptr))
+        #qh_vector.push_back(q_handle)
     vvh_quotes.push_back(sqh_vector)			
 	
     #TODO: Will pair<vector<vector<Real>>,vector<vector<Real>>> be implicitly converted to python equivalent? 
