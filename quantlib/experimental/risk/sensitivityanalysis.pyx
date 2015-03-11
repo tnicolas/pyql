@@ -25,7 +25,7 @@ def bucketAnalysis(quotes_vvsq, instruments,
 
     """ 
 		Inputs: 
-		1. List[Quantlib::SimpleQuote]
+		1. list(list[Quantlib::SimpleQuote))
 		2. List[Quantlib::Instrument]
 		3. List[decimal]
 		4. decimal
@@ -34,23 +34,15 @@ def bucketAnalysis(quotes_vvsq, instruments,
     """
     #C++ Inputs
     #final inputs
-#   cdef vector[vector[Handle[_qt.SimpleQuote]]]* vvh_quotes = new vector[vector[Handle[_qt.SimpleQuote]]]()
-    cdef vector[vector[Handle[_qt.SimpleQuote]]] vvh_quotes 
-
-    
-#   cdef vector[shared_ptr[_it.Instrument]]* vsp_instruments = new vector[shared_ptr[_it.Instrument]]()
-    cdef vector[shared_ptr[_it.Instrument]] vsp_instruments
-
-#   cdef vector[Real]* rates = new vector[Real]()
-    cdef vector[Real] rates
+    cdef vector[vector[Handle[_qt.SimpleQuote]]]* vvh_quotes = new vector[vector[Handle[_qt.SimpleQuote]]]()
+    cdef vector[shared_ptr[_it.Instrument]]* vsp_instruments = new vector[shared_ptr[_it.Instrument]]()
+    cdef vector[Real]* rates = new vector[Real]()
    
     #intermediary temps
     cdef vector[Handle[_qt.SimpleQuote]] sqh_vector
-    cdef vector[Handle[_qt.Quote]] qh_vector	
-    cdef Handle[_qt.Quote] q_handle
-    cdef Handle[_qt.SimpleQuote] sq_handle
+    cdef shared_ptr[_qt.SimpleQuote]* q_ptr
+    cdef Handle[_qt.SimpleQuote]* sq_handle
     cdef shared_ptr[_it.Instrument] instrument_sp
-    cdef long long mem_loc 
 	
     #C++ Output
     cdef pair[vector[vector[Real]],vector[vector[Real]]] ps
@@ -67,20 +59,18 @@ def bucketAnalysis(quotes_vvsq, instruments,
         for qlsq_in in qlsq_out:
 
             #be sure to pass shared_ptr pointing to same SimpleQuotes as were created outside of bucketAnalysis
-            mem_loc = <long long> ((<SimpleQuote>qlsq_in)._thisptr.get())
-            sq_handle =deref(new Handle[_qt.SimpleQuote](<shared_ptr[_qt.SimpleQuote]>(<_qt.SimpleQuote*>mem_loc)))
-            sqh_vector.push_back(sq_handle)
+            q_ptr = <shared_ptr[_qt.SimpleQuote]*>(<SimpleQuote>qlsq_in)._thisptr
+            sq_handle = new Handle[_qt.SimpleQuote](deref(q_ptr))
+            sqh_vector.push_back(deref(sq_handle))
 			
         vvh_quotes.push_back(sqh_vector)
    	
     #TODO: Will pair<vector<vector<Real>>,vector<vector<Real>>> be implicitly converted to python equivalent? 
-    ps = _sa.bucketAnalysis(vvh_quotes,
-                            vsp_instruments,
-			                rates,
+    ps = _sa.bucketAnalysis(deref(vvh_quotes),
+                            deref(vsp_instruments),
+			    deref(rates),
                             shift,
                             type)
     
     return ps
-
-
 
