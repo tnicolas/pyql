@@ -64,7 +64,7 @@ cdef extern from 'ql/termstructures/yield/ratehelpers.hpp' namespace 'QuantLib':
 
 
     cdef cppclass SwapRateHelper(RelativeDateRateHelper):
-        SwapRateHelper(Rate rate,
+        SwapRateHelper(Handle[Quote]& rate,
                        Period& tenor,
                        Calendar& calendar,
                        Frequency& fixedFrequency,
@@ -72,7 +72,7 @@ cdef extern from 'ql/termstructures/yield/ratehelpers.hpp' namespace 'QuantLib':
                        DayCounter& fixedDayCount,
                        shared_ptr[_ib.IborIndex]& iborIndex,
         )
-        SwapRateHelper(Rate rate,
+        SwapRateHelper(Handle[Quote]& rate,
                        Period& tenor,
                        Calendar& calendar,
                        Frequency& fixedFrequency,
