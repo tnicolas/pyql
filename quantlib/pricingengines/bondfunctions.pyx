@@ -44,9 +44,13 @@ cdef extern from 'ql/cashflows/duration.hpp' namespace 'QuantLib':
         Type type
 
 cdef extern from 'ql/pricingengines/bond/bondfunctions.hpp' namespace 'QuantLib':
-    cdef Rate _bf_yield "QuantLib::BondFunctions::yield" (QLBond, Real, _DayCounter, int, _Frequency, _dt.Date, Real, Size, Rate)
-       
-    
+
+    cdef _dt.Date _bf_startDate "QuantLib::BondFunctions::startDate" (QLBond)
+    cdef Real _bf_duration  "QuantLib::BondFunctions::duration" (QLBond, Real, _DayCounter, int, _Frequency, Type, _dt.Date)
+    cdef Rate _bf_yield     "QuantLib::BondFunctions::yield" (QLBond, Real, _DayCounter, int, _Frequency, _dt.Date, Real, Size, Rate)
+    cdef Real _bf_bpValue   "QuantLib::BondFunctions::basisPointValue" (QLBond, Real, _DayCounter, int, _Frequency, _dt.Date)    
+    cdef Rate _bf_zSpread   "QuantLib::BondFunctions::zSpread" (QLBond, Real, shared_ptr[_yt.YieldTermStructure], _DayCounter, int, _Frequency, _dt.Date, Real, Size, Rate)        
+            
 cdef class BondFunctions:
     
     def __cinit__(self):
@@ -64,9 +68,8 @@ cdef class BondFunctions:
         print "hello world"
     
     def startDate(self, Bond bond):
-
         cpdef QLBond* _bp = <QLBond*>bond._thisptr.get()
-        d =  self._thisptr.startDate(deref(<QLBond*>_bp))
+        d =  _bf_startDate(deref(<QLBond*>_bp))
         return date_from_qldate(d)
       
      
@@ -79,7 +82,7 @@ cdef class BondFunctions:
                     Date settlementDate = Date()):
             cpdef QLBond* _bp = <QLBond*>bond._thisptr.get()
            
-            d =  self._thisptr.duration(
+            d =  _bf_duration(
                     deref(<QLBond*>_bp),
                     yld,
                     deref(dayCounter._thisptr),
@@ -122,11 +125,12 @@ cdef class BondFunctions:
             int frequency,
             Date settlementDate):
             cpdef QLBond* _bp = <QLBond*>bond._thisptr.get()
+            cpdef _DayCounter* dc = <_DayCounter*>dayCounter._thisptr
 
-            b =  self._thisptr.basisPointValue(
+            b =  _bf_bpValue(
                     deref(<QLBond*>_bp),
                     yld,
-                    deref(dayCounter._thisptr),
+                    deref(dc),
                     <Compounding> compounding,
                     <_Frequency> frequency,
                     deref(settlementDate._thisptr.get()))
@@ -146,12 +150,13 @@ cdef class BondFunctions:
                         
         cpdef QLBond* _bp = <QLBond*>bond._thisptr.get()
         cpdef shared_ptr[_yt.YieldTermStructure] _yts = deref(pyts._thisptr)
+        cpdef _DayCounter* dc = <_DayCounter*>dayCounter._thisptr
 
         d =  self._thisptr.zSpread(
         deref(<QLBond*>_bp),
         cleanPrice,
         _yts,
-        deref(dayCounter._thisptr),
+        deref(dc),
         <Compounding> compounding,
         <_Frequency> frequency,
         deref(settlementDate._thisptr.get()),

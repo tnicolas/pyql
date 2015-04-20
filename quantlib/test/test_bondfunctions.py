@@ -173,12 +173,11 @@ class BondFunctionTestCase(unittest.TestCase):
         #self.assertTrue(Date(31, August, 2020), bond.maturity_date)
         #self.assertTrue(settings.evaluation_date, bond.valuation_date)
 
-        print settings.evaluation_date
         print d
-        print 'Principal: {}'.format(face_amount)
-        print 'Issuing date: {} '.format(bond.issue_date)
-        print 'Maturity: {}'.format(bond.maturity_date)
-        print 'Coupon rate: {:.4%}'.format(coupon_rate)
+        self.assertTrue(Date(27, January, 2011), d)
+
+        print 'Yield: {:.15%}'.format(bond_yield)
+        #self.assertTrue(bond_yield,
         print 'Yield: {:.4%}'.format(bond_yield)
         print 'z-spread: {:.4%}'.format(zspd)
         print 'premium  z-spread using pwyc: {:.4%}'.format(pyc_zspd)

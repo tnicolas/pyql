@@ -19,7 +19,7 @@ cimport quantlib.indexes._swap_index as _si
 from quantlib.time._period cimport Frequency, Days
 from quantlib.time._calendar cimport BusinessDayConvention
 
-from quantlib.quotes cimport Quote
+from quantlib.quotes cimport Quote, SimpleQuote
 from quantlib.time.calendar cimport Calendar
 from quantlib.time.daycounter cimport DayCounter
 from quantlib.time.date cimport Period, Date
@@ -40,10 +40,8 @@ cdef class RateHelper:
 
     property quote:
         def __get__(self):
-            cdef Handle[_qt.Quote] quote_handle = self._thisptr.get().quote()
-            cdef shared_ptr[_qt.Quote] quote_ptr = shared_ptr[_qt.Quote](quote_handle.currentLink())
-            value = quote_ptr.get().value()
-            return value
+            cdef shared_ptr[_qt.Quote] quote_ptr = shared_ptr[_qt.Quote](self._thisptr.get().quote().currentLink())
+            return quote_ptr.get().value()
 
     property implied_quote:
         def __get__(self):
@@ -62,10 +60,8 @@ cdef class RelativeDateRateHelper:
 
     property quote:
         def __get__(self):
-            cdef Handle[_qt.Quote] quote_handle = self._thisptr.get().quote()
-            cdef shared_ptr[_qt.Quote] quote_ptr = shared_ptr[_qt.Quote](quote_handle.currentLink())
-            value = quote_ptr.get().value()
-            return value
+            cdef shared_ptr[_qt.Quote] quote_ptr = shared_ptr[_qt.Quote](self._thisptr.get().quote().currentLink())
+            return quote_ptr.get().value()
 
     property implied_quote:
         def __get__(self):
@@ -127,6 +123,18 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
         
         cdef Handle[_qt.Quote] rate_handle = Handle[_qt.Quote](deref(rate._thisptr))
         cdef Handle[_qt.Quote] spread_handle
+#        cdef Handle[_qt.Quote] _rate    #from merge w/ master, might not need this any longer?
+
+        cdef _qt.SimpleQuote* qt 
+        cdef shared_ptr[_qt.Quote] ptr
+        if isinstance(rate, float):
+            qt = new _qt.SimpleQuote(<Rate>rate)
+            ptr = deref(new shared_ptr[_qt.Quote](qt))
+        elif isinstance(rate, SimpleQuote):
+            ptr = deref((<SimpleQuote>rate)._thisptr)
+
+#        _rate = Handle[_qt.Quote](ptr) #from merge w/ master, might not need this any longer?
+
 
         cdef SwapRateHelper instance = cls(from_classmethod=True)
 
@@ -164,7 +172,7 @@ cdef class SwapRateHelper(RelativeDateRateHelper):
     @classmethod
     def from_index(cls, double rate, SwapIndex index):
 
-        cdef Handle[_qt.Quote] spread_handle = Handle[_qt.Quote](new _qt.SimpleQuote(0))
+        cdef Handle[_qt.Quote] spread_handle = Handle[_qt.Quote](shared_ptr[_qt.Quote](new _qt.SimpleQuote(0)))
         cdef Period p = Period(2, Days)
 
 
